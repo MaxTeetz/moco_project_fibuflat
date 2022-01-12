@@ -2,4 +2,12 @@
     <string name="app_name">MoCo_Project_FiBuFlat</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="action_login">Login</string>
+    <string name="action_forgot_password">Forgot Password?</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="username">Username</string>
+    <string name="register">Register</string>
+    <string name="account_existing">Get back to Login</string>
 </resources>
