@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -19,6 +20,9 @@ private const val ARG_PARAM2 = "param2"
 class LoginFragment : Fragment() {
     // TODO: Rename and change types of parameters
 
+    private var _binding : FragmentLoginBinding? = null
+    private val binding get() = _binding
+    
     private var param1: String? = null
     private var param2: String? = null
 
