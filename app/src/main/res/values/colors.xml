@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#2DA44E</color>
     <color name="password_blue">#749DE3</color>
+    <color name="red_700">#FFD32F2F</color>
+
 </resources>

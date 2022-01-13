@@ -10,4 +10,11 @@
     <string name="username">Username</string>
     <string name="register">Register</string>
     <string name="account_existing">Get back to Login</string>
+    <string name="logo">logo</string>
+
+    <!--viewModelStrings-->
+    <string name="emptyMail">Mail can´t be empty</string>
+    <string name="emptyPassword">Password can´t be empty</string>
+    <string name="empty_username">Username can´t be empty</string>
+    <string name="register_successful">Register Successful</string>
 </resources>
