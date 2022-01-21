@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.Fragments
+package com.example.moco_project_fibuflat.FragmentsLogin
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.example.moco_project_fibuflat.ActivityLogin.MainActivity
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.Views.LoginViewModel
+import com.example.moco_project_fibuflat.ViewsLogin.LoginViewModel
 import com.example.moco_project_fibuflat.databinding.FragmentRegisterBinding
 
 /**
@@ -26,6 +27,7 @@ class RegisterFragment : Fragment() {
     private lateinit var password: String
     private lateinit var email: String
     private lateinit var username: String
+    private lateinit var confirmPassword: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +35,7 @@ class RegisterFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -49,16 +52,15 @@ class RegisterFragment : Fragment() {
 
     private fun onRegister() {
         var anyFieldEmpty = false
-        password = binding.password.text.toString()
+
+        confirmPassword = binding.confirmPassword.text.toString()
         email = binding.email.text.toString()
         username = binding.username.text.toString()
+        password = binding.password.text.toString()
 
         //check if anything´s empty
-        if (viewModel.isPasswordEmpty(password)) {
-            setErrorTextFieldPassword(true)
+        if (!checkPassword()) {
             anyFieldEmpty = true
-        } else {
-            setErrorTextFieldPassword(false)
         }
         if (viewModel.isMailEmpty(email)) {
             setErrorTextFieldEmail(true)
@@ -73,9 +75,40 @@ class RegisterFragment : Fragment() {
             setErrorTextFieldUsername(false)
         }
 
-        if (!anyFieldEmpty && viewModel.isEmailValidRegister(email)) {
+
+        if (!anyFieldEmpty) {
+            (activity as MainActivity?)!!.registerUserInFirebase(email, password)
             registerSuccessful()
         }
+    }
+
+    //returns false if anything´s wrong
+    private fun checkPassword(): Boolean {
+        var check = true
+
+        if (password.isBlank()) {
+            setErrorTextFieldPassword(true)
+            check = false
+        } else {
+            setErrorTextFieldPassword(false)
+        }
+
+        if (confirmPassword.isBlank()) {
+            setErrorTextFieldConfirmPassword(true, getString(R.string.empty_confirm_password))
+            check = false
+        } else {
+            setErrorTextFieldConfirmPassword(false, "")
+        }
+
+        if (confirmPassword != password && check) {
+            setErrorTextFieldConfirmPassword(
+                true,
+                getString(R.string.password_doesnt_match_confirm_password)
+            )
+            check = false
+        }
+
+        return check
     }
 
     private fun registerSuccessful() {
@@ -88,7 +121,8 @@ class RegisterFragment : Fragment() {
         model.setData(email, password, username)
 
         findNavController().navigate(action)
-        toast.show()
+        //
+    // toast.show()
     }
 
     private fun setErrorTextFieldEmail(error: Boolean) {
@@ -118,4 +152,14 @@ class RegisterFragment : Fragment() {
             binding.usernameLabel.isErrorEnabled = false
         }
     }
+
+    private fun setErrorTextFieldConfirmPassword(error: Boolean, errorMessage: String) {
+        if (error) {
+            binding.confirmPasswordLabel.isErrorEnabled = true
+            binding.confirmPasswordLabel.error = errorMessage
+        } else {
+            binding.confirmPasswordLabel.isErrorEnabled = false
+        }
+    }
+
 }

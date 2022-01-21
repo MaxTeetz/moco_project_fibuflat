@@ -11,10 +11,14 @@
     <string name="register">Register</string>
     <string name="account_existing">Get back to Login</string>
     <string name="logo">logo</string>
+    <string name="confirm_password">Confirm Password</string>
 
     <!--viewModelStrings-->
     <string name="emptyMail">Mail can´t be empty</string>
     <string name="emptyPassword">Password can´t be empty</string>
     <string name="empty_username">Username can´t be empty</string>
+    <string name="empty_confirm_password">Confirm Password can´t be empty</string>
+    <string name="password_doesnt_match_confirm_password">Password and confirm Password must be the same</string>
     <string name="register_successful">Register Successful</string>
+    <string name="register_failed">Register Failed</string>
 </resources>

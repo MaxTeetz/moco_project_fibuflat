@@ -1,6 +1,5 @@
-package com.example.moco_project_fibuflat.Views
+package com.example.moco_project_fibuflat.ViewsLogin
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,8 +42,6 @@ class LoginViewModel : ViewModel() {
         _email.value = email
         _password.value = password
         _username.value = username
-
-        Log.d("LoginRegisterDataSet", this.email.value!!.toString())
     }
 
 }

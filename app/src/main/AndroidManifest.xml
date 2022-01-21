@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoCo_Project_FiBuFlat">
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityLogin.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

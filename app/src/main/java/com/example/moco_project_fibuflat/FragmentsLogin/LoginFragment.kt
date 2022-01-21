@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.Fragments
+package com.example.moco_project_fibuflat.FragmentsLogin
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.Views.LoginViewModel
+import com.example.moco_project_fibuflat.ViewsLogin.LoginViewModel
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 
 /**
@@ -48,8 +48,6 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginButton.setOnClickListener { onLogin() }
-
-
     }
 
     private fun onLogin() {
