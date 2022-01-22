@@ -12,7 +12,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.ActivityGroupBinding
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 
 class GroupActivity : AppCompatActivity() {
 
@@ -27,10 +26,10 @@ class GroupActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarGroup.toolbar)
 
-        binding.appBarGroup.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+        //binding.appBarGroup.fab.setOnClickListener { view ->
+        //    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        //        .setAction("Action", null).show()
+        //}
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_group)

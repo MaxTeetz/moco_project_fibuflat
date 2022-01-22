@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_home_to_moneyPoolEntryDetailFragment"
             app:destination="@id/moneyPoolEntryDetailFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_addEntryFragment"
+            app:destination="@id/addEntryFragment" />
     </fragment>
 
     <fragment
@@ -31,4 +34,9 @@
         android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.MoneyPoolEntryDetailFragment"
         android:label="fragment_money_pool_entry_detail"
         tools:layout="@layout/fragment_money_pool_entry_detail" />
+    <fragment
+        android:id="@+id/addEntryFragment"
+        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntryFragment"
+        android:label="fragment_add_entry"
+        tools:layout="@layout/fragment_add_entry" />
 </navigation>

@@ -40,6 +40,15 @@
     <string name="needed_money">Goal: </string>
     <string name="current_money">Current: </string>
     <string name="add_new_task">Add new Task</string>
+    <string name="money_given">Amount</string>
+    <string name="delete_entry">Delete Entry</string>
+    <string name="amount">Amount</string>
+    <string name="add">Add</string>
+
+    <string name="max_mustermann">Max Mustermann</string>
+    <string name="john_doe">John Doe</string>
+    <string name="number">5</string>
+
     <!--ToDoFragment-->
     <string name="menu_gallery">Gallery</string>
 
@@ -47,6 +56,5 @@
     <string name="menu_slideshow">Slideshow</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
 </resources>

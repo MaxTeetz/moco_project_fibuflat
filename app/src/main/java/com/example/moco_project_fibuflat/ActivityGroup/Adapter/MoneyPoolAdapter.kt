@@ -28,8 +28,6 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
             onItemClicked(current)
         }
         holder.bind(current)
-        fun bind(moneyPoolEntry: MoneyPoolEntry){
-        }
     }
 
     class MoneyPoolViewHolder(private var binding: MoneypoolPoolEntryBinding) :
