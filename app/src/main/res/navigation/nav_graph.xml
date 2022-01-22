@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.moco_project_fibuflat.FragmentsLogin.LoginFragment"
+        android:name="com.example.moco_project_fibuflat.ActivityLogin.UI.Login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.moco_project_fibuflat.FragmentsLogin.RegisterFragment"
+        android:name="com.example.moco_project_fibuflat.ActivityLogin.UI.Register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action

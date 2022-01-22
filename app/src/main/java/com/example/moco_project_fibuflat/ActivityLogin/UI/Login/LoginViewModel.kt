@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ViewsLogin
+package com.example.moco_project_fibuflat.ActivityLogin.UI.Login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,30 +18,11 @@ class LoginViewModel : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> get() = _loginResult
 
-    fun isMailEmpty(mail: String): Boolean {
+    fun isTextInputEmpty(mail: String): Boolean {
         return mail.isBlank()
-    }
-
-    fun isPasswordEmpty(password: String): Boolean {
-        return password.isBlank()
-    }
-
-    fun isUsernameEmpty(username: String): Boolean {
-        return username.isBlank()
-    }
-
-    fun isEmailValidRegister(email: String): Boolean { //Todo check with emailInUse database
-        return true
     }
 
     fun loginCredentialsCorrect(email: String, password: String): Boolean{
         return true
     }
-
-    fun setData(email: String, password: String, username: String) {
-        _email.value = email
-        _password.value = password
-        _username.value = username
-    }
-
 }

@@ -1,17 +1,15 @@
-package com.example.moco_project_fibuflat.FragmentsLogin
+package com.example.moco_project_fibuflat.ActivityLogin.UI.Register
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.ActivityLogin.MainActivity
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.ViewsLogin.LoginViewModel
 import com.example.moco_project_fibuflat.databinding.FragmentRegisterBinding
 
 /**
@@ -19,7 +17,7 @@ import com.example.moco_project_fibuflat.databinding.FragmentRegisterBinding
  */
 class RegisterFragment : Fragment() {
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModels()
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
@@ -42,39 +40,33 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.existingAccount.setOnClickListener {
-            val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-            this.findNavController().navigate(action)
-        }
-
         binding.registerButton.setOnClickListener { onRegister() }
     }
 
     private fun onRegister() {
         var anyFieldEmpty = false
 
-        confirmPassword = binding.confirmPassword.text.toString()
-        email = binding.email.text.toString()
-        username = binding.username.text.toString()
-        password = binding.password.text.toString()
+        this.confirmPassword = binding.confirmPassword.text.toString()
+        this.email = binding.email.text.toString()
+        this.username = binding.username.text.toString()
+        this.password = binding.password.text.toString()
 
         //check if anything´s empty
-        if (!checkPassword()) {
+        if (!checkPassword()) { //ToDo call setError from ViewModel?
             anyFieldEmpty = true
         }
-        if (viewModel.isMailEmpty(email)) {
+        if (viewModel.isTextInputEmpty(email)) {
             setErrorTextFieldEmail(true)
             anyFieldEmpty = true
         } else {
             setErrorTextFieldEmail(false)
         }
-        if (viewModel.isUsernameEmpty(username)) {
+        if (viewModel.isTextInputEmpty(username)) {
             setErrorTextFieldUsername(true)
             anyFieldEmpty = true
         } else {
             setErrorTextFieldUsername(false)
         }
-
 
         if (!anyFieldEmpty) {
             (activity as MainActivity?)!!.registerUserInFirebase(email, password)
@@ -86,14 +78,14 @@ class RegisterFragment : Fragment() {
     private fun checkPassword(): Boolean {
         var check = true
 
-        if (password.isBlank()) {
+        if (viewModel.isTextInputEmpty(password)) {
             setErrorTextFieldPassword(true)
             check = false
         } else {
             setErrorTextFieldPassword(false)
         }
 
-        if (confirmPassword.isBlank()) {
+        if (viewModel.isTextInputEmpty(confirmPassword)) {
             setErrorTextFieldConfirmPassword(true, getString(R.string.empty_confirm_password))
             check = false
         } else {
@@ -113,10 +105,9 @@ class RegisterFragment : Fragment() {
 
     private fun registerSuccessful() {
         //change fragment and set data
-        val model = ViewModelProviders.of(activity!!)[LoginViewModel::class.java]
-        val duration = Toast.LENGTH_SHORT
+        val model = ViewModelProviders.of(activity!!)[RegisterViewModel::class.java] //ToDo redundant code?
+
         val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-        val toast = Toast.makeText(context, R.string.register_successful, duration)
 
         model.setData(email, password, username)
 

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="FragmentsLogin.LoginFragment">
+    tools:context=".ActivityLogin.UI.Login.LoginFragment">
 
     <TextView
         android:id="@+id/register"
@@ -141,18 +141,5 @@
         app:layout_constraintEnd_toEndOf="@id/password_label"
         app:layout_constraintStart_toStartOf="@id/password_label"
         app:layout_constraintTop_toBottomOf="@+id/confirm_password_label" />
-
-    <TextView
-        android:id="@+id/existing_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_input"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/account_existing"
-        android:textColor="@color/password_blue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/registerButton"
-        app:layout_constraintTop_toTopOf="@id/registerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
