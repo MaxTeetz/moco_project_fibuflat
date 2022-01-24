@@ -16,7 +16,7 @@ class LoginViewModel : ViewModel() {
     val username: LiveData<String> get() = _username
 
     private val _loginResult = MutableLiveData<LoginResult>()
-    val loginResult: LiveData<LoginResult> get() = _loginResult
+    val loginResult: LiveData<LoginResult> get() = _loginResult //ToDo check if login was successful
 
     fun isTextInputEmpty(mail: String): Boolean {
         return mail.isBlank()

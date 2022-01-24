@@ -9,9 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.MoneyPoolAdapter
-import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -45,10 +43,11 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
         binding.addEntry.setOnClickListener{
 
-            val moneyPoolEntry = MoneyPoolEntry(R.string.max_mustermann, R.string.number.toInt())
-            viewModel.addEntry(moneyPoolEntry)
-            //val action = HomeFragmentDirections.actionNavHomeToAddEntryFragment()
-            //this.findNavController().navigate(action)
+            //val i: Int = 5
+            //val moneyPoolEntry = MoneyPoolEntry(this,i)
+            //viewModel.addEntry(moneyPoolEntry)
+            val action = HomeFragmentDirections.actionNavHomeToAddEntryFragment()
+            this.findNavController().navigate(action)
         }
     }
 

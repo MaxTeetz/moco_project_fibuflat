@@ -1,5 +1,6 @@
 package com.example.moco_project_fibuflat.ActivityGroup.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,5 +13,7 @@ class HomeViewModel : ViewModel() {
 
     fun addEntry(moneyPoolEntry: MoneyPoolEntry){
         _allMoneyEntries.value = _allMoneyEntries.value?.plus(moneyPoolEntry) ?: listOf(moneyPoolEntry)
+        Log.d("addEntry", allMoneyEntries.value!!.size.toString())
+        Log.d("addEntry", moneyPoolEntry.stringMoneyId.toString())
     }
 }

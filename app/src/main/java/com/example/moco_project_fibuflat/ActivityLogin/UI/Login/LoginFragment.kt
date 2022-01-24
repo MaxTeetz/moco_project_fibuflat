@@ -2,6 +2,7 @@ package com.example.moco_project_fibuflat.ActivityLogin.UI.Login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.ActivityGroup.GroupActivity
 import com.example.moco_project_fibuflat.ActivityLogin.UI.Register.RegisterViewModel
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.data.LoginDataSource
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 
 /**
@@ -66,6 +68,10 @@ class LoginFragment : Fragment() {
         } else {
             setErrorTextFieldPassword(false)
         }
+
+        val loginDataSource : LoginDataSource = LoginDataSource()
+        loginDataSource.setUser(email, email) //ToDo change to use real user data and username and email
+        Log.d("setUser", loginDataSource.getUser().username)
 
         val intent = Intent(context, GroupActivity::class.java)
         startActivity(intent)

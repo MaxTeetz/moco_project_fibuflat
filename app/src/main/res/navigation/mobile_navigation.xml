@@ -9,7 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_moneyPoolEntryDetailFragment"
             app:destination="@id/moneyPoolEntryDetailFragment" />
@@ -33,10 +33,18 @@
         android:id="@+id/moneyPoolEntryDetailFragment"
         android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.MoneyPoolEntryDetailFragment"
         android:label="fragment_money_pool_entry_detail"
-        tools:layout="@layout/fragment_money_pool_entry_detail" />
+        tools:layout="@layout/fragment_money_pool_entry_detail" >
+        <action
+            android:id="@+id/action_moneyPoolEntryDetailFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/addEntryFragment"
         android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntryFragment"
         android:label="fragment_add_entry"
-        tools:layout="@layout/fragment_add_entry" />
+        tools:layout="@layout/fragment_add_entry" >
+        <action
+            android:id="@+id/action_addEntryFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>
