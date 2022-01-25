@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.MoneypoolPoolEntryBinding
 
 class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
@@ -15,7 +14,6 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoneyPoolViewHolder {
         return MoneyPoolViewHolder(
-            parent,
             MoneypoolPoolEntryBinding.inflate(
                 LayoutInflater.from(
                     parent.context
@@ -32,11 +30,13 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
         holder.bind(current)
     }
 
-    class MoneyPoolViewHolder(private var parent: ViewGroup,private var binding: MoneypoolPoolEntryBinding) :
+    class MoneyPoolViewHolder(
+        private var binding: MoneypoolPoolEntryBinding
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(moneyPoolEntry: MoneyPoolEntry) {
             binding.apply {
-                userName.text = parent.context.getString(R.string.max_mustermann)//ToDo get Username from logged in User
+                userName.text = moneyPoolEntry.stringUserId
                 moneyGiven.text = moneyPoolEntry.stringMoneyId.toString()
             }
         }

@@ -1,21 +1,19 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.home
+package com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry
 
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.ActivityGroup.ui.home.HomeViewModel
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
+import com.google.firebase.auth.FirebaseAuth
 
 
 class AddEntryFragment : Fragment() {
-    lateinit var moneyPoolEntry: MoneyPoolEntry
 
     private val viewModel: AddEntryViewModel by activityViewModels()
     private val viewModelHome: HomeViewModel by activityViewModels()
@@ -23,30 +21,12 @@ class AddEntryFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        // Inflate the layout for this fragment
         _binding = FragmentAddEntryBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    private fun isEntryValid(): Boolean {
-        return viewModel.isEntryValid(
-            binding.moneyAmount.text.toString()
-        )
-    }
-
-    private fun addNewEntry() {
-        if (isEntryValid()) {
-            val moneyPoolEntry =
-                MoneyPoolEntry(R.string.max_mustermann, binding.moneyAmount.text.toString().toInt())
-            viewModelHome.addEntry(
-                moneyPoolEntry
-            ) //ToDo get username from logged in user
-            val action = AddEntryFragmentDirections.actionAddEntryFragmentToNavHome()
-            findNavController().navigate(action)
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,12 +36,21 @@ class AddEntryFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        val inputMethodManager = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as
-                InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
-        _binding = null
+    private fun isEntryValid(): Boolean {
+        return viewModel.isEntryValid(
+            binding.moneyAmount.text.toString()
+        )
     }
 
+    private fun addNewEntry(){
+        if(isEntryValid()){
+
+            val moneyPoolEntry = MoneyPoolEntry(FirebaseAuth.getInstance().currentUser!!.uid, binding.moneyAmount.text.toString().toFloat())
+            viewModelHome.addEntry(
+                moneyPoolEntry
+            )
+            val action = AddEntryFragmentDirections.actionAddEntryFragmentToNavHome()
+            findNavController().navigate(action)
+        }
+    }
 }

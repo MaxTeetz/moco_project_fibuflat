@@ -1,8 +1,6 @@
 package com.example.moco_project_fibuflat.ActivityLogin.UI.Login
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.ActivityGroup.GroupActivity
+import com.example.moco_project_fibuflat.ActivityLogin.MainActivity
 import com.example.moco_project_fibuflat.ActivityLogin.UI.Register.RegisterViewModel
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.data.LoginDataSource
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 
 /**
@@ -22,7 +19,7 @@ import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 class LoginFragment : Fragment() {
 
     private val viewModel: LoginViewModel by viewModels()
-    private val registerView : RegisterViewModel by viewModels()
+    private val registerView: RegisterViewModel by viewModels()
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -42,10 +39,12 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //set email and password for login
-        registerView.password.observe(this, {   //ToDo observe data Package LoggedInUser or Repository
-            binding.email.setText(model.email.value)
-            binding.password.setText(model.password.value) //works now I guess. Before setData.toString()
-        })
+        registerView.password.observe(
+            this,
+            {   //ToDo observe data Package LoggedInUser or Repository
+                binding.email.setText(model.email.value)
+                binding.password.setText(model.password.value) //works now I guess. Before setData.toString()
+            })
 
         binding.createAccountText.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
@@ -58,24 +57,23 @@ class LoginFragment : Fragment() {
     private fun onLogin() {
         val password = binding.password.text.toString()
         val email = binding.email.text.toString()
+        var check = true
 
         if (viewModel.isTextInputEmpty(email)) {
             setErrorTextFieldEmail(true)
+            check = false
         } else
             setErrorTextFieldEmail(false)
         if (viewModel.isTextInputEmpty(password)) {
+            check = false
             setErrorTextFieldPassword(true)
         } else {
             setErrorTextFieldPassword(false)
         }
 
-        val loginDataSource : LoginDataSource = LoginDataSource()
-        loginDataSource.setUser(email, email) //ToDo change to use real user data and username and email
-        Log.d("setUser", loginDataSource.getUser().username)
-
-        val intent = Intent(context, GroupActivity::class.java)
-        startActivity(intent)
-
+        if (check) {
+            (activity as MainActivity)!!.firebaseLogin(email, password)
+        }
     }
 
     private fun setErrorTextFieldEmail(error: Boolean) {

@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.MoneyPoolAdapter
 import com.example.moco_project_fibuflat.databinding.FragmentHomeBinding
 
+//val intent = Intent (requireContext(), GroupActivity::class.java)
+//Log.d("homeFragment", intent.getStringExtra("user_id")!!)
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
@@ -23,9 +25,9 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -34,18 +36,22 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = MoneyPoolAdapter {
-            val action = HomeFragmentDirections.actionNavHomeToMoneyPoolEntryDetailFragment()
+            val action = HomeFragmentDirections.actionNavHomeToMoneyPoolChangeEntry()
             this.findNavController().navigate(action)
         }
+
+
         binding.recyclerView.adapter = adapter
 
-        viewModel.allMoneyEntries.observe(this.viewLifecycleOwner){entries -> entries.let { adapter.submitList(it) }}
+        viewModel.allMoneyEntries.observe(this.viewLifecycleOwner) { entries ->
+            entries.let {
+                adapter.submitList(it)
+                binding.currentMoney.text = viewModel.getCurrentMoney().toString()
+            }
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
-        binding.addEntry.setOnClickListener{
+        binding.addEntry.setOnClickListener {
 
-            //val i: Int = 5
-            //val moneyPoolEntry = MoneyPoolEntry(this,i)
-            //viewModel.addEntry(moneyPoolEntry)
             val action = HomeFragmentDirections.actionNavHomeToAddEntryFragment()
             this.findNavController().navigate(action)
         }

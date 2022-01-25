@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "815880528830",
-    "project_id": "moco-project-fibuflat",
-    "storage_bucket": "moco-project-fibuflat.appspot.com"
+    "project_number": "706496413654",
+    "project_id": "fibuflat",
+    "storage_bucket": "fibuflat.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:815880528830:android:ba0d3eb692df7606c04fef",
+        "mobilesdk_app_id": "1:706496413654:android:06c54f7b6f1b752c512e77",
         "android_client_info": {
           "package_name": "com.example.moco_project_fibuflat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "815880528830-hc8qbrp0b20r0pqb8vvfjv4g7b4t2vtv.apps.googleusercontent.com",
+          "client_id": "706496413654-cisrmv7ubbkrd5h33hol5biu1j4h31fi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.moco_project_fibuflat",
+            "certificate_hash": "bf7f5e7c098ef7f60d8df79d00b52774ef6bdcaa"
+          }
+        },
+        {
+          "client_id": "706496413654-vffoct5g2a07982msuk36bfm325k5if2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD2PW9EUAlB5AHEOPHBbO6JLDiB5ykpIS4"
+          "current_key": "AIzaSyAbqK6Ju5_x4VA8JumfcbFgz1TcWXx61Z0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "815880528830-hc8qbrp0b20r0pqb8vvfjv4g7b4t2vtv.apps.googleusercontent.com",
+              "client_id": "706496413654-vffoct5g2a07982msuk36bfm325k5if2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

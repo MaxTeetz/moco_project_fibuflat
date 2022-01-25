@@ -1,14 +1,16 @@
 package com.example.moco_project_fibuflat.ActivityLogin
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.example.moco_project_fibuflat.ActivityGroup.GroupActivity
 import com.example.moco_project_fibuflat.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -35,22 +37,67 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    fun registerUserInFirebase(email: String, password: String) {
+    fun firebaseRegister(email: String, password: String) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val firebaseUser: FirebaseUser = task.result!!.user!!
 
-        Log.d("RegisterUser", auth.currentUser.toString())
-
-        if (auth.currentUser == null) {
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) {
-
-                if (it.isSuccessful) {
-                    val user = auth.currentUser
-                    Toast.makeText(this, R.string.register_successful, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Register Successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val intent =
+                        Intent(this@MainActivity, GroupActivity::class.java)
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra(
+                        "user_id", firebaseUser.uid
+                    )
+                    intent.putExtra(
+                        "email_id", email
+                    )
+                    startActivity(intent)
                 } else {
-                    Toast.makeText(this, R.string.register_failed, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        task.exception!!.message.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-        }
-        Log.d("RegisterUser", auth.currentUser.toString())
     }
 
+    fun firebaseLogin(email: String, password: String) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val firebaseUser: FirebaseUser = task.result!!.user!!
+
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Login Successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val intent =
+                        Intent(this@MainActivity, GroupActivity::class.java)
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra(
+                        "user_id", FirebaseAuth.getInstance().currentUser!!.uid
+                    )
+                    intent.putExtra(
+                        "email_id", email
+                    )
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        this@MainActivity,
+                        task.exception!!.message.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
 }

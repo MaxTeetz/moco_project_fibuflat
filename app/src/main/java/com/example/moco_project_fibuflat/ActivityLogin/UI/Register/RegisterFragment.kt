@@ -22,15 +22,15 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var password: String
-    private lateinit var email: String
-    private lateinit var username: String
+    private lateinit var registerPassword: String
+    private lateinit var registerEmail: String
+    private lateinit var registerUsername: String
     private lateinit var confirmPassword: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
@@ -47,21 +47,22 @@ class RegisterFragment : Fragment() {
         var anyFieldEmpty = false
 
         this.confirmPassword = binding.confirmPassword.text.toString()
-        this.email = binding.email.text.toString()
-        this.username = binding.username.text.toString()
-        this.password = binding.password.text.toString()
+        this.registerEmail = binding.email.text.toString()
+        this.registerUsername = binding.username.text.toString()
+        this.registerPassword = binding.password.text.toString()
+
 
         //check if anything´s empty
-        if (!checkPassword()) { //ToDo call setError from ViewModel?
+        if (!checkPassword()) { //ToDo call setError from ViewModel? Make cleaner
             anyFieldEmpty = true
         }
-        if (viewModel.isTextInputEmpty(email)) {
+        if (viewModel.isTextInputEmpty(registerEmail)) {
             setErrorTextFieldEmail(true)
             anyFieldEmpty = true
         } else {
             setErrorTextFieldEmail(false)
         }
-        if (viewModel.isTextInputEmpty(username)) {
+        if (viewModel.isTextInputEmpty(registerUsername)) {
             setErrorTextFieldUsername(true)
             anyFieldEmpty = true
         } else {
@@ -69,7 +70,6 @@ class RegisterFragment : Fragment() {
         }
 
         if (!anyFieldEmpty) {
-            (activity as MainActivity?)!!.registerUserInFirebase(email, password)
             registerSuccessful()
         }
     }
@@ -78,7 +78,7 @@ class RegisterFragment : Fragment() {
     private fun checkPassword(): Boolean {
         var check = true
 
-        if (viewModel.isTextInputEmpty(password)) {
+        if (viewModel.isTextInputEmpty(registerPassword)) {
             setErrorTextFieldPassword(true)
             check = false
         } else {
@@ -92,7 +92,7 @@ class RegisterFragment : Fragment() {
             setErrorTextFieldConfirmPassword(false, "")
         }
 
-        if (confirmPassword != password && check) {
+        if (confirmPassword != registerPassword && check) {
             setErrorTextFieldConfirmPassword(
                 true,
                 getString(R.string.password_doesnt_match_confirm_password)
@@ -104,16 +104,22 @@ class RegisterFragment : Fragment() {
     }
 
     private fun registerSuccessful() {
+
+        //get rid of empty spaces
+        val email: String = registerEmail.trim { it <= ' ' }
+        val password: String = registerPassword.trim { it <= ' ' }
+
         //change fragment and set data
-        val model = ViewModelProviders.of(activity!!)[RegisterViewModel::class.java] //ToDo redundant code?
+        val model =
+            ViewModelProviders.of(activity!!)[RegisterViewModel::class.java] //ToDo redundant code?
+
+
+        model.setData(registerEmail, registerPassword, registerUsername)
+
+        (activity as MainActivity?)!!.firebaseRegister(email, password)
 
         val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-
-        model.setData(email, password, username)
-
         findNavController().navigate(action)
-        //
-    // toast.show()
     }
 
     private fun setErrorTextFieldEmail(error: Boolean) {

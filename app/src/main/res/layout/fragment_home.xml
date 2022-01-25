@@ -7,6 +7,7 @@
     android:layout_margin="8dp"
     tools:context=".ActivityGroup.ui.home.HomeFragment">
 
+
     <TextView
         android:id="@+id/money"
         android:layout_width="wrap_content"
@@ -15,13 +16,13 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/goal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/needed_money"
         android:textSize="25sp"
@@ -38,9 +39,44 @@
         app:layout_constraintTop_toBottomOf="@id/goal" />
 
     <TextView
+        android:id="@+id/name_text"
+        android:layout_width="180dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/username_home_fragment"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@id/current"
+        app:layout_constraintTop_toBottomOf="@id/current" />
+
+    <TextView
+        android:id="@+id/amount_text"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/amount_home_fragment"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@id/name_text"
+        app:layout_constraintTop_toBottomOf="@id/current" />
+
+    <TextView
+        android:id="@+id/date_text"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/date"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@id/recyclerView"
+        app:layout_constraintStart_toEndOf="@id/amount_text"
+        app:layout_constraintTop_toBottomOf="@id/current" />
+
+    <TextView
         android:id="@+id/goalMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="22222"
         android:textSize="25sp"
         app:layout_constraintStart_toEndOf="@id/current"
         app:layout_constraintTop_toTopOf="@id/goal"
@@ -57,14 +93,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="8dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/current" />
+        app:layout_constraintTop_toBottomOf="@id/name_text" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addEntry"
