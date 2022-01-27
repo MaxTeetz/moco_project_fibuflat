@@ -39,10 +39,11 @@ GroupActivity : AppCompatActivity() {
             ), drawerLayout
         )
 
-        Toast.makeText(this@GroupActivity,
+        Toast.makeText(
+            this@GroupActivity,
             intent.getStringExtra("user_id"),
             Toast.LENGTH_SHORT
-            ).show()
+        ).show()
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

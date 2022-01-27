@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.MoneyPoolAdapter
+import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.FragmentHomeBinding
 
 //val intent = Intent (requireContext(), GroupActivity::class.java)
@@ -46,7 +47,10 @@ class HomeFragment : Fragment() {
         viewModel.allMoneyEntries.observe(this.viewLifecycleOwner) { entries ->
             entries.let {
                 adapter.submitList(it)
-                binding.currentMoney.text = viewModel.getCurrentMoney().toString()
+                binding.currentMoney.text = view.context.getString(
+                    R.string.money_amount_in_euro,
+                    viewModel.getCurrentMoney().toString()
+                )
             }
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)

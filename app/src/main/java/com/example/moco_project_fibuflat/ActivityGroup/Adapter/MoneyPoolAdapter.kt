@@ -6,19 +6,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.MoneypoolPoolEntryBinding
 
 class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
     ListAdapter<MoneyPoolEntry, MoneyPoolAdapter.MoneyPoolViewHolder>(DiffCallback) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoneyPoolViewHolder {
         return MoneyPoolViewHolder(
             MoneypoolPoolEntryBinding.inflate(
                 LayoutInflater.from(
-                    parent.context
+                    parent.context,
                 )
-            )
+            ),
+            parent
         )
     }
 
@@ -31,16 +32,21 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
     }
 
     class MoneyPoolViewHolder(
-        private var binding: MoneypoolPoolEntryBinding
+        private var binding: MoneypoolPoolEntryBinding,
+        private var parent: ViewGroup
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(moneyPoolEntry: MoneyPoolEntry) {
+
             binding.apply {
                 userName.text = moneyPoolEntry.stringUserId
-                moneyGiven.text = moneyPoolEntry.stringMoneyId.toString()
+                moneyGiven.text = parent.context.getString(
+                    R.string.money_amount_in_euro,
+                    moneyPoolEntry.stringMoneyId.toString()
+                )
+                dateMoneyGiven.text = moneyPoolEntry.stringDate
             }
         }
-
     }
 
     companion object {

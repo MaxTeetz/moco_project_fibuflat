@@ -1,6 +1,7 @@
 package com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEnt
 import com.example.moco_project_fibuflat.ActivityGroup.ui.home.HomeViewModel
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AddEntryFragment : Fragment() {
@@ -42,10 +45,18 @@ class AddEntryFragment : Fragment() {
         )
     }
 
-    private fun addNewEntry(){
-        if(isEntryValid()){
+    private fun addNewEntry() {
+        if (isEntryValid()) {
 
-            val moneyPoolEntry = MoneyPoolEntry(FirebaseAuth.getInstance().currentUser!!.uid, binding.moneyAmount.text.toString().toFloat())
+            val sdf = SimpleDateFormat("dd/M/yyyy\nhh:mm:ss")
+            val currentDate = sdf.format(Date())
+
+            val moneyPoolEntry = MoneyPoolEntry(
+                FirebaseAuth.getInstance().currentUser!!.uid,
+                binding.moneyAmount.text.toString().toInt(),
+                currentDate
+            )
+            Log.d("addNewEntry", binding.moneyAmount.text.toString())
             viewModelHome.addEntry(
                 moneyPoolEntry
             )

@@ -1,5 +1,6 @@
 package com.example.moco_project_fibuflat.ActivityGroup.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,13 +12,14 @@ class HomeViewModel : ViewModel() {
     val allMoneyEntries: LiveData<List<MoneyPoolEntry>> get() = _allMoneyEntries
 
     fun addEntry(moneyPoolEntry: MoneyPoolEntry) {
+        Log.d("addEntry", moneyPoolEntry.stringDate)
         _allMoneyEntries.value =
             _allMoneyEntries.value?.plus(moneyPoolEntry) ?: listOf(moneyPoolEntry)
     }
 
-    fun getCurrentMoney(): Float {
-        var amount: Float = 0F
-        allMoneyEntries.value?.forEach { e -> amount += e.stringMoneyId.toFloat() }
-        return amount
+    fun getCurrentMoney(): Double {
+        var amount: Double = 0.0
+        allMoneyEntries.value?.forEach { e -> amount += e.stringMoneyId }
+        return amount //ToDo get no number after decimal
     }
 }

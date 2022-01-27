@@ -22,7 +22,7 @@ class LoginViewModel : ViewModel() {
         return mail.isBlank()
     }
 
-    fun loginCredentialsCorrect(email: String, password: String): Boolean{
+    fun loginCredentialsCorrect(email: String, password: String): Boolean {
         return true
     }
 }

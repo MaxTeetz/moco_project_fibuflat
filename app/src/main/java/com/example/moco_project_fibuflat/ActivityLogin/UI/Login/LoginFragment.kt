@@ -55,6 +55,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun onLogin() {
+        binding.email.setText("max-julien@hotmail.de")
+        binding.password.setText("Baum123!")
         val password = binding.password.text.toString()
         val email = binding.email.text.toString()
         var check = true
