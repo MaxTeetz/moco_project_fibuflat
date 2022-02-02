@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityLogin.UI.Register
+package com.example.moco_project_fibuflat.activityLogin.UI.Register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,10 +16,6 @@ class RegisterViewModel : ViewModel(){
 
     fun isTextInputEmpty(textInput: String): Boolean {
         return textInput.isBlank()
-    }
-
-    fun isEmailValidRegister(email: String): Boolean { //Todo check with emailInUse database
-        return true
     }
 
     fun setData(email: String, password: String, username: String) {//ToDo set data in data Package LoggedInUser or Repository

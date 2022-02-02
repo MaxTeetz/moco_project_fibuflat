@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityLogin
+package com.example.moco_project_fibuflat.activityLogin
 
 import android.content.Intent
 import android.os.Bundle

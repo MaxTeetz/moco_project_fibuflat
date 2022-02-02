@@ -37,11 +37,16 @@ class AddEntryFragment : Fragment() {
         binding.addEntry.setOnClickListener {
             addNewEntry()
         }
+        binding.cancel.setOnClickListener {
+            val action = AddEntryFragmentDirections.actionAddEntryFragmentToNavHome()
+            findNavController().navigate(action)
+        }
     }
 
     private fun isEntryValid(): Boolean {
         return viewModel.isEntryValid(
-            binding.moneyAmount.text.toString()
+            binding.moneyAmount.text.toString(),
+            binding.message.text.toString()
         )
     }
 
@@ -54,7 +59,8 @@ class AddEntryFragment : Fragment() {
             val moneyPoolEntry = MoneyPoolEntry(
                 FirebaseAuth.getInstance().currentUser!!.uid,
                 binding.moneyAmount.text.toString().toInt(),
-                currentDate
+                currentDate,
+                binding.message.text.toString()
             )
             Log.d("addNewEntry", binding.moneyAmount.text.toString())
             viewModelHome.addEntry(

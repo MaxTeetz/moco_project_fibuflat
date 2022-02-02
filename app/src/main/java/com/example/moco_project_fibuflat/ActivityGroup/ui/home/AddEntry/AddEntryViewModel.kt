@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 
 class AddEntryViewModel : ViewModel() {
 
-    fun isEntryValid(moneyAmount: String): Boolean {
-        if(moneyAmount.isNotBlank() && moneyAmount.toInt() < 20001)
+    fun isEntryValid(moneyAmount: String, message: String): Boolean {
+        if(moneyAmount.isNotBlank() && moneyAmount.toInt() < 20001 && message.isNotBlank())
             return true
         return false
     }

@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityLogin.UI.Login
+package com.example.moco_project_fibuflat.activityLogin.UI.Login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.ActivityLogin.MainActivity
-import com.example.moco_project_fibuflat.ActivityLogin.UI.Register.RegisterViewModel
+import com.example.moco_project_fibuflat.activityLogin.MainActivity
+import com.example.moco_project_fibuflat.activityLogin.UI.Register.RegisterViewModel
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 

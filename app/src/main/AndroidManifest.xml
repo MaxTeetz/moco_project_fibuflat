@@ -15,7 +15,7 @@
             android:label="@string/title_activity_group"
             android:theme="@style/Theme.MoCo_Project_FiBuFlat.NoActionBar" />
         <activity
-            android:name=".ActivityLogin.MainActivity"
+            android:name=".activityLogin.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

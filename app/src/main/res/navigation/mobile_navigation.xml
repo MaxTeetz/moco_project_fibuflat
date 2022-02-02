@@ -40,9 +40,9 @@
     </fragment>
     <fragment
         android:id="@+id/moneyPoolChangeEntry"
-        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry.MoneyPoolChangeEntry"
+        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry.EntryDetail"
         android:label="fragment_money_pool_change_entry"
-        tools:layout="@layout/fragment_money_pool_change_entry" >
+        tools:layout="@layout/entry_detail" >
         <action
             android:id="@+id/action_moneyPoolChangeEntry_to_nav_home"
             app:destination="@id/nav_home" />
