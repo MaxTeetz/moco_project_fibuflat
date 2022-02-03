@@ -1,7 +1,6 @@
 package com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,12 +56,12 @@ class AddEntryFragment : Fragment() {
             val currentDate = sdf.format(Date())
 
             val moneyPoolEntry = MoneyPoolEntry(
+                id = UUID.randomUUID(),
                 FirebaseAuth.getInstance().currentUser!!.uid,
                 binding.moneyAmount.text.toString().toInt(),
                 currentDate,
                 binding.message.text.toString()
             )
-            Log.d("addNewEntry", binding.moneyAmount.text.toString())
             viewModelHome.addEntry(
                 moneyPoolEntry
             )

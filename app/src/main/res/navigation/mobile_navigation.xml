@@ -14,8 +14,8 @@
             android:id="@+id/action_nav_home_to_addEntryFragment"
             app:destination="@id/addEntryFragment" />
         <action
-            android:id="@+id/action_nav_home_to_moneyPoolChangeEntry"
-            app:destination="@id/moneyPoolChangeEntry" />
+            android:id="@+id/action_nav_home_to_entryDetail"
+            app:destination="@id/entryDetail" />
     </fragment>
 
     <fragment
@@ -39,12 +39,15 @@
             app:destination="@id/nav_home" />
     </fragment>
     <fragment
-        android:id="@+id/moneyPoolChangeEntry"
-        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry.EntryDetail"
-        android:label="fragment_money_pool_change_entry"
+        android:id="@+id/entryDetail"
+        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry.EntryDetailFragment"
+        android:label="entry_detail"
         tools:layout="@layout/entry_detail" >
+        <argument
+            android:name="entry_id"
+            app:argType="java.util.UUID"/>
         <action
-            android:id="@+id/action_moneyPoolChangeEntry_to_nav_home"
+            android:id="@+id/action_entryDetail_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
 </navigation>

@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.MoneypoolPoolEntryBinding
+import java.util.*
 
 class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
     ListAdapter<MoneyPoolEntry, MoneyPoolAdapter.MoneyPoolViewHolder>(DiffCallback) {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoneyPoolViewHolder {
         return MoneyPoolViewHolder(
@@ -49,7 +51,13 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
         }
     }
 
-    companion object {
+    fun deleteItem(id: UUID) {
+
+        notifyDataSetChanged()
+    }
+
+    companion
+    object {
         private val DiffCallback = object : DiffUtil.ItemCallback<MoneyPoolEntry>() {
 
             override fun areItemsTheSame(
