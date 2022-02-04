@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.databinding.MoneypoolPoolEntryBinding
-import java.util.*
 
 class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
     ListAdapter<MoneyPoolEntry, MoneyPoolAdapter.MoneyPoolViewHolder>(DiffCallback) {
@@ -41,19 +40,14 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
         fun bind(moneyPoolEntry: MoneyPoolEntry) {
 
             binding.apply {
-                userName.text = moneyPoolEntry.stringUserId
+                userName.text = moneyPoolEntry.stringUser
                 moneyGiven.text = parent.context.getString(
                     R.string.money_amount_in_euro,
-                    moneyPoolEntry.stringMoneyId.toString()
+                    moneyPoolEntry.moneyAmount.toString()
                 )
                 dateMoneyGiven.text = moneyPoolEntry.stringDate
             }
         }
-    }
-
-    fun deleteItem(id: UUID) {
-
-        notifyDataSetChanged()
     }
 
     companion
@@ -71,7 +65,7 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
                 oldItem: MoneyPoolEntry,
                 newItem: MoneyPoolEntry
             ): Boolean {
-                return oldItem.stringMoneyId == newItem.stringMoneyId
+                return oldItem.moneyAmount == newItem.moneyAmount
             }
         }
     }

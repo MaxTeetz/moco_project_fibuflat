@@ -1,7 +1,6 @@
 package com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,16 +31,20 @@ class EntryDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val id = navigationArgs.entryId
-        bind(viewModel.getEntry(id)) //to display in detail
+        bind(viewModel.getEntry(id))
 
         binding.deleteEntry.setOnClickListener {
             deleteEntry(id)
         }
+
+        binding.cancel.setOnClickListener {
+            this.findNavController().navigateUp()
+        }
     }
 
-    fun deleteEntry(id: UUID) {
-        Log.d("viewModel", "detail: " + id)
+    private fun deleteEntry(id: UUID) {
         viewModel.deleteEntry(id)
         this.findNavController().navigateUp()
 
@@ -49,8 +52,8 @@ class EntryDetailFragment : Fragment() {
 
     private fun bind(entryMoneyPoolEntry: MoneyPoolEntry) {
         binding.apply {
-            username.text = entryMoneyPoolEntry.stringUserId
-            moneyGiven.text = entryMoneyPoolEntry.stringMoneyId.toString()
+            username.text = entryMoneyPoolEntry.stringUser
+            moneyGiven.text = entryMoneyPoolEntry.moneyAmount.toString()
             message.text = entryMoneyPoolEntry.stringInfo
         }
     }

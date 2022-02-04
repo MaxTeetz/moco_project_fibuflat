@@ -4,8 +4,8 @@ import java.util.*
 
 data class MoneyPoolEntry(
     val id: UUID,
-    val stringUserId: String,
-    val stringMoneyId: Int,
+    val stringUser: String,
+    val moneyAmount: Int,
     val stringDate: String,
     val stringInfo: String
 )

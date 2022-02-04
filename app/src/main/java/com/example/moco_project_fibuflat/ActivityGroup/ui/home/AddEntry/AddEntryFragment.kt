@@ -62,7 +62,7 @@ class AddEntryFragment : Fragment() {
                 currentDate,
                 binding.message.text.toString()
             )
-            viewModelHome.addEntry(
+            viewModelHome.addItem(
                 moneyPoolEntry
             )
             val action = AddEntryFragmentDirections.actionAddEntryFragmentToNavHome()
