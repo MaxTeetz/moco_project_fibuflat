@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.databinding.FragmentRegisterBinding
 
@@ -29,7 +28,7 @@ class RegisterFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        (activity as GroupActivity).supportActionBar?.title = "Register"
+        (activity as MainActivity).supportActionBar?.title = "Register"
     }
 
     override fun onCreateView(

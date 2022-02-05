@@ -2,7 +2,6 @@ package com.example.moco_project_fibuflat.activityGroup
 
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.AppBarConfiguration
@@ -33,11 +32,6 @@ GroupActivity : AppCompatActivity() {
             ), drawerLayout
         )
 
-        Toast.makeText(
-            this@GroupActivity,
-            intent.getStringExtra("user_id"),
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

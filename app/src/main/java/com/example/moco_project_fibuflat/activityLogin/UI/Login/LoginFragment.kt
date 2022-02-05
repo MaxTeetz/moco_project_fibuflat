@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 
@@ -24,7 +23,7 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        (activity as GroupActivity).supportActionBar?.title = "Login"
+        (activity as MainActivity).supportActionBar?.title = "Login"
     }
 
     override fun onCreateView(

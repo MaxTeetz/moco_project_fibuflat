@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.databinding.ActivityMainBinding
@@ -28,8 +26,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        //setupActionBarWithNavController(navController, binding.)
-
+        //this.supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        //supportActionBar?.setDisplayShowCustomEnabled(true)
+        //supportActionBar?.setCustomView(R.layout.action_bar_main)
 
         auth = Firebase.auth
 
