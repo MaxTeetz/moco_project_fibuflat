@@ -31,7 +31,7 @@
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/addEntryFragment"
-        android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry.AddEntryFragment"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.AddEntryFragment"
         android:label="fragment_add_entry"
         tools:layout="@layout/fragment_add_entry" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/entryDetail"
-        android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry.EntryDetailFragment"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.EntryDetailFragment"
         android:label="entry_detail"
         tools:layout="@layout/entry_detail" >
         <argument

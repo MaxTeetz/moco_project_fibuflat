@@ -17,7 +17,7 @@ class RecyclerViewItemDecoration(
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
 
-        val dividerLeft: Int = 4
+        val dividerLeft = 4
 
         val dividerRight: Int = parent.width - 4
 

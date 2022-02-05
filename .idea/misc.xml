@@ -10,12 +10,14 @@
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/action_bar_main.xml" value="0.322463768115942" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/activity_group.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/activity_main.xml" value="0.3671875" />
-        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/app_bar_group.xml" value="0.3671875" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/app_bar_group.xml" value="0.1" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/app_bar_main.xml" value="0.2151268115942029" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/content_group.xml" value="0.3671875" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/content_main.xml" value="0.17857142857142858" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/entry_detail.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_add_entry.xml" value="0.25" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_gallery.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_home.xml" value="0.19596541786743515" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_home.xml" value="0.55" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_login.xml" value="0.353125" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_money_pool_change_entry.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_money_pool_entry_detail.xml" value="0.353125" />
@@ -35,5 +37,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1" />
+      </ProjectState>
+    </option>
   </component>
 </project>

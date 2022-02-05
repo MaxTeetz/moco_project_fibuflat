@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry
+package com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry
 
 import android.os.Bundle
 import android.view.LayoutInflater

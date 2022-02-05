@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry
+package com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.activityGroup.ui.home.HomeViewModel
 import com.example.moco_project_fibuflat.databinding.EntryDetailBinding
@@ -22,10 +23,15 @@ class EntryDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
 
+    override fun onStart() {
+        super.onStart()
+        (activity as GroupActivity).supportActionBar?.title = ""
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = EntryDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
