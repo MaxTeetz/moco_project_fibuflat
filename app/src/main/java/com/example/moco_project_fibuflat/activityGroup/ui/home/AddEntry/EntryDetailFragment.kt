@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry
+package com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.ActivityGroup.ui.home.HomeViewModel
+import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.activityGroup.ui.home.HomeViewModel
 import com.example.moco_project_fibuflat.databinding.EntryDetailBinding
 import java.util.*
 
@@ -53,7 +54,10 @@ class EntryDetailFragment : Fragment() {
     private fun bind(entryMoneyPoolEntry: MoneyPoolEntry) {
         binding.apply {
             username.text = entryMoneyPoolEntry.stringUser
-            moneyGiven.text = entryMoneyPoolEntry.moneyAmount.toString()
+            moneyGiven.text = view?.context?.getString(
+                R.string.money_amount_in_euro,
+                entryMoneyPoolEntry.moneyAmount.toString()
+            )
             message.text = entryMoneyPoolEntry.stringInfo
         }
     }

@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry
+package com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry
 
 import androidx.lifecycle.ViewModel
 

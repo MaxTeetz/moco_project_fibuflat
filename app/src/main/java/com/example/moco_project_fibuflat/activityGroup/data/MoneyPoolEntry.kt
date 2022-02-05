@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data
+package com.example.moco_project_fibuflat.activityGroup.data
 
 import java.util.*
 

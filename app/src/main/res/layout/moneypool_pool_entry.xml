@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@color/grey"
     android:descendantFocusability="blocksDescendants">
+
 
     <TextView
         android:id="@+id/user_name"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
+        android:layout_width="182dp"
+        android:layout_height="48dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -21,8 +21,8 @@
 
     <TextView
         android:id="@+id/money_given"
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
+        android:layout_width="93dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_vertical"
@@ -33,13 +33,11 @@
         tools:text="99€" />
 
     <TextView
-        android:id="@+id/date_money_given"
-        android:layout_width="164dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:background="@color/password_blue"
+        android:id="@+id/date"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
         android:fontFamily="sans-serif-smallcaps"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/money_given"

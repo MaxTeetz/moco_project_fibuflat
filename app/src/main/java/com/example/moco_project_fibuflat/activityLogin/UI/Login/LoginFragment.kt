@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.activityLogin.MainActivity
-import com.example.moco_project_fibuflat.activityLogin.UI.Register.RegisterViewModel
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.GroupActivity
+import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 
 /**
@@ -19,10 +18,14 @@ import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 class LoginFragment : Fragment() {
 
     private val viewModel: LoginViewModel by viewModels()
-    private val registerView: RegisterViewModel by viewModels()
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
+    override fun onStart() {
+        super.onStart()
+        (activity as GroupActivity).supportActionBar?.title = "Login"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,17 +37,8 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val model = ViewModelProviders.of(activity!!).get(RegisterViewModel::class.java)
 
         super.onViewCreated(view, savedInstanceState)
-
-        //set email and password for login
-        registerView.password.observe(
-            this,
-            {   //ToDo observe data Package LoggedInUser or Repository
-                binding.email.setText(model.email.value)
-                binding.password.setText(model.password.value) //works now I guess. Before setData.toString()
-            })
 
         binding.createAccountText.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
@@ -74,7 +68,7 @@ class LoginFragment : Fragment() {
         }
 
         if (check) {
-            (activity as MainActivity)!!.firebaseLogin(email, password)
+            (activity as MainActivity).firebaseLogin(email, password)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry
+package com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.ActivityGroup.ui.home.HomeViewModel
+import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.activityGroup.ui.home.HomeViewModel
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat

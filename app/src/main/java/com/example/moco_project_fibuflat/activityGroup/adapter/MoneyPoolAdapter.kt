@@ -1,12 +1,12 @@
-package com.example.moco_project_fibuflat.ActivityGroup.Adapter
+package com.example.moco_project_fibuflat.activityGroup.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.databinding.MoneypoolPoolEntryBinding
 
 class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
@@ -45,7 +45,7 @@ class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :
                     R.string.money_amount_in_euro,
                     moneyPoolEntry.moneyAmount.toString()
                 )
-                dateMoneyGiven.text = moneyPoolEntry.stringDate
+                date.text = moneyPoolEntry.stringDate
             }
         }
     }

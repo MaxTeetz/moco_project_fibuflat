@@ -1,17 +1,17 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.home
+package com.example.moco_project_fibuflat.activityGroup.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
 import java.util.*
 
 class HomeViewModel : ViewModel() {
 
-    val _allMoneyEntries = MutableListLiveData<MoneyPoolEntry>()
-    //val allMoneyPoolEntries: LiveData<List<MoneyPoolEntry>> get() = _allMoneyEntries
+    private val _allMoneyEntries = MutableListLiveData<MoneyPoolEntry>()
+    val allMoneyEntries: LiveData<List<MoneyPoolEntry>> get() = _allMoneyEntries
 
 
-    fun addItem(moneyPoolEntry: MoneyPoolEntry){
+    fun addItem(moneyPoolEntry: MoneyPoolEntry) {
         _allMoneyEntries.add(moneyPoolEntry)
     }
 

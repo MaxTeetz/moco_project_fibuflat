@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.NFC
+package com.example.moco_project_fibuflat.activityGroup.ui.NFC
 
 import android.os.Bundle
 import android.view.LayoutInflater

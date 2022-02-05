@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.HomeFragment"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -20,18 +20,18 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.ToDo.GalleryFragment"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.ToDo.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.NFC.SlideshowFragment"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.NFC.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/addEntryFragment"
-        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry.AddEntryFragment"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry.AddEntryFragment"
         android:label="fragment_add_entry"
         tools:layout="@layout/fragment_add_entry" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/entryDetail"
-        android:name="com.example.moco_project_fibuflat.ActivityGroup.ui.home.AddEntry.EntryDetailFragment"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.AddEntry.EntryDetailFragment"
         android:label="entry_detail"
         tools:layout="@layout/entry_detail" >
         <argument

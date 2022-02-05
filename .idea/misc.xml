@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/divider_shape.xml" value="0.148" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/ic_error.xml" value="0.25833333333333336" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.137" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/underline_black.xml" value="0.148" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/activity_group.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/activity_main.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/app_bar_group.xml" value="0.3671875" />
@@ -11,17 +14,18 @@
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/entry_detail.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_add_entry.xml" value="0.25" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_gallery.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_home.xml" value="0.5" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_home.xml" value="0.19596541786743515" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_login.xml" value="0.353125" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_money_pool_change_entry.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_money_pool_entry_detail.xml" value="0.353125" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_register.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_slideshow.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/moneypool_entry.xml" value="0.3671875" />
-        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/moneypool_pool_entry.xml" value="0.4437869822485207" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/moneypool_pool_entry.xml" value="0.25" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/nav_header_group.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/test.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/menu/activity_main_drawer.xml" value="0.3671875" />
+        <entry key="..\:/Users/max-j/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/activity_list_item.xml" value="0.3671875" />
       </map>
     </option>
   </component>

@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.databinding.FragmentRegisterBinding
 
@@ -27,19 +27,22 @@ class RegisterFragment : Fragment() {
     private lateinit var registerUsername: String
     private lateinit var confirmPassword: String
 
+    override fun onStart() {
+        super.onStart()
+        (activity as GroupActivity).supportActionBar?.title = "Register"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.registerButton.setOnClickListener { onRegister() }
     }
 
@@ -53,7 +56,7 @@ class RegisterFragment : Fragment() {
 
 
         //check if anything´s empty
-        if (!checkPassword()) { //ToDo call setError from ViewModel? Make cleaner
+        if (!checkPassword()) {
             anyFieldEmpty = true
         }
         if (viewModel.isTextInputEmpty(registerEmail)) {
@@ -109,12 +112,6 @@ class RegisterFragment : Fragment() {
         val email: String = registerEmail.trim { it <= ' ' }
         val password: String = registerPassword.trim { it <= ' ' }
 
-        //change fragment and set data
-        val model =
-            ViewModelProviders.of(activity!!)[RegisterViewModel::class.java] //ToDo redundant code?
-
-
-        model.setData(registerEmail, registerPassword, registerUsername)
 
         (activity as MainActivity?)!!.firebaseRegister(email, password)
 

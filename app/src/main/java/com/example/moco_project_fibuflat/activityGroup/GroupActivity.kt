@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup
+package com.example.moco_project_fibuflat.activityGroup
 
 import android.os.Bundle
 import android.view.Menu

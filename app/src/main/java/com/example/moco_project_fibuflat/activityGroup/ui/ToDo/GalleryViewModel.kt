@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.ToDo
+package com.example.moco_project_fibuflat.activityGroup.ui.ToDo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

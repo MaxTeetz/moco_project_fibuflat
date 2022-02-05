@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.ActivityGroup.ui.home
+package com.example.moco_project_fibuflat.activityGroup.ui.home
 
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moco_project_fibuflat.ActivityGroup.Adapter.Data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.ActivityGroup.Adapter.MoneyPoolAdapter
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.GroupActivity
+import com.example.moco_project_fibuflat.activityGroup.adapter.MoneyPoolAdapter
+import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
+import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.databinding.FragmentHomeBinding
 import java.util.*
 import kotlin.random.Random
@@ -38,6 +40,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         Log.d("homeFragment", "onViewCreated")
         val adapter = MoneyPoolAdapter {
             val action = HomeFragmentDirections.actionNavHomeToEntryDetail(it.id)
@@ -46,7 +49,7 @@ class HomeFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
 
-        viewModel._allMoneyEntries.observe(this.viewLifecycleOwner) { entries ->
+        viewModel.allMoneyEntries.observe(this.viewLifecycleOwner) { entries ->
             entries.let {
                 adapter.submitList(it)
                 binding.currentMoney.text = view.context.getString(
@@ -55,7 +58,10 @@ class HomeFragment : Fragment() {
                 )
             }
         }
+
+
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
+        binding.recyclerView.addItemDecoration(RecyclerViewItemDecoration(this.requireContext(), R.drawable.divider_shape))
         binding.addEntry.setOnClickListener {
 
             viewModel.addItem(
@@ -67,6 +73,8 @@ class HomeFragment : Fragment() {
                     "This is a message"
                 )
             )
+
+            adapter.notifyItemInserted(viewModel.allMoneyEntries.value!!.size-1) //ToDo also with delete etc.
             //val action = HomeFragmentDirections.actionNavHomeToAddEntryFragment()
             //this.findNavController().navigate(action)
         }
@@ -75,6 +83,7 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d("homeFragment", "onStart")
+        (activity as GroupActivity).supportActionBar?.title = "Moneypool"
 
     }
 

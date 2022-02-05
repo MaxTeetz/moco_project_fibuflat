@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoCo_Project_FiBuFlat">
         <activity
-            android:name=".ActivityGroup.GroupActivity"
+            android:name=".activityGroup.GroupActivity"
             android:exported="false"
             android:label="@string/title_activity_group"
             android:theme="@style/Theme.MoCo_Project_FiBuFlat.NoActionBar" />
