@@ -112,7 +112,7 @@ class RegisterFragment : Fragment() {
         val password: String = registerPassword.trim { it <= ' ' }
 
 
-        (activity as MainActivity?)!!.firebaseRegister(email, password)
+        (activity as MainActivity?)!!.firebaseRegister(email, password, registerUsername)
 
         val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
         findNavController().navigate(action)

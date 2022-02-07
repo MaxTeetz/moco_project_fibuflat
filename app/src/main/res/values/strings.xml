@@ -56,17 +56,17 @@
     <string name="cancel">Cancel</string>
     <string name="enter_description">Enter description</string>
     <string name="back">Back</string>
-
+    <string name="change_the_current_money_goal">change the current money goal</string>
 
     <!--ToDoFragment-->
     <string name="menu_gallery">Gallery</string>
 
     <!--NFC-->
     <string name="menu_slideshow">Slideshow</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="date">Date</string>
     <string name="title_activity_main2">MainActivity2</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 
 </resources>

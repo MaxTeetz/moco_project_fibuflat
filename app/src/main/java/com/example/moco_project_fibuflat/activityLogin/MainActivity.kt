@@ -2,6 +2,7 @@ package com.example.moco_project_fibuflat.activityLogin
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -15,6 +16,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -45,14 +47,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    fun firebaseRegister(email: String, password: String) {
+    fun firebaseRegister(email: String, password: String, name: String) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful)
                     taskSuccessful(
                         "Register Successful",
                         email,
-                        task.result!!.user!!
+                        task.result!!.user!!,
+                        LoginType.REGISTER,
+                        name
                     )
                 else
                     taskFailed(task)
@@ -66,14 +70,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     taskSuccessful(
                         "Login Successful",
                         email,
-                        FirebaseAuth.getInstance().currentUser!!
+                        FirebaseAuth.getInstance().currentUser!!,
+                        LoginType.LOGIN,
+                        null
                     )
                 else
                     taskFailed(task)
             }
     }
 
-    private fun taskSuccessful(text: String, email: String, firebaseUser: FirebaseUser) {
+    private fun taskSuccessful(
+        text: String,
+        email: String,
+        firebaseUser: FirebaseUser,
+        type: LoginType,
+        name: String?
+    ) {
         Toast.makeText(
             this@MainActivity,
             text,
@@ -92,7 +104,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         intent.putExtra(
             "email_id", email
         )
+
+        if (type == LoginType.REGISTER)
+            setNameAndPic(name!!)
+
         startActivity(intent)
+
     }
 
     private fun taskFailed(task: Task<AuthResult>) {
@@ -101,5 +118,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             task.exception!!.message.toString(),
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun setNameAndPic(name: String) {
+        val user = Firebase.auth.currentUser
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name
+        }
+
+        user!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful)
+                    Log.d("mainActivity", "changedProfileName")
+            }
     }
 }

@@ -9,39 +9,29 @@
 
 
     <TextView
-        android:id="@+id/money"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/money_pool"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/goal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/needed_money"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/money" />
-
-    <TextView
         android:id="@+id/current"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/current_money"
         android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="@id/goal"
-        app:layout_constraintTop_toBottomOf="@id/goal" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/currentMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@id/current"
+        app:layout_constraintTop_toTopOf="@id/current"
+        tools:text="€9999" />
 
     <TextView
         android:id="@+id/name_text"
         android:layout_width="190dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/underline_black"
         android:gravity="center_vertical"
         android:text="@string/username_home_fragment"
@@ -54,47 +44,26 @@
         android:id="@+id/amount_text"
         android:layout_width="93dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/underline_black"
         android:gravity="center_vertical"
         android:text="@string/amount_home_fragment"
         android:textSize="22sp"
         app:layout_constraintStart_toEndOf="@id/name_text"
-        app:layout_constraintTop_toBottomOf="@id/current" />
+        app:layout_constraintTop_toTopOf="@id/name_text" />
 
     <TextView
         android:id="@+id/date_text"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/underline_black"
         android:gravity="center_vertical"
         android:text="@string/date"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="@id/recyclerView"
         app:layout_constraintStart_toEndOf="@id/amount_text"
-        app:layout_constraintTop_toBottomOf="@id/current" />
+        app:layout_constraintTop_toTopOf="@id/name_text" />
 
-    <TextView
-        android:id="@+id/goalMoney"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="22222"
-        android:textSize="25sp"
-        app:layout_constraintStart_toEndOf="@id/current"
-        app:layout_constraintTop_toTopOf="@id/goal"
-        tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/currentMoney"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="25sp"
-        app:layout_constraintStart_toEndOf="@id/current"
-        app:layout_constraintTop_toBottomOf="@id/goalMoney"
-        tools:ignore="HardcodedText" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -106,7 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name_text" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/addEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,4 +86,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ImageButton
+        android:id="@+id/change_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/change_money"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/current"
+        android:contentDescription="@string/change_the_current_money_goal"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

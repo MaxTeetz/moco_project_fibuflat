@@ -1,7 +1,9 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.moco_project_fibuflat.activityGroup.data.MoneyGoal
 import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
 import java.util.*
 
@@ -9,16 +11,31 @@ class HomeViewModel : ViewModel() {
 
     private val _allMoneyEntries = MutableListLiveData<MoneyPoolEntry>()
     val allMoneyEntries: LiveData<List<MoneyPoolEntry>> get() = _allMoneyEntries
-
+    private val _moneyGoal = MutableLiveData(MoneyGoal(0.0,0.0))
+    val moneyGoal: LiveData<MoneyGoal> get() = _moneyGoal
 
     fun addItem(moneyPoolEntry: MoneyPoolEntry) {
         _allMoneyEntries.add(moneyPoolEntry)
     }
 
-    fun getCurrentMoney(): Double {
+    fun getGoalReached(): Boolean{
+        if(_moneyGoal.value?.goalMoney!! <= currentMoney())
+            return true
+        return false //ToDo elvis
+    }
+
+    private fun currentMoney(): Double {
         var amount = 0.0
         _allMoneyEntries.value?.forEach { e -> amount += e.moneyAmount }
         return amount
+    }
+
+    fun moneyGoalSetGoal(goal: Double){
+        moneyGoal.value?.goalMoney = goal
+    }
+
+    fun moneyGoalSetCurrent(){
+        moneyGoal.value?.currentMoney = currentMoney()
     }
 
     fun getEntry(id: UUID): MoneyPoolEntry {

@@ -57,7 +57,7 @@ class AddEntryFragment : Fragment() {
 
             val moneyPoolEntry = MoneyPoolEntry(
                 id = UUID.randomUUID(),
-                FirebaseAuth.getInstance().currentUser!!.uid,
+                FirebaseAuth.getInstance().currentUser!!.displayName!!,
                 binding.moneyAmount.text.toString().toInt(),
                 currentDate,
                 binding.message.text.toString()
@@ -65,6 +65,7 @@ class AddEntryFragment : Fragment() {
             viewModelHome.addItem(
                 moneyPoolEntry
             )
+            viewModelHome.moneyGoalSetCurrent()
             val action = AddEntryFragmentDirections.actionAddEntryFragmentToNavHome()
             findNavController().navigate(action)
         }
