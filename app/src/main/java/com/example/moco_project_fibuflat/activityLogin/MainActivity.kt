@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         var intent: Intent? = null //ToDo make clean
         //ToDo in viewModel
-        intent = if (getDBGroupEntry())
+        intent = if (getDBGroupEntry(firebaseUser.uid))
             Intent(this@MainActivity, GroupActivity::class.java)
         else
             Intent(this@MainActivity, SelectGroupActivity::class.java)
@@ -120,25 +120,28 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         ).show()
     }
 
-    private fun setUserDB(userID: String, name: String, email: String) {
+    private fun setUserDB(
+        userID: String,
+        name: String,
+        email: String
+    ) { //ToDo return if db entry was created
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users")
-        val user = User(userID, name, email)
+        val user = User(userID, name, email, "noGroupSelected")
 
         database.child(userID).setValue(user)
-            .addOnSuccessListener {
-                Log.d("mainActivity", "createdDBInstance")
-            }
-            .addOnFailureListener {
-                Log.d("mainActivity", "couldn't create db entry")
-            }
+
     }
 
-    private fun getDBGroupEntry(): Boolean {
+    private fun getDBGroupEntry(firebaseUser: String): Boolean {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child("group").child("groupID")
-        return !database.get().equals(null)
+                .getReference("Users").child(firebaseUser)
+                .child("group")
+        Log.d("mainActivity", firebaseUser)
+        if(database.get().equals(null))
+            return false
+        return true
     }
 }
