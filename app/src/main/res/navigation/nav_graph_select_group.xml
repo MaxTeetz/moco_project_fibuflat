@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_select_group"
+    app:startDestination="@id/selectGroupFragment">
+
+    <fragment
+        android:id="@+id/createGroupFragment"
+        android:name="com.example.moco_project_fibuflat.activitySelectGroup.ui.createGroup.CreateGroupFragment"
+        android:label="fragment_create_group"
+        tools:layout="@layout/fragment_create_group">
+
+        <action
+            android:id="@+id/action_createGroupFragment_to_selectGroupFragment"
+            app:destination="@id/selectGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinGroupFragment"
+        android:name="com.example.moco_project_fibuflat.activitySelectGroup.ui.joinGroup.JoinGroupFragment"
+        android:label="fragment_join_group"
+        tools:layout="@layout/fragment_join_group" >
+        <action
+            android:id="@+id/action_joinGroupFragment_to_selectGroupFragment"
+            app:destination="@id/selectGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectGroupFragment"
+        android:name="com.example.moco_project_fibuflat.activitySelectGroup.ui.selectGroup.SelectGroupFragment"
+        android:label="fragment_select_group"
+        tools:layout="@layout/fragment_select_group">
+
+        <action
+            android:id="@+id/action_selectGroupFragment_to_joinGroupFragment"
+            app:destination="@id/joinGroupFragment" />
+        <action
+            android:id="@+id/action_selectGroupFragment_to_createGroupFragment"
+            app:destination="@id/createGroupFragment" />
+    </fragment>
+</navigation>

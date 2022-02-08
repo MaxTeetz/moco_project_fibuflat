@@ -39,7 +39,6 @@
         app:layout_constraintStart_toStartOf="@id/current"
         app:layout_constraintTop_toBottomOf="@id/current" />
 
-    <!--ToDo 8dp?-->
     <TextView
         android:id="@+id/amount_text"
         android:layout_width="93dp"

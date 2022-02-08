@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoCo_Project_FiBuFlat">
         <activity
+            android:name=".activitySelectGroup.SelectGroupActivity"
+            android:exported="false" />
+        <activity
             android:name=".activityGroup.GroupActivity"
             android:exported="false"
             android:label="@string/title_activity_group"

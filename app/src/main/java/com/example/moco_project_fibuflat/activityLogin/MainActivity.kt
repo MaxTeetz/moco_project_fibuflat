@@ -9,28 +9,29 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.activityGroup.GroupActivity
+import com.example.moco_project_fibuflat.activitySelectGroup.SelectGroupActivity
+import com.example.moco_project_fibuflat.data.User
 import com.example.moco_project_fibuflat.databinding.ActivityMainBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var navController: NavController
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        //this.supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        //supportActionBar?.setDisplayShowCustomEnabled(true)
-        //supportActionBar?.setCustomView(R.layout.action_bar_main)
 
         auth = Firebase.auth
 
@@ -42,7 +43,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
@@ -50,15 +50,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     fun firebaseRegister(email: String, password: String, name: String) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful)
+                if (task.isSuccessful) {
+                    setUserDB(
+                        task.result!!.user!!.uid,
+                        name,
+                        email
+                    )
                     taskSuccessful(
                         "Register Successful",
                         email,
                         task.result!!.user!!,
-                        LoginType.REGISTER,
-                        name
                     )
-                else
+                } else
                     taskFailed(task)
             }
     }
@@ -71,8 +74,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                         "Login Successful",
                         email,
                         FirebaseAuth.getInstance().currentUser!!,
-                        LoginType.LOGIN,
-                        null
                     )
                 else
                     taskFailed(task)
@@ -82,9 +83,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun taskSuccessful(
         text: String,
         email: String,
-        firebaseUser: FirebaseUser,
-        type: LoginType,
-        name: String?
+        firebaseUser: FirebaseUser
     ) {
         Toast.makeText(
             this@MainActivity,
@@ -92,8 +91,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             Toast.LENGTH_SHORT
         ).show()
 
+
         val intent =
-            Intent(this@MainActivity, GroupActivity::class.java)
+            Intent(this@MainActivity, SelectGroupActivity::class.java)
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
@@ -104,9 +104,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         intent.putExtra(
             "email_id", email
         )
-
-        if (type == LoginType.REGISTER)
-            setNameAndPic(name!!)
 
         startActivity(intent)
 
@@ -120,17 +117,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         ).show()
     }
 
-    private fun setNameAndPic(name: String) {
-        val user = Firebase.auth.currentUser
+    private fun setUserDB(uid: String, name: String, email: String) {
+        database =
+            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Users")
+        val user = User(uid, name, email, UUID.randomUUID())
 
-        val profileUpdates = userProfileChangeRequest {
-            displayName = name
-        }
-
-        user!!.updateProfile(profileUpdates)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful)
-                    Log.d("mainActivity", "changedProfileName")
+        database.child(uid).setValue(user)
+            .addOnSuccessListener {
+                Log.d("mainActivity", "createdDBInstance")
             }
+            .addOnFailureListener {
+                Log.d("mainActivity", "couldn't create db entry")
+            }
+    }
+
+    private fun getDBGroupEntry(): Boolean{
+        return true
     }
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    tools:context=".activitySelectGroup.ui.joinGroup.JoinGroupFragment">
+
+    <TextView
+        android:id="@+id/find_group_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/enter_a_group_name_here"
+        android:gravity="center"
+        android:textSize="25sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/find_group_label"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:layout_constraintTop_toBottomOf="@id/find_group_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/find_group_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/invitations_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/active_invitations"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:background="@drawable/underline_black"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/find_group_label" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/invitations_text"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

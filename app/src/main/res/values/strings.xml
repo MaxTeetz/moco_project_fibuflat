@@ -2,7 +2,6 @@
     <string name="app_name">MoCo_Project_FiBuFlat</string>
 
     <!--Main activity strings-->
-
     <!--UI strings-->
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -30,7 +29,20 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--Select group activity strings-->
+    <!--Select Group Option Fragment-->
+    <string name="welcome_message">Welcome to FiBuFlat.\n To Continue create a Group or join an existing one.</string>
+    <string name="create_group_text">Create Group</string>
+    <string name="join_group_text">Join Group</string>
+
+    <!--Join Group Fragment-->
+    <string name="decline">decline</string>
+    <string name="accept">accept</string>
+    <string name="enter_a_group_name_here">Enter a Group name here:</string>
+    <string name="active_invitations">Active invitations</string>
+
     <!--Group activity strings-->
+    <!--side_nav_bar-->
     <string name="moneypool">Moneypool</string>
     <string name="to_do_list">To Do–List</string>
     <string name="nfc">NFC</string>
@@ -64,9 +76,8 @@
     <!--NFC-->
     <string name="menu_slideshow">Slideshow</string>
     <string name="date">Date</string>
-    <string name="title_activity_main2">MainActivity2</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
