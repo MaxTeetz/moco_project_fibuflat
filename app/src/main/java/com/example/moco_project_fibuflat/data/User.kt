@@ -8,3 +8,9 @@ data class User(
     val email: String? = null,
     val groupId: UUID? = null
 )
+
+data class Group(
+    val groupID: String? = null,
+    val groupName: String? = null,
+    val users: MutableList<String>
+)

@@ -3,7 +3,6 @@ package com.example.moco_project_fibuflat.activityGroup.ui.home
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        Log.d("homeFragment", "onStart")
         (activity as GroupActivity).supportActionBar?.title = "Moneypool"
 
     }
@@ -41,15 +39,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        Log.d("homeFragment", "onCreateView")
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d("homeFragment", "onViewCreated")
 
         bindRecyclerView()
 
@@ -62,18 +57,6 @@ class HomeFragment : Fragment() {
         }
 
         binding.addEntry.setOnClickListener {
-
-            /*viewModel.addItem(
-                MoneyPoolEntry(
-                    UUID.randomUUID(),
-                    "Max Mustermann",
-                    Random.nextInt(0, 9999),
-                    "03.02.2022",
-                    "This is a message"
-                )
-            )
-            adapter.notifyItemInserted(viewModel.allMoneyEntries.value!!.size - 1) //ToDo also with delete etc.
-             */
 
             val action = HomeFragmentDirections.actionNavHomeToAddEntryFragment()
             this.findNavController().navigate(action)

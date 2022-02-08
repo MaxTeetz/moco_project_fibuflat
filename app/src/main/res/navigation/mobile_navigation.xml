@@ -45,7 +45,7 @@
         tools:layout="@layout/entry_detail" >
         <argument
             android:name="entry_id"
-            app:argType="java.util.UUID"/>
+            app:argType="string"/>
         <action
             android:id="@+id/action_entryDetail_to_nav_home"
             app:destination="@id/nav_home" />

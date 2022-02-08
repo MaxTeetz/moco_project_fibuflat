@@ -106,7 +106,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         )
 
         startActivity(intent)
-
     }
 
     private fun taskFailed(task: Task<AuthResult>) {

@@ -40,6 +40,13 @@
     <string name="accept">accept</string>
     <string name="enter_a_group_name_here">Enter a Group name here:</string>
     <string name="active_invitations">Active invitations</string>
+    <string name="join_group">Send Inquiry</string>
+
+    <!--Create Group Fragment-->
+    <string name="create_group">Create Group</string>
+    <string name="group_name">Group Name</string>
+    <string name="create_your_group_here">Create your Group here</string>
+    <string name="emptyGroupName">Group Name can´t be empty</string>
 
     <!--Group activity strings-->
     <!--side_nav_bar-->
@@ -76,8 +83,6 @@
     <!--NFC-->
     <string name="menu_slideshow">Slideshow</string>
     <string name="date">Date</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -1,9 +1,7 @@
 package com.example.moco_project_fibuflat.activityGroup.data
 
-import java.util.*
-
 data class MoneyPoolEntry(
-    val id: UUID, //identifier of entry
+    val id: String, //identifier of entry
     val stringUser: String, //username
     val moneyAmount: Int, //money
     val stringDate: String, //date
