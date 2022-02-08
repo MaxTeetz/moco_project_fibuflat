@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activitySelectGroup.SelectGroupActivity
 import com.example.moco_project_fibuflat.data.User
 import com.example.moco_project_fibuflat.databinding.ActivityMainBinding
@@ -20,7 +21,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import java.util.*
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -91,9 +91,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             Toast.LENGTH_SHORT
         ).show()
 
-
-        val intent =
+        var intent: Intent? = null //ToDo make clean
+        //ToDo in viewModel
+        intent = if (getDBGroupEntry())
+            Intent(this@MainActivity, GroupActivity::class.java)
+        else
             Intent(this@MainActivity, SelectGroupActivity::class.java)
+
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
@@ -116,13 +120,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         ).show()
     }
 
-    private fun setUserDB(uid: String, name: String, email: String) {
+    private fun setUserDB(userID: String, name: String, email: String) {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users")
-        val user = User(uid, name, email, UUID.randomUUID())
+        val user = User(userID, name, email)
 
-        database.child(uid).setValue(user)
+        database.child(userID).setValue(user)
             .addOnSuccessListener {
                 Log.d("mainActivity", "createdDBInstance")
             }
@@ -131,7 +135,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
     }
 
-    private fun getDBGroupEntry(): Boolean{
+    private fun getDBGroupEntry(): Boolean {
+        database =
+            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Users").child("group").child("groupID")
+        if (database.get().equals(null))
+            return false
+
         return true
     }
 }

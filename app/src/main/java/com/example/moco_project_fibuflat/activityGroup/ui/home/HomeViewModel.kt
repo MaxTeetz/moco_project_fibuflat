@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moco_project_fibuflat.activityGroup.data.MoneyGoal
 import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
-import java.util.*
 
 class HomeViewModel : ViewModel() {
 
@@ -38,16 +37,16 @@ class HomeViewModel : ViewModel() {
         moneyGoal.value?.currentMoney = currentMoney()
     }
 
-    fun getEntry(id: UUID): MoneyPoolEntry {
+    fun getEntry(id: String): MoneyPoolEntry {
         _allMoneyEntries.value?.forEach { e ->
-            if (e.id == id)
+            if (e.id.equals(id))
                 return e
         }
         throw error("nothing found") //ToDo
     }
 
 
-    fun deleteEntry(id: UUID) {
+    fun deleteEntry(id: String) {
         _allMoneyEntries.remove(getEntry(id))
     }
 }

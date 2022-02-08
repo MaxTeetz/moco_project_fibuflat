@@ -86,6 +86,6 @@ class AddEntryFragment : Fragment() {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Groups")
-        database.child(intent!!).child("moneyPoolEntry").setValue(moneyPoolEntry)
+        database.child(intent!!).child("moneyPoolEntry").child(moneyPoolEntry.id).setValue(moneyPoolEntry)
     }
 }

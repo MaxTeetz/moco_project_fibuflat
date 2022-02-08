@@ -13,12 +13,13 @@ import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.activityGroup.ui.home.HomeViewModel
 import com.example.moco_project_fibuflat.databinding.EntryDetailBinding
-import java.util.*
+import com.google.firebase.database.DatabaseReference
 
 
 class EntryDetailFragment : Fragment() {
     private val navigationArgs: EntryDetailFragmentArgs by navArgs()
 
+    private lateinit var database: DatabaseReference
     private var _binding: EntryDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
@@ -51,7 +52,12 @@ class EntryDetailFragment : Fragment() {
         }
     }
 
-    private fun deleteEntry(id: UUID) {
+    private fun deleteEntry(id: String) {
+        //database = FirebaseDatabase.getInstance() //ToDo
+        //    .getReference("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
+        //    .child("Groups").child(activity?.intent?.extras?.get("groupID").toString())
+        //    .child("moneyPoolEntry")
+        //database.child(id).removeValue()
         viewModel.deleteEntry(id)
         this.findNavController().navigateUp()
 
