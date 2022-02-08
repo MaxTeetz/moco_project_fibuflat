@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
+import com.google.android.material.textfield.TextInputLayout
 
 /**
  * A simple [Fragment] subclass.
@@ -47,7 +48,7 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener { onLogin() }
     }
 
-    private fun onLogin() {
+    private fun onLogin() { //ToDo ?
         binding.email.setText("max-julien@hotmail.de")
         binding.password.setText("Baum123!")
         val password = binding.password.text.toString()
@@ -55,15 +56,15 @@ class LoginFragment : Fragment() {
         var check = true
 
         if (viewModel.isTextInputEmpty(email)) {
-            setErrorTextFieldEmail(true)
+            setErrorTextField(true, binding.emailLabel, R.string.emptyMail)
             check = false
         } else
-            setErrorTextFieldEmail(false)
+            setErrorTextField(false, binding.emailLabel, null)
         if (viewModel.isTextInputEmpty(password)) {
             check = false
-            setErrorTextFieldPassword(true)
+            setErrorTextField(true, binding.passwordLabel, R.string.emptyPassword)
         } else {
-            setErrorTextFieldPassword(false)
+            setErrorTextField(false, binding.passwordLabel, null)
         }
 
         if (check) {
@@ -71,21 +72,13 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun setErrorTextFieldEmail(error: Boolean) {
+    private fun setErrorTextField(error: Boolean, textField: TextInputLayout?, int: Int?) {
         if (error) {
-            binding.emailLabel.isErrorEnabled = true
-            binding.emailLabel.error = getString(R.string.emptyMail)
+            textField!!.isErrorEnabled = true
+            textField.error = getString(int!!)
         } else {
-            binding.emailLabel.isErrorEnabled = false
+            textField!!.isErrorEnabled = false
         }
     }
 
-    private fun setErrorTextFieldPassword(error: Boolean) {
-        if (error) {
-            binding.passwordLabel.isErrorEnabled = true
-            binding.passwordLabel.error = getString(R.string.emptyPassword)
-        } else {
-            binding.passwordLabel.isErrorEnabled = false
-        }
-    }
 }

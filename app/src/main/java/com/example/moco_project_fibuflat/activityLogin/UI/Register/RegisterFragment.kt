@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.databinding.FragmentRegisterBinding
+import com.google.android.material.textfield.TextInputLayout
 
 /**
  * A simple [Fragment] subclass.
@@ -45,7 +46,7 @@ class RegisterFragment : Fragment() {
         binding.registerButton.setOnClickListener { onRegister() }
     }
 
-    private fun onRegister() {
+    private fun onRegister() { //ToDO make clean
         var anyFieldEmpty = false
 
         this.confirmPassword = binding.confirmPassword.text.toString()
@@ -55,23 +56,20 @@ class RegisterFragment : Fragment() {
 
 
         //check if anything´s empty
-        if (!checkPassword()) {
-            anyFieldEmpty = true
-        }
         if (viewModel.isTextInputEmpty(registerEmail)) {
-            setErrorTextFieldEmail(true)
+            setErrorTextField(true, binding.emailLabel, R.string.emptyMail)
             anyFieldEmpty = true
         } else {
-            setErrorTextFieldEmail(false)
+            setErrorTextField(false, binding.emailLabel, null)
         }
         if (viewModel.isTextInputEmpty(registerUsername)) {
-            setErrorTextFieldUsername(true)
+            setErrorTextField(true, binding.usernameLabel, R.string.empty_username)
             anyFieldEmpty = true
         } else {
-            setErrorTextFieldUsername(false)
+            setErrorTextField(false, binding.usernameLabel, null)
         }
 
-        if (!anyFieldEmpty) {
+        if (checkPassword() && !anyFieldEmpty) {
             registerSuccessful()
         }
     }
@@ -81,78 +79,42 @@ class RegisterFragment : Fragment() {
         var check = true
 
         if (viewModel.isTextInputEmpty(registerPassword)) {
-            setErrorTextFieldPassword(true)
+            setErrorTextField(true, binding.passwordLabel, R.string.emptyPassword)
             check = false
-        } else {
-            setErrorTextFieldPassword(false)
-        }
+        } else
+            setErrorTextField(false, binding.passwordLabel, null)
 
         if (viewModel.isTextInputEmpty(confirmPassword)) {
-            setErrorTextFieldConfirmPassword(true, getString(R.string.empty_confirm_password))
+            setErrorTextField(true, binding.confirmPasswordLabel, R.string.empty_confirm_password)
             check = false
         } else {
-            setErrorTextFieldConfirmPassword(false, "")
+            setErrorTextField(false, binding.confirmPasswordLabel, null)
         }
 
         if (confirmPassword != registerPassword && check) {
-            setErrorTextFieldConfirmPassword(
-                true,
-                getString(R.string.password_doesnt_match_confirm_password)
-            )
+            setErrorTextField(true, binding.confirmPasswordLabel, R.string.password_confirm_password_unequal)
             check = false
         }
-
         return check
     }
 
     private fun registerSuccessful() {
-
         //get rid of empty spaces
         val email: String = registerEmail.trim { it <= ' ' }
         val password: String = registerPassword.trim { it <= ' ' }
 
-
         (activity as MainActivity?)!!.firebaseRegister(email, password, registerUsername)
 
         val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-        findNavController().navigate(action)
+        this.findNavController().navigate(action)
     }
 
-    private fun setErrorTextFieldEmail(error: Boolean) {
+    private fun setErrorTextField(error: Boolean, textField: TextInputLayout?, int: Int?) {
         if (error) {
-            binding.emailLabel.isErrorEnabled = true
-            binding.emailLabel.error = getString(R.string.emptyMail)
+            textField!!.isErrorEnabled = true
+            textField.error = getString(int!!)
         } else {
-            binding.emailLabel.isErrorEnabled = false
+            textField!!.isErrorEnabled = false
         }
     }
-
-    private fun setErrorTextFieldPassword(error: Boolean) {
-
-        if (error) {
-            binding.passwordLabel.isErrorEnabled = true
-            binding.passwordLabel.error = getString(R.string.emptyPassword)
-        } else {
-            binding.passwordLabel.isErrorEnabled = false
-        }
-    }
-
-    private fun setErrorTextFieldUsername(error: Boolean) {
-        if (error) {
-            binding.usernameLabel.isErrorEnabled = true
-            binding.usernameLabel.error = getString(R.string.empty_username)
-        } else {
-            binding.usernameLabel.isErrorEnabled = false
-        }
-    }
-
-    private fun setErrorTextFieldConfirmPassword(error: Boolean, errorMessage: String) {
-        if (error) {
-            binding.confirmPasswordLabel.isErrorEnabled = true
-            binding.confirmPasswordLabel.error = errorMessage
-        } else {
-            binding.confirmPasswordLabel.isErrorEnabled = false
-        }
-    }
-
 }

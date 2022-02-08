@@ -8,7 +8,7 @@ data class User(
 )
 
 data class Group(
-    val groupID: String? = null,
+    val groupID: String? = null, //random UUID to string
     val groupName: String? = null,
     val users: MutableList<String>
 )

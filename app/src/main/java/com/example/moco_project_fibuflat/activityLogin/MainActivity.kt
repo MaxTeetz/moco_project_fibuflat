@@ -139,9 +139,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users").child("group").child("groupID")
-        if (database.get().equals(null))
-            return false
-
-        return true
+        return !database.get().equals(null)
     }
 }

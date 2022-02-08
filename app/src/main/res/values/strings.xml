@@ -18,7 +18,7 @@
     <string name="emptyPassword">Password can´t be empty</string>
     <string name="empty_username">Username can´t be empty</string>
     <string name="empty_confirm_password">Confirm Password can´t be empty</string>
-    <string name="password_doesnt_match_confirm_password">Password and confirm Password must be the same</string>
+    <string name="password_confirm_password_unequal">Password and confirm Password must be the same</string>
     <string name="register_successful">Register Successful</string>
     <string name="register_failed">Register Failed</string>
     <string name="title_activity_group">GroupActivity</string>
