@@ -2,14 +2,13 @@ package com.example.moco_project_fibuflat.activitySelectGroup
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
-import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.databinding.ActivitySelectGroupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -20,6 +19,7 @@ class SelectGroupActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivitySelectGroupBinding
     private lateinit var database: DatabaseReference
+    private val viewModel: SelectGroupActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,6 @@ class SelectGroupActivity : AppCompatActivity() {
                 .child("group")
 
         //set group -> name and id
-
         database.child("name").setValue(name)
         database.child("groupID").setValue(groupID).addOnSuccessListener {
 
@@ -57,7 +56,7 @@ class SelectGroupActivity : AppCompatActivity() {
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-            createGroup(groupID, name, FirebaseAuth.getInstance().currentUser!!.uid)
+            viewModel.createGroup(groupID, name, FirebaseAuth.getInstance().currentUser!!.uid)
             //extras
             intent.putExtra("groupName", name)
             intent.putExtra("groupID", groupID)
@@ -65,16 +64,5 @@ class SelectGroupActivity : AppCompatActivity() {
         }
     }
 
-    private fun createGroup(groupID: String, groupName: String, groupAdminID: String) {
-        val mutableList = mutableListOf(groupAdminID)
-        val group = Group(groupID, groupName, mutableList)
-        database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Groups")
-        database.child(groupID).setValue(group).addOnSuccessListener {
-            Log.d("selectGroupActivity", "createdDBInstance")
-        }.addOnFailureListener {
-            Log.d("selectGroupActivity", "couldn't create db entry")
-        }
-    }
+
 }
