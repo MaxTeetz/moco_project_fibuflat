@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activitySelectGroup.SelectGroupActivity
+import com.example.moco_project_fibuflat.data.LoginType
 import com.example.moco_project_fibuflat.data.User
 import com.example.moco_project_fibuflat.databinding.ActivityMainBinding
 import com.google.android.gms.tasks.Task
@@ -91,25 +92,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             Toast.LENGTH_SHORT
         ).show()
 
-        var intent: Intent? = null //ToDo make clean
-        //ToDo in viewModel
-        intent = if (getDBGroupEntry(firebaseUser.uid))
-            Intent(this@MainActivity, GroupActivity::class.java)
-        else
-            Intent(this@MainActivity, SelectGroupActivity::class.java)
-
-        intent.flags =
-            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-        intent.putExtra(
-            "user_id", firebaseUser.uid
-        )
-
-        intent.putExtra(
-            "email_id", email
-        )
-
-        startActivity(intent)
+        getDBGroupEntry(email, firebaseUser.uid)
     }
 
     private fun taskFailed(task: Task<AuthResult>) {
@@ -128,20 +111,47 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users")
-        val user = User(userID, name, email, "noGroupSelected")
+        val user = User(userID, name, email)
 
         database.child(userID).setValue(user)
 
     }
 
-    private fun getDBGroupEntry(firebaseUser: String): Boolean {
+    private fun getDBGroupEntry(email: String, firebaseUser: String) {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(firebaseUser)
-                .child("group")
-        Log.d("mainActivity", firebaseUser)
-        if(database.get().equals(null))
-            return false
-        return true
+                .getReference("Users").child(FirebaseAuth.getInstance().uid.toString())
+                .child("group").child("name")
+        database.get().addOnSuccessListener {
+            Log.d("mainActivity", it.value.toString())
+            if(it.value == null)
+                changeActivity(email, firebaseUser, LoginType.SELECTGROUP)
+            else
+                changeActivity(email, firebaseUser, LoginType.GROUPHOME)
+
+        }.addOnFailureListener {
+            Log.d("mainActivity", "no Data retrieved")
+        }
+    }
+
+    private fun changeActivity(email: String, firebaseUser: String, loginType: LoginType){
+        //ToDo in viewModel
+        val intent: Intent = if (loginType == LoginType.GROUPHOME)
+            Intent(this@MainActivity, GroupActivity::class.java)
+        else
+            Intent(this@MainActivity, SelectGroupActivity::class.java) //ToDo make clean
+
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        intent.putExtra(
+            "user_id", firebaseUser
+        )
+
+        intent.putExtra(
+            "email_id", email
+        )
+
+        startActivity(intent)
     }
 }
