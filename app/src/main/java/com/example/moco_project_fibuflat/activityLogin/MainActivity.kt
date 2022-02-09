@@ -2,7 +2,6 @@ package com.example.moco_project_fibuflat.activityLogin
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -40,17 +39,20 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         // Set up the action bar for use with the NavController
         NavigationUI.setupActionBarWithNavController(this, navController)
 
-        viewModel.groupAccess.observe(this) { it ->
+        viewModel.groupAccess.observe(this) {
             changeActivity(it)
-            Log.d("mainActivity", it.toString())
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
+    override fun onSupportNavigateUp(): Boolean { //stays
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    fun firebaseRegister(email: String, password: String, name: String) {
+    fun firebaseRegister(
+        email: String,
+        password: String,
+        name: String
+    ) { //ToDo into viewModel? Performance influence
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -59,13 +61,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                         name,
                         email
                     )
-                    viewModel.getDBGroupEntry()
+                    changeActivity(GroupAccess.NOGROUP)
                 } else
                     taskFailed(task)
             }
     }
 
-    fun firebaseLogin(email: String, password: String) {
+    fun firebaseLogin(
+        email: String,
+        password: String
+    ) { //ToDo into viewModel? Performance influence
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful)
@@ -75,7 +80,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
     }
 
-    private fun taskFailed(task: Task<AuthResult>) {
+    private fun taskFailed(task: Task<AuthResult>) { //stays
         Toast.makeText(
             this@MainActivity,
             task.exception!!.message.toString(),
@@ -83,7 +88,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         ).show()
     }
 
-    private fun changeActivity(groupAccess: GroupAccess) {
+    private fun changeActivity(groupAccess: GroupAccess) { //ToDo into viewModel? Performance influence
         val intent: Intent = if (groupAccess == GroupAccess.INGROUP)
             Intent(this@MainActivity, GroupActivity::class.java)
         else

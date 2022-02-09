@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
+import com.example.moco_project_fibuflat.data.ErrorMessageType
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 import com.google.android.material.textfield.TextInputLayout
 
@@ -21,6 +21,8 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private lateinit var email: String
+    private lateinit var password: String
 
     override fun onStart() {
         super.onStart()
@@ -46,39 +48,31 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginButton.setOnClickListener { onLogin() }
-    }
 
-    private fun onLogin() { //ToDo ?
-        binding.email.setText("max-julien@hotmail.de")
-        binding.password.setText("Baum123!")
-        val password = binding.password.text.toString()
-        val email = binding.email.text.toString()
-        var check = true
-
-        if (viewModel.isTextInputEmpty(email)) {
-            setErrorTextField(true, binding.emailLabel, R.string.emptyMail)
-            check = false
-        } else
-            setErrorTextField(false, binding.emailLabel, null)
-        if (viewModel.isTextInputEmpty(password)) {
-            check = false
-            setErrorTextField(true, binding.passwordLabel, R.string.emptyPassword)
-        } else {
-            setErrorTextField(false, binding.passwordLabel, null)
-        }
-
-        if (check) {
-            (activity as MainActivity).firebaseLogin(email, password)
+        viewModel.errorMessage.observe(viewLifecycleOwner) {
+            when (it.errorMessageType) {
+                ErrorMessageType.EMAIL -> setErrorTextField(it.error!!, binding.emailLabel, it.message)
+                ErrorMessageType.PASSWORD -> setErrorTextField(it.error!!, binding.passwordLabel, it.message)
+                else -> (activity as MainActivity).firebaseLogin(email, password)
+            }
         }
     }
 
-    private fun setErrorTextField(error: Boolean, textField: TextInputLayout?, int: Int?) {
+    private fun onLogin() {
+        //binding.email.setText("max-julien@hotmail.de")
+        //binding.password.setText("Baum123!")
+        this.password = binding.password.text.toString()
+        this.email = binding.email.text.toString()
+
+        viewModel.onLogin(email, password, requireContext())
+    }
+
+    private fun setErrorTextField(error: Boolean, textField: TextInputLayout?, message: String?) {
         if (error) {
             textField!!.isErrorEnabled = true
-            textField.error = getString(int!!)
+            textField.error = message
         } else {
             textField!!.isErrorEnabled = false
         }
     }
-
 }
