@@ -47,7 +47,7 @@ class SelectGroupActivity : AppCompatActivity() {
                 .child("group")
 
         //set group -> name and id
-        database.child("name").setValue(name)
+        database.child("name").setValue(name) //ToDo !!! with data class
         database.child("groupID").setValue(groupID).addOnSuccessListener {
 
             //intent for changing activity

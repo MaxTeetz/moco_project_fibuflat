@@ -37,7 +37,7 @@ class MainActivityViewModel : ViewModel() {
                 .getReference("Users").child(FirebaseAuth.getInstance().uid.toString())
                 .child("group").child("name")
         database.get().addOnSuccessListener {
-            Log.d("mainActivity", it.value.toString())
+            Log.d("mainActivity1", it.value.toString())
             if (it.value == null)
                 _groupAccess.value = GroupAccess.NOGROUP
             else

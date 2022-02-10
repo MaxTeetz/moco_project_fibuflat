@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels() //ToDO back to activityViewModels() if it doesnt work
+    private val viewModel: HomeViewModel by viewModels() //ToDO back to activityViewModels() if it doesn't work
 
     override fun onStart() {
         super.onStart()

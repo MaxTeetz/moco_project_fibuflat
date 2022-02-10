@@ -51,8 +51,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-database-ktx:20.0.3'
+
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
@@ -70,6 +69,11 @@ dependencies {
 
     //Add dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.3'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.firebaseui:firebase-ui-database:6.2.1'
+
 
     //test
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

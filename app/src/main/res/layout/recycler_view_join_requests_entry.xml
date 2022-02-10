@@ -6,9 +6,8 @@
     android:layout_height="48dp"
     android:descendantFocusability="blocksDescendants">
 
-
     <TextView
-        android:id="@+id/group_name"
+        android:id="@+id/username_request_to_group"
         android:layout_width="182dp"
         android:layout_height="48dp"
         android:fontFamily="sans-serif-smallcaps"
@@ -17,10 +16,10 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Max Mustermann" />
+        tools:text="Gruppe Guummersbach Eins" />
 
     <Button
-        android:id="@+id/accept"
+        android:id="@+id/money_given"
         android:layout_width="93dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
@@ -30,11 +29,11 @@
         android:text="@string/accept"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@id/group_name"
+        app:layout_constraintStart_toEndOf="@id/username_request_to_group"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/decline"
+        android:id="@+id/date"
         android:layout_width="100dp"
         android:layout_height="48dp"
         android:backgroundTint="@color/red"
@@ -44,7 +43,7 @@
         android:layout_marginStart="12dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@id/accept"
+        app:layout_constraintStart_toEndOf="@id/money_given"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
