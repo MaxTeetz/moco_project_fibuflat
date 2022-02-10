@@ -19,11 +19,16 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_todo_list"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.ToDo.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
+    <fragment
+        android:id="@+id/nav_group_management"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.groupManagement.FragmentGroupManagement"
+        android:label="menu_group_management"
+        tools:layout="@layout/fragment_group_management"/>
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.NFC.SlideshowFragment"
@@ -50,4 +55,5 @@
             android:id="@+id/action_entryDetail_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
+
 </navigation>

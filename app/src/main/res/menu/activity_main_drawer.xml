@@ -9,12 +9,16 @@
             android:icon="@drawable/euro"
             android:title="@string/moneypool" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_todo_list"
             android:icon="@drawable/todo"
             android:title="@string/to_do_list" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/nfc"
             android:title="@string/nfc" />
+        <item
+            android:id="@+id/nav_group_management"
+            android:icon="@drawable/group_management"
+            android:title="@string/group_management"/>
     </group>
 </menu>

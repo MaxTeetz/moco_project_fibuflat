@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.activitySelectGroup.SelectGroupActivity
 import com.example.moco_project_fibuflat.databinding.FragmentSelectGroupBinding
@@ -14,7 +13,6 @@ class SelectGroupFragment : Fragment() {
 
     private var _binding: FragmentSelectGroupBinding? = null
     private val binding get() = _binding!!
-    private val viewodel: SelectGroupViewModel by activityViewModels()
 
     override fun onStart() {
         super.onStart()
@@ -23,6 +21,7 @@ class SelectGroupFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as SelectGroupActivity).supportActionBar?.title = "Select Group"
     }
 
     override fun onCreateView(

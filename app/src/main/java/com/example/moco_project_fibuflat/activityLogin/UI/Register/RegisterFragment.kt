@@ -52,16 +52,21 @@ class RegisterFragment : Fragment() {
                 ErrorMessageType.CONFIRMPASSWORD -> setErrorTextField(it.error!!, binding.confirmPasswordLabel, it.message)
                 ErrorMessageType.PASSWORDCONFIRMPASSWORD -> setErrorTextField(it.error!!, binding.confirmPasswordLabel, it.message)
                 else -> registerSuccessful()
-
             }
         }
     }
 
     private fun onRegister() {
-        this.confirmPassword = binding.confirmPassword.text.toString()
-        this.email = binding.email.text.toString()
-        this.username = binding.username.text.toString()
-        this.password = binding.password.text.toString()
+
+        this.email = "max-julien@hotmail.de"
+        this.username = "Max Teetz"
+        this.password = "Baum123!"
+        this.confirmPassword = this.password
+
+        //this.confirmPassword = binding.confirmPassword.text.toString()
+        //this.email = binding.email.text.toString()
+        //this.username = binding.username.text.toString()
+        //this.password = binding.password.text.toString()
 
         viewModel.onRegister(email, username, password, confirmPassword, requireContext())
     }

@@ -38,9 +38,10 @@
     <!--Join Group Fragment-->
     <string name="decline">decline</string>
     <string name="accept">accept</string>
-    <string name="enter_a_group_name_here">Enter a Group name here:</string>
+    <string name="enter_a_group_name_here">Enter Group name and ID here</string>
     <string name="active_invitations">Active invitations</string>
     <string name="join_group">Send Inquiry</string>
+    <string name="id">ID</string>
 
     <!--Create Group Fragment-->
     <string name="create_group">Create Group</string>
@@ -53,6 +54,7 @@
     <string name="moneypool">Moneypool</string>
     <string name="to_do_list">To Do–List</string>
     <string name="nfc">NFC</string>
+    <string name="group_management">Group Management</string>
 
     <!--HomeFragment-->
     <string name="Group">Group Number</string> <!--ToDo get group number -->
@@ -76,13 +78,16 @@
     <string name="enter_description">Enter description</string>
     <string name="back">Back</string>
     <string name="change_the_current_money_goal">change the current money goal</string>
+    <string name="date">Date</string>
 
     <!--ToDoFragment-->
     <string name="menu_gallery">Gallery</string>
 
     <!--NFC-->
     <string name="menu_slideshow">Slideshow</string>
-    <string name="date">Date</string>
 
+    <!--Group Management-->
+    <string name="group_members">Group Members</string>
+    <string name="join_requests">Join Requests</string>
 
 </resources>

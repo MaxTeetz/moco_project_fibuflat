@@ -25,7 +25,9 @@ class MainActivityViewModel : ViewModel() {
                 .getReference("Users")
         val user = User(userID, name, email)
 
+        Log.d("mainActivity", "viewModel")
         database.child(userID).setValue(user)
+        Log.d("mainActivity", "dataSet")
     }
 
     fun getDBGroupEntry() {

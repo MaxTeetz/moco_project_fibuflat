@@ -87,7 +87,6 @@ class RegisterViewModel : ViewModel() {
 
         if (checkPassword(registerPassword, confirmPassword, context) && !anyFieldEmpty)
             _errorMessage.value = ErrorMessage(null, null, null)
-
     }
 
 
