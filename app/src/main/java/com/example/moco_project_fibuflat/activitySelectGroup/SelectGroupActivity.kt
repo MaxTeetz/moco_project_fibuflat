@@ -62,7 +62,7 @@ class SelectGroupActivity : AppCompatActivity() {
             //extras
             intent.putExtra("groupName", name)
             intent.putExtra("groupID", groupID)
-            //startActivity(intent)
+            startActivity(intent)
         }
     }
 }

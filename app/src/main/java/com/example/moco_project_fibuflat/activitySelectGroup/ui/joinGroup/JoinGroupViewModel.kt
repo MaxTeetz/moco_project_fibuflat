@@ -62,9 +62,11 @@ class JoinGroupViewModel : ViewModel() {
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (ds in snapshot.children) {
+                    Log.d("joinFragment1", ds.toString())
                     if (ds.child("groupId").getValue(String::class.java)
                             ?.substring(0, 4) == groupId
                     ) {
+                        Log.d("joinFragment", ds.toString())
                         group = ds.getValue(Group::class.java)!!
                         getUser()
                     }
@@ -108,12 +110,12 @@ class JoinGroupViewModel : ViewModel() {
         val openRequestUser = OpenRequestUser(group.groupId, requestID, group.groupName)
 
         //set Group Request
-        database.parent!!.child("Groups").child(group.groupId!!).child("openRequests")
+        database.parent!!.child("Groups").child(group.groupId!!).child("openRequestsByUsers")
             .child(requestID).setValue(openRequestGroup)
 
         //set User Request
         database = //works
-            database.parent!!.child("Users").child(userID).child("openRequests").child(requestID)
+            database.parent!!.child("Users").child(userID).child("openRequestsToGroups").child(requestID)
         database.setValue(openRequestUser)
     }
 

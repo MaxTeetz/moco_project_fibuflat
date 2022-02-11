@@ -58,15 +58,10 @@ class RegisterFragment : Fragment() {
 
     private fun onRegister() {
 
-        this.email = "max-julien@hotmail.de"
-        this.username = "Max Teetz"
-        this.password = "Baum123!"
-        this.confirmPassword = this.password
-
-        //this.confirmPassword = binding.confirmPassword.text.toString()
-        //this.email = binding.email.text.toString()
-        //this.username = binding.username.text.toString()
-        //this.password = binding.password.text.toString()
+        this.confirmPassword = binding.confirmPassword.text.toString()
+        this.email = binding.email.text.toString()
+        this.username = binding.username.text.toString()
+        this.password = binding.password.text.toString()
 
         viewModel.onRegister(email, username, password, confirmPassword, requireContext())
     }

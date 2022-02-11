@@ -23,7 +23,7 @@ class MainActivityViewModel : ViewModel() {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users").child(uid)
-        val user = User(uid,name, email)
+        val user = User(uid, name, email)
         database.setValue(user)
     }
 
@@ -32,12 +32,13 @@ class MainActivityViewModel : ViewModel() {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users").child(FirebaseAuth.getInstance().uid.toString())
-                .child("group").child("name")
+                .child("group")
         database.get().addOnSuccessListener {
             if (it.value == null)
                 _groupAccess.value = GroupAccess.NOGROUP
             else
                 _groupAccess.value = GroupAccess.INGROUP
+
 
         }.addOnFailureListener {
             Log.d("mainActivity", "no Data retrieved")
