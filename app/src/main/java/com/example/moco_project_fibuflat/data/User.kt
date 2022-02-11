@@ -15,7 +15,7 @@ data class Group(
     val groupName: String? = null,
     val users: User? = null,
     //val openInvitations: OpenRequestUser? = null, //invited users -> id of user
-    val openRequestsByUsers: OpenRequestGroup? = null //open requets by users -> id of user
+    val openRequestsByUsers: OpenRequestGroup? = null //open requests by users -> id of user
 )
 
 

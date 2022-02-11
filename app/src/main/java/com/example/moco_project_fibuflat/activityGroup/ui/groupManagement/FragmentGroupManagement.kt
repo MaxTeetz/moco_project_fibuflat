@@ -1,6 +1,7 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.groupManagement
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,9 +24,7 @@ class FragmentGroupManagement : Fragment() {
     private lateinit var database: DatabaseReference
     private lateinit var requestRecyclerView: RecyclerView
     private lateinit var requestList: ArrayList<OpenRequestGroup>
-
-    private lateinit var groupID: String
-
+    private lateinit var requestListNew: ArrayList<OpenRequestGroup>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +48,7 @@ class FragmentGroupManagement : Fragment() {
         requestRecyclerView.setHasFixedSize(true)
 
         requestList = arrayListOf<OpenRequestGroup>()
+        requestListNew = arrayListOf<OpenRequestGroup>()
         getUserData()
     }
 
@@ -57,25 +57,51 @@ class FragmentGroupManagement : Fragment() {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Groups")
-        val groupNameRef = database.child("a7fb880c-1175-4ee6-ab68-8f35cb6f934c").child("openRequests").orderByChild("OpenRequestGroup")
+
+        val groupNameRef = database.child("6182134e-0bb3-4954-9eaa-cba45bc6c27c").child("openRequestsByUsers").orderByChild("OpenRequestGroup")
+
         val valueEventListener = object : ValueEventListener {
 
-            override fun onDataChange(snapshot: DataSnapshot) {
+            //what if requests go to 0
+            override fun onDataChange(snapshot: DataSnapshot) { //ToDo doesn't use recyclerViewNewArranged
+                requestListNew.clear()
+
                 if (snapshot.exists()) {
                     for (requestSnapshot in snapshot.children) {
                         val request = requestSnapshot.getValue(OpenRequestGroup::class.java)
-                        requestList.add(request!!)
+                        requestListNew.add(request!!)
                     }
+                    Log.d("adapter", requestListNew.size.toString())
 
-                    requestRecyclerView.adapter = RecyclerViewJoinRequestAdapter(requestList)
+                    requestRecyclerView.adapter = RecyclerViewJoinRequestAdapter(requestListNew)
+                    requestList = requestListNew
+                }
+                else { //ToDo this part. s.a.
+                    requestListNew.clear()
+                    requestRecyclerView.adapter = RecyclerViewJoinRequestAdapter(requestListNew)
+                    requestList.clear()
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
-                //ToDo ask prof
             }
 
         }
-        groupNameRef.addListenerForSingleValueEvent(valueEventListener)
+        groupNameRef.addValueEventListener(valueEventListener)
     }
+
+    private fun recyclerViewNewArranged() { //ok gets whole new list, I guess
+        if (requestList.size > requestListNew.size) {
+            for ((i, openRequestGroup: OpenRequestGroup) in requestList.withIndex()) {
+
+                if (i == requestListNew.size - 1) {
+                    requestRecyclerView.adapter?.notifyItemRemoved(i)
+                    break
+                }
+
+                if (requestListNew[i] != requestList[i])
+                    requestRecyclerView.adapter?.notifyItemRemoved(i)
+            }
+        }
+    }
+
 }

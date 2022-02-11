@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainActivityViewModel by viewModels()
-    private val neededDataViewModel: OftenNeededData by viewModels()
+    private val neededData: OftenNeededData by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,6 +107,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
+        intent.putExtra("userID", neededData.getUser()?.userID) //ToDo maybe less
+        intent.putExtra("userName", neededData.getUser()?.username)
+        intent.putExtra("groupID", neededData.getUser()?.groupId)
+        intent.putExtra("groupName", neededData.getUser()?.groupName)
         startActivity(intent)
     }
 
@@ -126,7 +130,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
                     if (snapshot.child("group").exists()) {
                         group = snapshot.child("group").getValue(Group::class.java)!!
-                        neededDataViewModel.setUser(
+                        neededData.setUser(
                             User(
                                 user.userID,
                                 user.username,
@@ -136,9 +140,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                             )
                         )
                     } else
-                        neededDataViewModel.setUser(User(user.userID, user.username, user.email))
+                        neededData.setUser(User(user.userID, user.username, user.email))
                 }
-                Log.d("mainActivity", neededDataViewModel.getUser().toString())
+                Log.d("mainActivity", neededData.getUser().toString())
+                Log.d("mainActivity", neededData.getUser()?.groupId.toString())
             }
 
             override fun onCancelled(error: DatabaseError) {

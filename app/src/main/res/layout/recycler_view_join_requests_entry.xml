@@ -16,10 +16,10 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Gruppe Guummersbach Eins" />
+        tools:text="Max Teetz" />
 
     <Button
-        android:id="@+id/money_given"
+        android:id="@+id/accept_user"
         android:layout_width="93dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/date"
+        android:id="@+id/decline_user"
         android:layout_width="100dp"
         android:layout_height="48dp"
         android:backgroundTint="@color/red"
@@ -43,7 +43,7 @@
         android:layout_marginStart="12dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@id/money_given"
+        app:layout_constraintStart_toEndOf="@id/accept_user"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,8 +59,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun onLogin() {
-        binding.email.setText("max-julien@hotmail.de")
-        binding.password.setText("Baum123!")
+        //binding.email.setText("max-julien@hotmail.de")
+        //binding.password.setText("Baum123!")
         this.password = binding.password.text.toString()
         this.email = binding.email.text.toString()
 
