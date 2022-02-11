@@ -1,28 +1,55 @@
 package com.example.moco_project_fibuflat.activitySelectGroup
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.moco_project_fibuflat.data.Group
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.moco_project_fibuflat.data.User
+import com.google.firebase.database.*
 
-private lateinit var database: DatabaseReference
-
+//ToDo !!!This whole class need to use coroutines. Currently one function after an other -> blocking code !!!
 class SelectGroupActivityViewModel : ViewModel() {
 
-    private var name: String? = null
-    fun createGroup(groupID: String, groupName: String, groupAdminID: String) {
+    private lateinit var user: User
+    private lateinit var group: Group
+    private lateinit var userKey: String
+    private lateinit var database: DatabaseReference
 
-        database =
+
+    fun createGroup(group: Group, userID: String) {
+        this.userKey = userID
+        this.group = group
+        getUser(userID)
+    }
+
+    private fun getUser(userID: String) {
+        this.database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users")
-        database.child(groupAdminID).child("username").get().addOnSuccessListener {
-            this.name = it.value.toString()
+
+        val userRef = database.child(userID)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    user = snapshot.getValue(User::class.java)!!
+                    Log.d("selectGroup", snapshot.key.toString())
+                    setDatabase() //ToDo this part?
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("selectGroup", "cancelled")
+            }
         }
-        val group = Group(groupID, groupName)
+        userRef.addListenerForSingleValueEvent(valueEventListener)
+    }
+
+    private fun setDatabase() {
+        Log.d("selectGroup", "await")
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Groups")
-        database.child(groupID).setValue(group)
-        database.child(groupID).child("users").child(groupAdminID).setValue("this.name") //ToDo get name !!!
+
+        database.child(group.groupId!!).setValue(group)
+        database.child(group.groupId!!).child("users").child(userKey).setValue(user)
     }
 }

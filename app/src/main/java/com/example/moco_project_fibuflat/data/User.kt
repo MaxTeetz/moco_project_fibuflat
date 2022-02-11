@@ -1,7 +1,7 @@
 package com.example.moco_project_fibuflat.data
 
 data class User(
-    val userId: String? = null, //ToDo
+    val userID: String? = null,
     val username: String? = null,
     val email: String? = null,
     val groupId: String? = null,
@@ -10,19 +10,21 @@ data class User(
 )
 
 data class Group(
-    val groupID: String? = null, //random UUID to string
+    val groupId: String? = null,
     val groupName: String? = null,
-    val users: String? = null,
+    val users: User? = null,
     val openInvitations: String? = null, //invited users -> id of user
     val openRequests: String? = null //open requets by users -> id of user
 )
 
-data class OpenRequestGroup(
+
+data class OpenRequestGroup( //used in Group
     var userID: String? = null,
     var username: String? = null
 )
 
-data class OpenRequestUser(
+data class OpenRequestUser( //used in User
     var groupID: String? = null,
-    var requestID: String? = null
+    var requestID: String? = null,
+    var groupName: String? = null
 )

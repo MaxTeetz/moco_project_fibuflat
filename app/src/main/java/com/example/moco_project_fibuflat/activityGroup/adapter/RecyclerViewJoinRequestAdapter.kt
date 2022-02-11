@@ -20,7 +20,7 @@ class RecyclerViewJoinRequestAdapter(private val userList: ArrayList<OpenRequest
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = userList[position]
 
-        holder.id.text = currentItem.userID
+        holder.id.text = currentItem.username
     }
 
     override fun getItemCount(): Int {

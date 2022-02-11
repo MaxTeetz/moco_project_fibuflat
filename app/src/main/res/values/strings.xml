@@ -57,7 +57,7 @@
     <string name="group_management">Group Management</string>
 
     <!--HomeFragment-->
-    <string name="Group">Group Number</string> <!--ToDo get group number -->
+    <string name="Group">Group Number</string> <!--ToDo delete when possible to get Group Name-->
     <string name="menu_home">Home</string>
     <string name="money_pool">Moneypool</string>
     <string name="needed_money">Goal: </string>

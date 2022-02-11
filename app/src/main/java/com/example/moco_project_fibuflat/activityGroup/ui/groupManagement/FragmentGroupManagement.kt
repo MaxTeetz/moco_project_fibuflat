@@ -52,11 +52,12 @@ class FragmentGroupManagement : Fragment() {
         getUserData()
     }
 
-    private fun getUserData() {
+    private fun getUserData() { //ToDo in viewModel
+
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Groups")
-        val groupSameRef = database.child("98ace245-f51c-4644-ad21-9f23c4f56af2").child("openRequests").orderByChild("OpenRequestGroup")
+        val groupNameRef = database.child("98ace245-f51c-4644-ad21-9f23c4f56af2").child("openRequests").orderByChild("OpenRequestGroup")
         val valueEventListener = object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -71,10 +72,10 @@ class FragmentGroupManagement : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                //ToDo ask prof
             }
 
         }
-        groupSameRef.addListenerForSingleValueEvent(valueEventListener)
+        groupNameRef.addListenerForSingleValueEvent(valueEventListener)
     }
 }

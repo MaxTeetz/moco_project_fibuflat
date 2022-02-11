@@ -16,18 +16,15 @@ class MainActivityViewModel : ViewModel() {
     val groupAccess: LiveData<GroupAccess> get() = _groupAccess
 
     fun setUserDB(
-        userID: String,
+        uid: String,
         name: String,
         email: String
     ) { //ToDo return if db entry was created
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users")
-        val user = User(userID, name, email)
-
-        Log.d("mainActivity", "viewModel")
-        database.child(userID).setValue(user)
-        Log.d("mainActivity", "dataSet")
+                .getReference("Users").child(uid)
+        val user = User(uid,name, email)
+        database.setValue(user)
     }
 
     fun getDBGroupEntry() {
@@ -37,7 +34,6 @@ class MainActivityViewModel : ViewModel() {
                 .getReference("Users").child(FirebaseAuth.getInstance().uid.toString())
                 .child("group").child("name")
         database.get().addOnSuccessListener {
-            Log.d("mainActivity1", it.value.toString())
             if (it.value == null)
                 _groupAccess.value = GroupAccess.NOGROUP
             else

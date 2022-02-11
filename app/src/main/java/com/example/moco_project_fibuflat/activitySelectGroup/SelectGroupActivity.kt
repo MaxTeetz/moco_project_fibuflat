@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
+import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.databinding.ActivitySelectGroupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -39,16 +40,17 @@ class SelectGroupActivity : AppCompatActivity() {
 
     fun fireBaseCreateGroup(name: String) { //Todo make clean and better
         val groupID = UUID.randomUUID().toString()
+        val group = Group(groupID, name)
+        val userID = FirebaseAuth.getInstance().currentUser!!.uid
 
         //get user -> groupNode
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(FirebaseAuth.getInstance().currentUser!!.uid)
+                .getReference("Users").child(userID)
                 .child("group")
 
         //set group -> name and id
-        database.child("name").setValue(name) //ToDo !!! with data class
-        database.child("groupID").setValue(groupID).addOnSuccessListener {
+        database.setValue(group).addOnSuccessListener {
 
             //intent for changing activity
             val intent =
@@ -56,13 +58,11 @@ class SelectGroupActivity : AppCompatActivity() {
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-            viewModel.createGroup(groupID, name, FirebaseAuth.getInstance().currentUser!!.uid)
+            viewModel.createGroup(group, userID)
             //extras
             intent.putExtra("groupName", name)
             intent.putExtra("groupID", groupID)
-            startActivity(intent)
+            //startActivity(intent)
         }
     }
-
-
 }

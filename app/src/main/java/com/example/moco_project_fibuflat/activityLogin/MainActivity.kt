@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         name: String
     ) { //ToDo into viewModel? Performance influence
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
+            .addOnCompleteListener { task -> //ToDo work with thread -> lazy?
                 if (task.isSuccessful) {
                     viewModel.setUserDB(
                         task.result!!.user!!.uid,
