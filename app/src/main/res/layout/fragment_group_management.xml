@@ -40,6 +40,7 @@
         android:id="@+id/recyclerView_join_requests"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@id/_join_requests_text"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

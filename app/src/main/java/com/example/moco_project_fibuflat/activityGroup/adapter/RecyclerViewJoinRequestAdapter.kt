@@ -1,59 +1,98 @@
 package com.example.moco_project_fibuflat.activityGroup.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
+import com.example.moco_project_fibuflat.databinding.RecyclerViewJoinRequestsEntryBinding
 
 class RecyclerViewJoinRequestAdapter(
-    private val userList: ArrayList<OpenRequestGroup>,
-    private val clickListenerAccept: AcceptUser,
-    private val clickListenerDecline: DeclineUser
-    //private val clickListenerDecline: (openRequestGroup: OpenRequestGroup) -> Unit
+    private val clickListener: (OpenRequestGroup) -> Unit
+    //private val clickListenerDecline: (OpenRequestGroup) -> Unit,
 ) :
-    RecyclerView.Adapter<RecyclerViewJoinRequestAdapter.MyViewHolder>() {
+    ListAdapter<OpenRequestGroup, RecyclerViewJoinRequestAdapter.MyViewHolder>(DiffCallback) {
 
 
-    inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val buttonAcceptUser: Button = view.findViewById(R.id.accept_user)
-        val buttonDeclineUser: Button = view.findViewById(R.id.decline_user)
-        val username : TextView = view.findViewById(R.id.username_request_to_group)
+    class MyViewHolder(
+        val binding: RecyclerViewJoinRequestsEntryBinding,
+        private var parent: ViewGroup
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(openRequestGroup: OpenRequestGroup) {
-            username.text = openRequestGroup.username
+            binding.apply {
+                usernameRequestToGroup.text = openRequestGroup.username
+                declineUser.setOnClickListener {
+
+                }
+            }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_view_join_requests_entry, parent, false)
-        return MyViewHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewJoinRequestAdapter.MyViewHolder {
+        return RecyclerViewJoinRequestAdapter.MyViewHolder(
+            RecyclerViewJoinRequestsEntryBinding.inflate(
+                LayoutInflater.from(
+                    parent.context,
+                )
+            ),
+            parent
+        )
     }
+
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = userList[position]
-        holder.buttonAcceptUser.setOnClickListener {
-            clickListenerAccept.onItemClicked(position)
+        val current = getItem(position)
+        holder.binding.acceptUser.setOnClickListener {
+            clickListener(current)
         }
-        holder.buttonDeclineUser.setOnClickListener {
-            clickListenerDecline.onItemClicked(position)
+
+        holder.binding.declineUser.setOnClickListener {
+            clickListener(current)
         }
-        holder.bind(currentItem)
+        holder.itemView.setOnClickListener {
+            clickListener(current)
+        }
+        holder.bind(current)
     }
 
-    override fun getItemCount() = userList.size
 
-    interface AcceptUser {
-        fun onItemClicked(position: Int)
+/*override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    val itemView = LayoutInflater.from(parent.context)
+        .inflate(R.layout.recycler_view_join_requests_entry, parent, false)
+    return MyViewHolder(itemView)
+}
+
+override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    val currentItem = getItem(position)
+    holder.buttonAcceptUser.setOnClickListener {
+        clickListenerAccept.onItemClicked(position)
     }
-
-    interface DeclineUser{
-        fun onItemClicked(position: Int)
+    holder.buttonDeclineUser.setOnClickListener {
+        clickListenerDecline.onItemClicked(position)
     }
+    holder.bind(currentItem)
+}*/
 
-    fun getItem(position: Int) : OpenRequestGroup = userList[position]
+//fun getItem(position: Int) : OpenRequestGroup = userList[position]
 
+    companion
+    object {
+        private val DiffCallback = object : DiffUtil.ItemCallback<OpenRequestGroup>() {
+
+            override fun areItemsTheSame(
+                oldItem: OpenRequestGroup,
+                newItem: OpenRequestGroup,
+            ): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: OpenRequestGroup,
+                newItem: OpenRequestGroup,
+            ): Boolean {
+                return oldItem.userID == newItem.userID
+            }
+        }
+    }
 }

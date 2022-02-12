@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
+import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewJoinRequestAdapter
+import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentGroupManagementBinding
 
@@ -20,9 +22,7 @@ class FragmentGroupManagement : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: GroupManagementViewModel by viewModels()
     private val oftenNeededData: OftenNeededData by viewModels()
-    private lateinit var adapter: RecyclerViewJoinRequestAdapter
 
-    private lateinit var requestRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,32 +41,41 @@ class FragmentGroupManagement : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requestRecyclerView = binding.recyclerViewJoinRequests
-        requestRecyclerView.layoutManager = LinearLayoutManager(this.context)
-        requestRecyclerView.setHasFixedSize(true)
+        bindRecyclerView()
+    }
+
+    private fun bindRecyclerView() {
+        val adapter = RecyclerViewJoinRequestAdapter {
+            //ToDo just the click part. The notifyOnChanged ( viewModel) could be used now
+            Log.d("fragmentGroupManagement", it.toString())
+        }
+
+        binding.recyclerViewJoinRequests.adapter = adapter
 
         viewModel.getUserData(oftenNeededData.dataBaseGroups)
 
-        viewModel.requestListNew.observe(viewLifecycleOwner) {
-            adapter = RecyclerViewJoinRequestAdapter(it,
-                object : RecyclerViewJoinRequestAdapter.AcceptUser {
-                    override fun onItemClicked(position: Int) {
-                        getUserAccept(position)
-                    }
-                }, object : RecyclerViewJoinRequestAdapter.DeclineUser {
-                    override fun onItemClicked(position: Int) {
-                        getUserDecline(position)
-                    }
-                })
-            requestRecyclerView.adapter = adapter
+        viewModel.requestListNew.observe(this.viewLifecycleOwner) { it ->
+            it.let {
+                adapter.submitList(it)
+                adapter.notifyDataSetChanged()
+            }
         }
+
+        binding.recyclerViewJoinRequests.layoutManager = LinearLayoutManager(this.context)
+        binding.recyclerViewJoinRequests.addItemDecoration(
+            RecyclerViewItemDecoration(
+                this.requireContext(),
+                R.drawable.divider_shape
+            )
+        )
     }
 
-    private fun getUserAccept(position: Int) {
-        Log.d("fragmentGroupManagement", adapter.getItem(position).toString())
+
+    private fun getUserAccept(openRequestGroup: OpenRequestGroup) {
+        Log.d("fragmentGroupManagement", "Accept: $openRequestGroup")
     }
 
-    private fun getUserDecline(position: Int) {
-        Log.d("fragmentGroupManagement", adapter.getItem(position).toString())
+    private fun getUserDecline(openRequestGroup: OpenRequestGroup) {
+        Log.d("fragmentGroupManagement", "Decline: $openRequestGroup")
     }
 }

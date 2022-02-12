@@ -57,7 +57,6 @@ class HomeFragment : Fragment() {
         }
 
         binding.addEntry.setOnClickListener {
-
             val action = HomeFragmentDirections.actionNavHomeToAddEntryFragment()
             this.findNavController().navigate(action)
         }
