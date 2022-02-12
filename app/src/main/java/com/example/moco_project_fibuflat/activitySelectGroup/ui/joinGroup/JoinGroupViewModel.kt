@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
 
-//ToDo !!!This whole class need to use coroutines. Currently one function after an other -> blocking code !!!
+//ToDo !!!This whole class needs to use coroutines. Currently one function after an other -> blocking code !!!
 class JoinGroupViewModel : ViewModel() {
     private lateinit var database: DatabaseReference
     private lateinit var user: User
@@ -30,11 +30,12 @@ class JoinGroupViewModel : ViewModel() {
         database =
             FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users")
-        val userRef = database.child(userID).child("openRequests").orderByChild("groupName")
+        val userRef = database.child(userID).child("openRequestsToGroups").orderByChild("groupName")
             .equalTo(groupName)
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (ds in snapshot.children) {
+                    Log.d("joiNGroup", ds.toString())
                     if (ds.child("groupID").getValue(String::class.java)
                             ?.substring(0, 4) == groupId
                     ) {

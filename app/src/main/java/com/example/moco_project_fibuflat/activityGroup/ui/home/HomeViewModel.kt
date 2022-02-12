@@ -39,7 +39,7 @@ class HomeViewModel : ViewModel() {
 
     fun getEntry(id: String): MoneyPoolEntry {
         _allMoneyEntries.value?.forEach { e ->
-            if (e.id.equals(id))
+            if (e.id == id)
                 return e
         }
         throw error("nothing found") //ToDo

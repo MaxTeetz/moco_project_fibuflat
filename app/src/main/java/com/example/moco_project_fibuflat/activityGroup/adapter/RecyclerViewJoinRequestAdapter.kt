@@ -8,10 +8,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.activityGroup.ui.groupManagement.GroupManagementViewModel
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 
-class RecyclerViewJoinRequestAdapter(private val userList: ArrayList<OpenRequestGroup>) :
+class RecyclerViewJoinRequestAdapter(model: GroupManagementViewModel, private val userList: ArrayList<OpenRequestGroup>, val clickListener: AcceptUser) :
     RecyclerView.Adapter<RecyclerViewJoinRequestAdapter.MyViewHolder>() {
+
+    private val myModel = model
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val buttonAccept: Button = itemView.findViewById(R.id.accept_user)
@@ -29,18 +32,21 @@ class RecyclerViewJoinRequestAdapter(private val userList: ArrayList<OpenRequest
         val currentItem = userList[position]
 
         holder.textView.text = currentItem.username
-        holder.buttonAccept.setOnClickListener { accept() }
+        holder.buttonAccept.setOnClickListener {  }
         holder.buttonDecline.setOnClickListener { decline() }
     }
 
     override fun getItemCount() = userList.size
 
-
-    private fun accept() {
-        Log.d("adapter", "accept")
+    class AcceptUser(val clickListener: (userId: String) -> Unit){
+        fun onClick(openRequestGroup: OpenRequestGroup) = clickListener(openRequestGroup.userID!!)
     }
 
-    private fun decline() {
+    private fun accept() { //Delete from database user and group, if user is already in a group, makeToast
+        myModel.acceptUser()
+    }
+
+    private fun decline() { //Delete from database user and Group
         Log.d("adapter", "decline")
     }
 
