@@ -1,6 +1,7 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.groupManagement
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ class FragmentGroupManagement : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: GroupManagementViewModel by viewModels()
     private val oftenNeededData: OftenNeededData by viewModels()
+    private lateinit var adapter: RecyclerViewJoinRequestAdapter
 
     private lateinit var requestRecyclerView: RecyclerView
 
@@ -29,7 +31,7 @@ class FragmentGroupManagement : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentGroupManagementBinding.inflate(inflater, container, false)
@@ -45,15 +47,26 @@ class FragmentGroupManagement : Fragment() {
 
         viewModel.getUserData(oftenNeededData.dataBaseGroups)
 
-
         viewModel.requestListNew.observe(viewLifecycleOwner) {
-            requestRecyclerView.adapter = RecyclerViewJoinRequestAdapter(viewModel, it)
-            //when (viewModel.listCases) {
-            //    ListCases.EMPTY -> requestRecyclerView.adapter = RecyclerViewJoinRequestAdapter(it)
-            //    ListCases.ADDED -> requestRecyclerView.adapter?.notifyItemInserted(viewModel.index!!)
-            //    ListCases.DELETED -> requestRecyclerView.adapter?.notifyItemRemoved(viewModel.index!!)
-            //    else -> Log.d("adapterGroupManagement", "Error")
-            //} //ToDo see corresponding viewModel
+            adapter = RecyclerViewJoinRequestAdapter(it,
+                object : RecyclerViewJoinRequestAdapter.AcceptUser {
+                    override fun onItemClicked(position: Int) {
+                        getUserAccept(position)
+                    }
+                }, object : RecyclerViewJoinRequestAdapter.DeclineUser {
+                    override fun onItemClicked(position: Int) {
+                        getUserDecline(position)
+                    }
+                })
+            requestRecyclerView.adapter = adapter
         }
+    }
+
+    private fun getUserAccept(position: Int) {
+        Log.d("fragmentGroupManagement", adapter.getItem(position).toString())
+    }
+
+    private fun getUserDecline(position: Int) {
+        Log.d("fragmentGroupManagement", adapter.getItem(position).toString())
     }
 }

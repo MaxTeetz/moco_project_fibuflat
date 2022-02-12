@@ -90,10 +90,10 @@ class GroupManagementViewModel : ViewModel() {
         _requestListNew.value = requestList
     }*/
 
-    fun acceptUser(){
+    fun acceptUser(userID: String){
         val oftenNeededData:OftenNeededData = OftenNeededData()
         databaseUser = oftenNeededData.dataBaseUsers
-        Log.d("adapter", "databaseUser.toString()")
+        Log.d("adapter", userID)
     }
 
     fun declineUser(){
