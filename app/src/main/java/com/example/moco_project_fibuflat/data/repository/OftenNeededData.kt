@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -40,45 +39,54 @@ class OftenNeededData : ViewModel() {
     }
 
     suspend fun setData() {
-
         viewModelScope.launch(Dispatchers.Default) {
             val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
-            var group: Group?
-            var user: User? = null
-            Log.d("dataUser0", user.toString())
-
-            user = fetchUser(uid)
-            delay(500)
-            Log.d("dataUser3", user.toString())
-
-            _dataBaseUsers.child(uid).child("group").get().addOnSuccessListener {
-                group = it.getValue(Group::class.java)!!
-                _user = User(user?.userID,
-                    user?.username,
-                    user?.email,
-                    group?.groupId,
-                    group?.groupName)
-                _group = group
-                Log.d("dataUser", _user.toString())
-                Log.d("dataUser", user.toString())
-            }
+            Log.d("dataUser0", "user.toString()")
+            fetchUser(uid)
+            fetchGroup(uid)
         }
     }
 
     private suspend fun fetchUser(uid: String): User =
         withContext(Dispatchers.Default) { //ToDo I.O.?
-            var user: User? = null
-
-            var task1 =
-                _dataBaseUsers.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).get()
-                    .addOnSuccessListener {
-                        user = it.getValue(User::class.java)!!
-                        Log.d("dataUser1", user.toString())
-                    }
-
-            if (task1.isComplete) {
-                Log.d("dataUser2", user.toString())
-            }
-            return@withContext user!!
+            Log.d("dataUser1", "user.toString()")
+            getUserData(uid)
+            return@withContext User() //ToDo
         }
+
+    private fun getUserData(uid: String){
+        var user: User? = null
+        _dataBaseUsers.child(uid).get()
+            .addOnSuccessListener {
+                user = it.getValue(User::class.java)!!
+                Log.d("dataUser2", user.toString())
+                _user = user
+            }
+    }
+
+    private suspend fun fetchGroup(uid: String): Group =
+        withContext(Dispatchers.IO) {
+            Log.d("dataUser3", "user.toString()")
+
+            getGroupData(uid)
+            return@withContext Group()
+        }
+
+    private fun getGroupData(uid: String) {
+        var group: Group? = null
+        Log.d("dataUser4", "$uid")
+
+        _dataBaseUsers.child(uid).child("group").get().addOnSuccessListener {
+            Log.d("dataUser5", it.toString())
+            group = it.getValue(Group::class.java)!!
+            _user = User(
+                _user?.userID,
+                _user?.username,
+                _user?.email,
+                group?.groupId,
+                group?.groupName)
+            _group = group
+            Log.d("dataUser6", _user.toString())
+        }
+    }
 }

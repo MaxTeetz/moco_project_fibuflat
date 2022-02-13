@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        (activity as GroupActivity).supportActionBar?.title = "Moneypool"
+        (activity as GroupActivity).supportActionBar?.title = "Moneypool" //ToDo check here
 
     }
 

@@ -30,12 +30,15 @@ GroupActivity : AppCompatActivity() {
 
         MainScope().launch {
             try {
-                viewModel.getUser()
-            }catch (exeption: Exception){
-                Log.d("groupActivity")
+                viewModel.setData()
+                updateUI()
+            }catch (exception: Exception){
+                Log.d("groupActivity", "$exception")
             }
         }
+    }
 
+    private fun updateUI(){
         binding = ActivityGroupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -53,7 +56,6 @@ GroupActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

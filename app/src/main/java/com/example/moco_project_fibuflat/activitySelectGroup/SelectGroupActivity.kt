@@ -60,8 +60,6 @@ class SelectGroupActivity : AppCompatActivity() {
 
             viewModel.createGroup(group, userID)
             //extras
-            intent.putExtra("groupName", name)
-            intent.putExtra("groupID", groupID)
             startActivity(intent)
         }
     }
