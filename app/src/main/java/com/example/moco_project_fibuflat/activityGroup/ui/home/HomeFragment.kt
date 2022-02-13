@@ -105,7 +105,7 @@ class HomeFragment : Fragment() {
             .setTitle("Change Goal")
             .setView(taskEditText)
             .setPositiveButton("Change",
-                DialogInterface.OnClickListener { dialog, which ->
+                DialogInterface.OnClickListener { _, _ ->
                     viewModel.moneyGoalSetGoal(taskEditText.text.toString().toDouble())
                 })
             .setNegativeButton("Cancel", null)

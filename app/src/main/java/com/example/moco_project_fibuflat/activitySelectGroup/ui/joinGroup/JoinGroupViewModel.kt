@@ -22,7 +22,7 @@ class JoinGroupViewModel : ViewModel() {
         stop = false
         userID = FirebaseAuth.getInstance().currentUser!!.uid
 
-        checkRequestAlreadySent(groupName, groupId)
+        getGroup(groupName, groupId) //ToDo
 
     }
 
@@ -107,8 +107,9 @@ class JoinGroupViewModel : ViewModel() {
     private fun setDatabase() {
 
         val requestID: String = UUID.randomUUID().toString()
-        val openRequestGroup = OpenRequestGroup(user.userID, user.username)
-        val openRequestUser = OpenRequestUser(group.groupId, requestID, group.groupName)
+        val openRequestGroup =
+            OpenRequestGroup(requestID, user.userID, user.username) //ToDo
+        val openRequestUser = OpenRequestUser(requestID, group.groupId, group.groupName)
 
         //set Group Request
         database.parent!!.child("Groups").child(group.groupId!!).child("openRequestsByUsers")
@@ -116,7 +117,8 @@ class JoinGroupViewModel : ViewModel() {
 
         //set User Request
         database = //works
-            database.parent!!.child("Users").child(userID).child("openRequestsToGroups").child(requestID)
+            database.parent!!.child("Users").child(userID).child("openRequestsToGroups")
+                .child(requestID)
         database.setValue(openRequestUser)
     }
 

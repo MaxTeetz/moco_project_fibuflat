@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.moco_project_fibuflat.data.Group
+import com.example.moco_project_fibuflat.data.ListCases
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
-import com.example.moco_project_fibuflat.data.repository.OftenNeededData
+import com.example.moco_project_fibuflat.data.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -16,25 +18,28 @@ class GroupManagementViewModel : ViewModel() {
     private lateinit var requestListOld: ArrayList<OpenRequestGroup>
     private lateinit var databaseGroup: DatabaseReference
     private lateinit var databaseUser: DatabaseReference
+    private lateinit var group: Group
+    private lateinit var user: User
 
     private var _requestListNew: MutableLiveData<ArrayList<OpenRequestGroup>> = MutableLiveData()
     val requestListNew: LiveData<ArrayList<OpenRequestGroup>> get() = _requestListNew
 
-    /*private var _listCases: ListCases? = ListCases.EMPTY
+    private var _listCases: ListCases? = ListCases.EMPTY
     val listCases get() = _listCases
 
     private var _index: Int? = null
-    val index get() = _index*/ //ToDo code for part below. See ToDo
+    val index get() = _index
 
-    fun getUserData(database: DatabaseReference) {
-        this.databaseGroup = database //ToDo ask Prof -> better in viewModel and given to function or define in here
-
-        val groupNameRef =
-            database.child("6182134e-0bb3-4954-9eaa-cba45bc6c27c").child("openRequestsByUsers")
-                .orderByChild("OpenRequestGroup")
-
+    fun getUserData(database: DatabaseReference, group: Group) {
         requestList = arrayListOf()
         requestListOld = arrayListOf()
+
+        this.databaseGroup =
+            database //ToDo ask Prof -> better in viewModel and given to function or define in here
+
+        val groupNameRef =
+            database.child(this.group.groupId!!).child("openRequestsByUsers")
+                .orderByChild("OpenRequestGroup")
 
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -48,8 +53,8 @@ class GroupManagementViewModel : ViewModel() {
                         requestList.add(request!!)
                     }
                 }
-                _requestListNew.value = requestList
-                //recyclerViewNewArranged() ToDo doesn't work because oldList is always same as current list
+                //_requestListNew.value = requestList
+                recyclerViewNewArranged(requestListOld, requestList)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -59,44 +64,58 @@ class GroupManagementViewModel : ViewModel() {
         groupNameRef.addValueEventListener(valueEventListener)
     }
 
-    /*private fun recyclerViewNewArranged() { //ok gets whole new list, I guess
+    private fun recyclerViewNewArranged(
+        arrayListOld: ArrayList<OpenRequestGroup>,
+        arrayList: ArrayList<OpenRequestGroup>,
+    ) { //ok gets whole new list, I guess
 
-        Log.d("adapter2", requestListOld.size.toString())
-        Log.d("adapter2", requestList.size.toString())
-        if (requestListOld.isEmpty()) {
+        Log.d("adapter1", arrayListOld.size.toString())
+        Log.d("adapter2", arrayList.size.toString())
+
+        if (arrayListOld.isEmpty()) {
             Log.d("adapter", "empty")
             _listCases = ListCases.EMPTY
         }
 
-        if (requestListOld.size > requestList.size) { //Item deleted
+        if (arrayListOld.size > arrayList.size) { //Item deleted
             Log.d("adapter", "deleted")
 
             _listCases = ListCases.DELETED
 
-            for ((i, openRequestGroup: OpenRequestGroup) in requestListOld.withIndex()) { //item somewhere before the lists end
+            for ((i, openRequestGroup: OpenRequestGroup) in arrayListOld.withIndex()) { //item somewhere before the lists end
+                if (i == arrayListOld.size) {
+                    _index = i //here +1 if it need the old list
+                    break
+                }
                 if (requestList[i] != openRequestGroup) {
                     _index = i
-                }
-                if (i == requestList.size - 2) { //item at lists end
-                    _index = i + 1
+                    break
                 }
             }
         }
-        if (requestListOld.size < requestList.size && requestListOld.isNotEmpty()) { //Item added
+        Log.d("adapter", _index.toString())
+        if ((arrayListOld.size < arrayList.size) && arrayListOld.isNotEmpty()) { //Item added
             Log.d("adapter", "added")
             _listCases = ListCases.ADDED
         }
-        requestListOld = requestList
-        _requestListNew.value = requestList
-    }*/
 
-    fun acceptUser(userID: String){
-        val oftenNeededData:OftenNeededData = OftenNeededData()
-        databaseUser = oftenNeededData.dataBaseUsers
-        Log.d("adapter", userID)
+        setListOldItems()
+        _requestListNew.value = arrayList
     }
 
-    fun declineUser(){
+    private fun setListOldItems() {
+        requestListOld.clear()
+        for (ds in requestList)
+            requestListOld.add(ds)
+    }
 
+    fun acceptUser(openRequestGroup: OpenRequestGroup) {
+    }
+
+    fun declineUser(openRequestGroup: OpenRequestGroup) {
+        databaseUser.child(openRequestGroup.userID!!).child("openRequestsToGroups")
+            .child(openRequestGroup.requestID!!).removeValue()
+        databaseGroup.child(this.group.groupId!!).child("openRequestsByUsers")
+            .child(openRequestGroup.requestID!!).removeValue()
     }
 }

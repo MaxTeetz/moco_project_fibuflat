@@ -1,7 +1,6 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.groupManagement
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,17 +41,30 @@ class FragmentGroupManagement : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         bindRecyclerView()
+        viewModel.getUserData(oftenNeededData.dataBaseGroups, oftenNeededData.getGroup()!!)
+
     }
 
     private fun bindRecyclerView() {
-        val adapter = RecyclerViewJoinRequestAdapter {
-            //ToDo just the click part. The notifyOnChanged ( viewModel) could be used now
-            Log.d("fragmentGroupManagement", it.toString())
-        }
+        val adapter = RecyclerViewJoinRequestAdapter(
+            object : RecyclerViewJoinRequestAdapter.ClickListenerAccept {
+                override fun onItemClicked(openRequestGroup: OpenRequestGroup) {
+                    getUserAccept(openRequestGroup)
+                }
+            },
+            object : RecyclerViewJoinRequestAdapter.ClickListenerDecline {
+                override fun onItemClicked(openRequestGroup: OpenRequestGroup) {
+                    getUserDecline(openRequestGroup)
+                }
+            })
 
         binding.recyclerViewJoinRequests.adapter = adapter
 
-        viewModel.getUserData(oftenNeededData.dataBaseGroups)
+        binding.recyclerViewJoinRequests.layoutManager = LinearLayoutManager(this.context)
+        binding.recyclerViewJoinRequests.addItemDecoration(
+            RecyclerViewItemDecoration(
+                this.requireContext(),
+                R.drawable.divider_shape))
 
         viewModel.requestListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
@@ -60,22 +72,14 @@ class FragmentGroupManagement : Fragment() {
                 adapter.notifyDataSetChanged()
             }
         }
-
-        binding.recyclerViewJoinRequests.layoutManager = LinearLayoutManager(this.context)
-        binding.recyclerViewJoinRequests.addItemDecoration(
-            RecyclerViewItemDecoration(
-                this.requireContext(),
-                R.drawable.divider_shape
-            )
-        )
     }
 
 
     private fun getUserAccept(openRequestGroup: OpenRequestGroup) {
-        Log.d("fragmentGroupManagement", "Accept: $openRequestGroup")
+        viewModel.acceptUser(openRequestGroup)
     }
 
     private fun getUserDecline(openRequestGroup: OpenRequestGroup) {
-        Log.d("fragmentGroupManagement", "Decline: $openRequestGroup")
+        viewModel.declineUser(openRequestGroup)
     }
 }

@@ -1,7 +1,9 @@
 package com.example.moco_project_fibuflat.activityGroup
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -10,17 +12,29 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.ActivityGroupBinding
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class
 GroupActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityGroupBinding
+    private val viewModel: OftenNeededData by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MainScope().launch {
+            try {
+                viewModel.getUser()
+            }catch (exeption: Exception){
+                Log.d("groupActivity")
+            }
+        }
 
         binding = ActivityGroupBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -39,6 +53,7 @@ GroupActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
