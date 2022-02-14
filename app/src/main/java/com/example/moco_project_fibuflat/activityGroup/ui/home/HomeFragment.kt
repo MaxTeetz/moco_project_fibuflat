@@ -3,18 +3,21 @@ package com.example.moco_project_fibuflat.activityGroup.ui.home
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityGroup.adapter.MoneyPoolAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
+import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentHomeBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -26,11 +29,14 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels() //ToDO back to activityViewModels() if it doesn't work
+    private lateinit var neededData: OftenNeededData
 
     override fun onStart() {
         super.onStart()
-        (activity as GroupActivity).supportActionBar?.title = "Moneypool" //ToDo check here
+        Log.d("dataUserGroupHome", "")
+        neededData = ViewModelProvider(requireActivity()).get(OftenNeededData::class.java)
 
+        (activity as GroupActivity).supportActionBar?.title = "Home"//ToDo check here
     }
 
     override fun onCreateView(
@@ -48,7 +54,7 @@ class HomeFragment : Fragment() {
 
         bindRecyclerView()
 
-        viewModel.moneyGoal.observe(this.viewLifecycleOwner) { _ -> //ToDo doesnt change if popup is used, has to reload fragment
+        viewModel.moneyGoal.observe(this.viewLifecycleOwner) { _ -> //ToDo doesn't change if popup is used, has to reload fragment
             bindGoalMoney(view)
         }
 

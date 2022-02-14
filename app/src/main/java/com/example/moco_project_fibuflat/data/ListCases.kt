@@ -5,3 +5,8 @@ enum class ListCases {
     ADDED,
     DELETED
 }
+
+enum class AdapterCase{
+    GroupMember,
+    Request
+}

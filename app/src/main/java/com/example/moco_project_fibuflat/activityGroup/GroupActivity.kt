@@ -1,7 +1,6 @@
 package com.example.moco_project_fibuflat.activityGroup
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,16 +28,13 @@ GroupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         MainScope().launch {
-            try {
-                viewModel.setData()
-                updateUI()
-            }catch (exception: Exception){
-                Log.d("groupActivity", "$exception")
-            }
+            viewModel.setData()
+            updateUI()
         }
     }
 
-    private fun updateUI(){
+    private fun updateUI() {
+
         binding = ActivityGroupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

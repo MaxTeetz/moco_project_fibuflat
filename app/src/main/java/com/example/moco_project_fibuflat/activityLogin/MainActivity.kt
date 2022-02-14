@@ -100,10 +100,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-        intent.putExtra("userID", neededData.getUser()?.userID) //ToDo maybe less
-        intent.putExtra("userName", neededData.getUser()?.username)
-        intent.putExtra("groupID", neededData.getUser()?.groupId)
-        intent.putExtra("groupName", neededData.getUser()?.groupName)
+        //intent.putExtra("userID", neededData.getUser()?.userID) //ToDo maybe less
+        //intent.putExtra("userName", neededData.getUser()?.username)
+        //intent.putExtra("groupID", neededData.getUser()?.groupId)
+        //intent.putExtra("groupName", neededData.getUser()?.groupName)
         startActivity(intent)
     }
 
