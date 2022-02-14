@@ -9,6 +9,7 @@ import com.example.moco_project_fibuflat.data.ListCases
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.data.User
 import com.google.firebase.database.*
+import kotlinx.coroutines.SupervisorJob
 
 class GroupManagementViewModel : ViewModel() {
     private lateinit var requestList: ArrayList<OpenRequestGroup>
@@ -19,9 +20,13 @@ class GroupManagementViewModel : ViewModel() {
     private lateinit var user: User
     private lateinit var groupNameRef: Query
     private lateinit var valueEventListener: ValueEventListener
+    val job = SupervisorJob()
 
     private var _requestListNew: MutableLiveData<ArrayList<OpenRequestGroup>> = MutableLiveData()
     val requestListNew: LiveData<ArrayList<OpenRequestGroup>> get() = _requestListNew
+
+    private var _toast: MutableLiveData<String> = MutableLiveData()
+    val toast: LiveData<String> get() = _toast
 
     private var _listCases: ListCases? = ListCases.EMPTY
     val listCases get() = _listCases
@@ -61,13 +66,17 @@ class GroupManagementViewModel : ViewModel() {
         groupNameRef.addValueEventListener(valueEventListener)
     }
 
+    //could delete all requests belonging to the user in user and groups
+    //but just display a message that hes already in a group
+    //this way send requests stay active and group members decide if they want to delete it
     fun acceptUser(openRequestGroup: OpenRequestGroup) { //ToDo make functions with network call suspending
 
         databaseUser.child(openRequestGroup.userID.toString()).child("group").get()
             .addOnSuccessListener {
 
                 if (it.getValue(Group::class.java)?.groupId != null)
-                    declineUser(openRequestGroup)
+                //Make toast here
+                    _toast.value = openRequestGroup.username!!
                 else
                     letUserJoin(openRequestGroup)
             }.addOnFailureListener { e: Exception ->
@@ -82,11 +91,12 @@ class GroupManagementViewModel : ViewModel() {
 
     private fun letUserJoin(openRequestGroup: OpenRequestGroup) {
 
-        val user: User = User(openRequestGroup.userID, openRequestGroup.username)
-        databaseUser.child(openRequestGroup.userID.toString()).child("group")
+        val user = User(openRequestGroup.userID, openRequestGroup.username)
+
+        databaseUser.child(user.userID.toString()).child("group")
             .setValue(group)
         databaseGroup.child(group.groupId.toString()).child("users")
-            .child(openRequestGroup.userID.toString()).setValue(user)
+            .child(user.userID.toString()).setValue(user)
         declineUser(openRequestGroup)
         Log.d("groupManagementViewModel", "User successfully joined Group")
     }
@@ -135,27 +145,22 @@ class GroupManagementViewModel : ViewModel() {
             Log.d("adapter", "DELETED")
         }
         if ((arrayListOld.size < arrayList.size) && arrayListOld.isNotEmpty()) { //Item added
-            Log.d("adapter1", arrayListOld.size.toString())
-            Log.d("adapter2", arrayList.size.toString())
-            Log.d("adapter", "ADDED")
             _listCases = ListCases.ADDED
             for ((i, openRequestGroup: OpenRequestGroup) in arrayList.withIndex()) {
 
                 if (i == arrayListOld.size) {
-                    Log.d("adapterloop1", "$i")
                     _index = i
                     break
                 }
                 if (arrayListOld[i] != openRequestGroup) {
                     _index = i
-                    Log.d("adapterloop2", "$i")
                     break
                 }
             }
-            Log.d("adapterIndex", _index.toString())
+            Log.d("adapter", "ADDED")
         }
 
-        //ToDo if empty and item gets insertet, only shows after second one gets inserted too. No problem if fragment loads with only one item in list
+        //ToDo if empty and item gets inserted, only shows after second one gets inserted too. No problem if fragment loads with only one item in list
     }
 
     private fun setListOldItems() {
