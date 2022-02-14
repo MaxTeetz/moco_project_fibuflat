@@ -15,10 +15,15 @@ import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityGroup.adapter.GroupMembersAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewJoinRequestAdapter
-import com.example.moco_project_fibuflat.data.ListCases
+import com.example.moco_project_fibuflat.data.AdapterCase
+import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentGroupManagementBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class FragmentGroupManagement : Fragment() {
 
@@ -28,6 +33,10 @@ class FragmentGroupManagement : Fragment() {
     private lateinit var neededData: OftenNeededData
     private lateinit var adapterRequest: RecyclerViewJoinRequestAdapter
     private lateinit var adapterMembers: GroupMembersAdapter
+    private val coroutine1 = Job()
+    private val coroutine2 = Job()
+    private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
+    private val coroutineScope2 = CoroutineScope(coroutine2 + Dispatchers.Main)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +62,16 @@ class FragmentGroupManagement : Fragment() {
             neededData.group,
             neededData.user)
 
+        coroutineScope1.launch {
+            viewModel.getRequests(AdapterCase.Request)
+        }
+
+        coroutineScope2.launch {
+            viewModel.getGroupMembers(AdapterCase.GroupMember)
+        }
+
+        Log.d("groupManagement", "after getUserData call")
+
         viewModel.toast.observe(this.viewLifecycleOwner) {
             Toast.makeText(
                 requireContext(),
@@ -65,7 +84,6 @@ class FragmentGroupManagement : Fragment() {
         bindingRecyclerViewRequests()
         requestObserver()
 
-        viewModel.getUserData()
     }
 
 
@@ -98,14 +116,21 @@ class FragmentGroupManagement : Fragment() {
             it.let {
                 adapterRequest.submitList(it)
 
-                when (viewModel.listCases) {
-                    ListCases.EMPTY -> {
+                when (viewModel.listCaseRequest) {
+                    ListCase.EMPTY -> {
                         adapterRequest.submitList(it)
                         adapterRequest.notifyItemRangeChanged(0, it.size - 1)
+                        Log.d("adapterViewModelEMPTY", "${viewModel.indexRequest}")
                     }
-                    ListCases.DELETED -> adapterRequest.notifyItemRemoved(viewModel.index!!)
+                    ListCase.DELETED -> {
+                        adapterRequest.notifyItemRemoved(viewModel.indexRequest!!)
+                        Log.d("adapterViewModelDELETED", "${viewModel.indexRequest}")
+                    }
 
-                    ListCases.ADDED -> adapterRequest.notifyItemInserted(viewModel.index!!)
+                    ListCase.ADDED -> {
+                        adapterRequest.notifyItemInserted(viewModel.indexRequest!!)
+                        Log.d("adapterViewModelADDED", "${viewModel.indexRequest}")
+                    }
 
                     null -> { //should actually never happen. But just in case, reload the whole list
                         adapterRequest.notifyDataSetChanged()
@@ -126,6 +151,6 @@ class FragmentGroupManagement : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.removeListener()
+        viewModel.removeListeners()
     }
 }

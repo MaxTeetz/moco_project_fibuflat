@@ -1,6 +1,6 @@
 package com.example.moco_project_fibuflat.data
 
-enum class ListCases {
+enum class ListCase {
     EMPTY,
     ADDED,
     DELETED
