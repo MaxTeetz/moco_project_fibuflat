@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry
+package com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.addEntry
 
 import android.os.Bundle
 import android.util.Log
@@ -7,13 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.activityGroup.ui.home.HomeViewModel
+import com.example.moco_project_fibuflat.data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import java.text.SimpleDateFormat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -21,14 +24,17 @@ class AddEntryFragment : Fragment() {
 
     private val viewModel: AddEntryViewModel by activityViewModels()
     private val viewModelHome: HomeViewModel by activityViewModels()
+    private lateinit var neededData: OftenNeededData
     private var _binding: FragmentAddEntryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var database: DatabaseReference
+    private val coroutine1 = Job()
+    private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
+        neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
         Log.d("addEntryFragment", "onCreateView")
         // Inflate the layout for this fragment
         _binding = FragmentAddEntryBinding.inflate(inflater, container, false)
@@ -38,6 +44,11 @@ class AddEntryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("addEntryFragment", "onViewCreated")
+
+        viewModel.setData(
+            neededData.user.value!!,
+            neededData.group.value!!,
+            neededData.dataBaseGroups)
 
         binding.addEntry.setOnClickListener {
             addNewEntry()
@@ -58,34 +69,17 @@ class AddEntryFragment : Fragment() {
     private fun addNewEntry() {
         if (isEntryValid()) {
 
-            val sdf = SimpleDateFormat("dd/M/yyyy\nhh:mm:ss")
-            val currentDate = sdf.format(Date())
-
-            val moneyPoolEntry = MoneyPoolEntry(
-                id = UUID.randomUUID().toString(),
-                "Max Mustermann",
-                binding.moneyAmount.text.toString().toInt(),
-                currentDate,
-                binding.message.text.toString()
-            )
-            addEntryToDB(moneyPoolEntry)
-
-            viewModelHome.addItem( //ToDo get from database
-                moneyPoolEntry
-            )
-            viewModelHome.moneyGoalSetCurrent()
+            coroutineScope1.launch {
+                viewModel.addEntryToDB(MoneyPoolEntry(
+                    UUID.randomUUID().toString(),
+                    neededData.user.value!!.username!!,
+                    binding.moneyAmount.text.toString().toInt(),
+                    viewModel.getCurrentDate(),
+                    binding.message.text.toString()
+                ))
+            }
             val action = AddEntryFragmentDirections.actionAddEntryFragmentToNavHome()
             findNavController().navigate(action)
         }
-    }
-
-    private fun addEntryToDB(moneyPoolEntry: MoneyPoolEntry) {
-        val intent = activity?.intent?.extras?.getString("groupID")
-        //Log.d("homeFragment", intent.getStringExtra("groupID")!!)
-
-        database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Groups")
-        database.child(intent!!).child("moneyPoolEntry").child(moneyPoolEntry.id).setValue(moneyPoolEntry)
     }
 }

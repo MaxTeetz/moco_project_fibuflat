@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activityGroup.ui.home.poolEntry.AddEntryFragment">
+    tools:context=".activityGroup.ui.home.poolEntry.addEntry.AddEntryFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

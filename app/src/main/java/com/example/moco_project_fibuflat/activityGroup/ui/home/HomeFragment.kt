@@ -1,13 +1,10 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home
 
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -17,34 +14,38 @@ import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityGroup.adapter.MoneyPoolAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
+import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentHomeBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-
-//val intent = Intent (requireContext(), GroupActivity::class.java)
-//Log.d("homeFragment", intent.getStringExtra("user_id")!!)
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels() //ToDO back to activityViewModels() if it doesn't work
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var neededData: OftenNeededData
+    private lateinit var adapterEntry: MoneyPoolAdapter
+    private val coroutine1 = Job()
+    private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
 
     override fun onStart() {
         super.onStart()
         Log.d("dataUserGroupHome", "")
-        neededData = ViewModelProvider(requireActivity()).get(OftenNeededData::class.java)
 
-        (activity as GroupActivity).supportActionBar?.title = "Home"//ToDo check here
+
+        (activity as GroupActivity).supportActionBar?.title = "Home"
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-
+        neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,24 +53,66 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindRecyclerView()
+        viewModel.setDataViewModel(
+            neededData.dataBaseUsers,
+            neededData.dataBaseGroups,
+            neededData.group,
+            neededData.user)
 
-        viewModel.moneyGoal.observe(this.viewLifecycleOwner) { _ -> //ToDo doesn't change if popup is used, has to reload fragment
-            bindGoalMoney(view)
+        coroutineScope1.launch {
+            viewModel.getEntries()
         }
-
-        binding.changeGoal.setOnClickListener {
-            showAddItemDialog(requireContext())
-        }
-
+        setAdapter()
+        bindingRecyclerViewRequests()
+        requestObserver()
         binding.addEntry.setOnClickListener {
             val action = HomeFragmentDirections.actionNavHomeToAddEntryFragment()
             this.findNavController().navigate(action)
         }
     }
 
+    private fun setAdapter() {
+        adapterEntry = MoneyPoolAdapter {
+            val action = HomeFragmentDirections.actionNavHomeToEntryDetail(it.id!!)
+            this.findNavController().navigate(action)
+        }
+    }
 
-    private fun bindGoalMoney(view: View){ //ToDO doesn't change if entry is deleted
+    private fun bindingRecyclerViewRequests() {
+        binding.recyclerViewMoneyPoolEntry.adapter = adapterEntry
+
+        binding.recyclerViewMoneyPoolEntry.layoutManager = LinearLayoutManager(this.context)
+        binding.recyclerViewMoneyPoolEntry.addItemDecoration(
+            RecyclerViewItemDecoration(
+                this.requireContext(),
+                R.drawable.divider_shape))
+    }
+
+    private fun requestObserver() {
+        viewModel.allMoneyEntries.observe(this.viewLifecycleOwner) { it ->
+            it.let {
+                adapterEntry.submitList(it)
+
+                when (viewModel.listCase) {
+                    ListCase.EMPTY -> adapterEntry.submitList(it)
+                    ListCase.DELETED -> adapterEntry.notifyItemRemoved(viewModel.index!!)
+                    ListCase.ADDED -> adapterEntry.notifyItemInserted(viewModel.index!!)
+                    null -> { //should actually never happen. But just in case, reload the whole list
+                        adapterEntry.notifyDataSetChanged()
+                        Log.d("adapter", "Error")
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        Log.d("homeFragment", "destroyed")
+        super.onDestroyView()
+        viewModel.removeListeners()
+    }
+
+    /*private fun bindGoalMoney(view: View) { //ToDO doesn't change if entry is deleted
         (view.context.getString(
             R.string.money_amount_in_euro,
             viewModel.moneyGoal.value?.currentMoney.toString()
@@ -79,31 +122,7 @@ class HomeFragment : Fragment() {
         else
             binding.currentMoney.setTextColor(resources.getColor(R.color.red_700))
     }
-
-    private fun bindRecyclerView() {
-        val adapter = MoneyPoolAdapter {
-            val action = HomeFragmentDirections.actionNavHomeToEntryDetail(it.id)
-            this.findNavController().navigate(action)
-        }
-
-        binding.recyclerView.adapter = adapter
-
-        viewModel.allMoneyEntries.observe(this.viewLifecycleOwner) { entries ->
-            entries.let { it ->
-                adapter.submitList(it)
-            }
-        }
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
-        binding.recyclerView.addItemDecoration(
-            RecyclerViewItemDecoration(
-                this.requireContext(),
-                R.drawable.divider_shape
-            )
-        )
-    }
-
-    private fun showAddItemDialog(context: Context) {
+      private fun showAddItemDialog(context: Context) {
         val taskEditText: EditText = EditText(context)
         taskEditText.inputType.dec()
         taskEditText.maxEms = 5
@@ -117,5 +136,5 @@ class HomeFragment : Fragment() {
             .setNegativeButton("Cancel", null)
             .create()
             .show()
-    }
+    }*/
 }

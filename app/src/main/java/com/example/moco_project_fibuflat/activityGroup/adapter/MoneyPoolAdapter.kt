@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.activityGroup.data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.databinding.MoneypoolPoolEntryBinding
 
 class MoneyPoolAdapter(private val onItemClicked: (MoneyPoolEntry) -> Unit) :

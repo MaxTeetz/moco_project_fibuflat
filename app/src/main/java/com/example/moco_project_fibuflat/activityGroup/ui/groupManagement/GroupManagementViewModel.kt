@@ -9,20 +9,20 @@ import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST") //always clear, so its ok to suppress it
 class GroupManagementViewModel : ViewModel() {
 
-    private var requestList: ArrayList<OpenRequestGroup> = arrayListOf() //ToDo
+    private var requestList: ArrayList<OpenRequestGroup> = arrayListOf()
     private var requestListOld: ArrayList<OpenRequestGroup> = arrayListOf()
-    private var memberList: ArrayList<User> = arrayListOf() //ToDo
+    private var memberList: ArrayList<User> = arrayListOf()
     private var memberListOld: ArrayList<User> = arrayListOf()
 
-    private lateinit var databaseGroup: DatabaseReference //ToDo define earlier to requests
+    private lateinit var databaseGroup: DatabaseReference
     private lateinit var databaseUser: DatabaseReference
     private lateinit var group: Group
     private lateinit var user: User
-    private lateinit var groupNameRef: Query
-    private lateinit var valueEventListener: ValueEventListener
+    private lateinit var valueEventListenerRequest: ValueEventListener
+    private lateinit var valueEventListenerMember: ValueEventListener
 
     private lateinit var databaseRequestRef: Query
     private lateinit var databaseMemberRef: Query
@@ -46,28 +46,18 @@ class GroupManagementViewModel : ViewModel() {
     val indexRequest get() = _indexRequest
 
     private var _indexMember: Int? = 0
-    val indexMember get() = _indexRequest
+    val indexMember get() = _indexMember
 
     suspend fun getRequests(adapterCase: AdapterCase) {
-        Log.d("adapterViewModelStart", "in fetchData call start")
         databaseRequestRef = databaseGroup.child(group.groupId!!).child("openRequestsByUsers")
             .orderByChild("OpenRequestGroup")
-
-        withContext(Dispatchers.IO) {
-            fetchDataRequest(adapterCase)
-        }
+        fetchDataRequest(adapterCase)
     }
 
     suspend fun getGroupMembers(adapterCase: AdapterCase) {
-        withContext(Dispatchers.IO) {
-            fetchDataMember(databaseGroup.child(group.groupId!!).child("users")
-                .orderByChild("User"), adapterCase)
-        }
+        databaseMemberRef = databaseGroup.child(group.groupId!!).child("users").orderByChild("User")
+        fetchDataMember(adapterCase)
     }
-
-    //could delete all requests belonging to the user in user and groups
-    //but just display a message that hes already in a group
-    //this way send requests stay active and group members decide if they want to delete it
 
     fun setDataViewModel(
         dataBaseUsers: DatabaseReference,
@@ -83,6 +73,9 @@ class GroupManagementViewModel : ViewModel() {
 
     fun acceptUser(openRequestGroup: OpenRequestGroup) { //ToDo make functions with network call suspending
 
+        //could delete all requests belonging to the user in user and groups
+        //but just display a message that hes already in a group
+        //this way send requests stay active and group members decide if they want to delete it
         databaseUser.child(openRequestGroup.userID.toString()).child("group").get()
             .addOnSuccessListener {
 
@@ -104,9 +97,9 @@ class GroupManagementViewModel : ViewModel() {
             .child(openRequestGroup.requestID!!).removeValue()
     }
 
-    fun removeListeners(){
-        databaseRequestRef.removeEventListener(valueEventListener)
-        databaseMemberRef.removeEventListener(valueEventListener)
+    fun removeListeners() {
+        databaseRequestRef.removeEventListener(valueEventListenerRequest)
+        databaseMemberRef.removeEventListener(valueEventListenerMember)
     }
 
     private fun letUserJoin(openRequestGroup: OpenRequestGroup) {
@@ -121,55 +114,57 @@ class GroupManagementViewModel : ViewModel() {
         Log.d("groupManagementViewModel", "User successfully joined Group")
     }
 
-    private fun fetchDataRequest(adapterCase: AdapterCase) {
-        valueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+    private suspend fun fetchDataRequest(adapterCase: AdapterCase) {
 
-                if (requestList.isNotEmpty())
-                    requestList.clear()
-                if (snapshot.exists()) {
-                    for (requestSnapshot in snapshot.children) {
-                        val request = requestSnapshot.getValue(OpenRequestGroup::class.java)
-                        requestList.add(request!!)
+        withContext(Dispatchers.IO) {
+            valueEventListenerRequest = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    if (requestList.isNotEmpty())
+                        requestList.clear()
+                    if (snapshot.exists()) {
+                        for (requestSnapshot in snapshot.children) {
+                            val request = requestSnapshot.getValue(OpenRequestGroup::class.java)
+                            requestList.add(request!!)
+                        }
                     }
-                    Log.d("adapterViewModel", "$snapshot")
-
+                    recyclerViewNewArranged(requestListOld, requestList, adapterCase)
+                    setRequestListOld()
                 }
-                Log.d("adapterViewModel", "$requestList")
 
-                recyclerViewNewArranged(requestListOld, requestList, adapterCase)
-                setRequestListOld()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("adapter", "cancelled")
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("adapter", "cancelled")
+                }
             }
         }
-        databaseRequestRef.addValueEventListener(valueEventListener)
+        databaseRequestRef.addValueEventListener(valueEventListenerRequest)
     }
 
-    private suspend fun fetchDataMember(databaseRef: Query, adapterCase: AdapterCase) {
-        valueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+    private suspend fun fetchDataMember(adapterCase: AdapterCase) {
 
-                if (memberList.isNotEmpty())
-                    memberList.clear()
+        withContext(Dispatchers.IO) {
+            valueEventListenerMember = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
 
-                if (snapshot.exists()) {
-                    for (requestSnapshot in snapshot.children) {
-                        val user = requestSnapshot.getValue(User::class.java)
-                        memberList.add(user!!)
+                    if (memberList.isNotEmpty())
+                        memberList.clear()
+
+                    if (snapshot.exists()) {
+                        for (requestSnapshot in snapshot.children) {
+                            val user = requestSnapshot.getValue(User::class.java)
+                            memberList.add(user!!)
+                        }
                     }
+                    recyclerViewNewArranged(memberListOld, memberList, adapterCase)
+                    setMembersListOld()
                 }
-                recyclerViewNewArranged(memberListOld, memberList, adapterCase)
-                setMembersListOld()
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("adapter", "cancelled")
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("adapter", "cancelled")
+                }
             }
         }
-        databaseRef.addValueEventListener(valueEventListener)
+        databaseMemberRef.addValueEventListener(valueEventListenerMember)
     }
 
     private fun recyclerViewNewArranged(
@@ -177,17 +172,12 @@ class GroupManagementViewModel : ViewModel() {
         arrayList: ArrayList<*>,
         adapterCase: AdapterCase,
     ) {
-        Log.d("adapterViewModel", "recyclerViewArrangeCase: $adapterCase")
-        Log.d("adapterViewModel", "recyclerViewArrangeNew: ${arrayList.size}")
-        Log.d("adapterViewModel", "recyclerViewArrangeOld: ${arrayListOld.size}")
-
-
+        Log.d("viewModelGroupManagement", "$adapterCase")
         var index = 0
         var case: ListCase? = null
 
         if (arrayListOld.isEmpty()) {
             case = ListCase.EMPTY
-            Log.d("adapter", "EMPTY")
         }
 
         if (arrayListOld.size > arrayList.size) { //Item deleted
@@ -204,9 +194,6 @@ class GroupManagementViewModel : ViewModel() {
         else
             setListMembers(index, case!!, arrayList as ArrayList<User>)
 
-        Log.d("adapterViewModel", "recyclerViewArrangeEnd: $index")
-        Log.d("adapterViewModel", "recyclerViewArrangeEnd: $case")
-
         //ToDo if empty and item gets inserted, only shows after second one gets inserted too. No problem if fragment loads with only one item in list
     }
 
@@ -216,10 +203,10 @@ class GroupManagementViewModel : ViewModel() {
     ): Int {
         for ((i, any: Any) in arrayList.withIndex()) {
 
-            if (i == arrayListOld.size) {
+            if (i == arrayListOld.size) { //item somewhere in between
                 return i
             }
-            if (arrayListOld[i] != any) {
+            if (arrayListOld[i] != any) { //item at lists end
                 return i
             }
         }
@@ -230,12 +217,12 @@ class GroupManagementViewModel : ViewModel() {
         arrayListOld: ArrayList<*>,
         arrayList: ArrayList<*>,
     ): Int {
-        for ((i, any: Any) in arrayListOld.withIndex()) { //item somewhere before the lists end
+        for ((i, any: Any) in arrayListOld.withIndex()) {
 
             if (i == arrayList.size) {
-                return i //here +1 if it need the old list
+                return i
             }
-            if (arrayList[i] != any) { //here requestlist to arraylist
+            if (arrayList[i] != any) {
                 return i
             }
         }
@@ -248,6 +235,9 @@ class GroupManagementViewModel : ViewModel() {
         listCase: ListCase,
         arrayList: ArrayList<OpenRequestGroup>,
     ) {
+        Log.d("viewModelGroupManagementRequest", "$arrayList")
+        Log.d("viewModelGroupManagementRequest", "$listCase")
+        Log.d("viewModelGroupManagementRequest", "$index")
         _indexRequest = index
         _listCaseRequest = listCase
         _requestListNew.value = arrayList
@@ -258,6 +248,9 @@ class GroupManagementViewModel : ViewModel() {
         listCase: ListCase,
         arrayList: ArrayList<User>,
     ) {
+        Log.d("viewModelGroupManagementMember", "$arrayList")
+        Log.d("viewModelGroupManagementMember", "$listCase")
+        Log.d("viewModelGroupManagementMember", "$index")
         _indexMember = index
         _listCaseMembers = listCase
         _memberListNew.value = arrayList
@@ -275,6 +268,5 @@ class GroupManagementViewModel : ViewModel() {
         memberListOld.clear()
         for (ds in memberList)
             memberListOld.add(ds)
-        _memberListNew.value = memberList
     }
 }

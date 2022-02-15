@@ -30,9 +30,11 @@ class FragmentGroupManagement : Fragment() {
     private var _binding: FragmentGroupManagementBinding? = null
     private val binding get() = _binding!!
     private val viewModel: GroupManagementViewModel by viewModels()
+
     private lateinit var neededData: OftenNeededData
     private lateinit var adapterRequest: RecyclerViewJoinRequestAdapter
     private lateinit var adapterMembers: GroupMembersAdapter
+
     private val coroutine1 = Job()
     private val coroutine2 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
@@ -57,7 +59,8 @@ class FragmentGroupManagement : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.setDataViewModel(neededData.dataBaseUsers,
+        viewModel.setDataViewModel(
+            neededData.dataBaseUsers,
             neededData.dataBaseGroups,
             neededData.group,
             neededData.user)
@@ -70,8 +73,6 @@ class FragmentGroupManagement : Fragment() {
             viewModel.getGroupMembers(AdapterCase.GroupMember)
         }
 
-        Log.d("groupManagement", "after getUserData call")
-
         viewModel.toast.observe(this.viewLifecycleOwner) {
             Toast.makeText(
                 requireContext(),
@@ -79,13 +80,12 @@ class FragmentGroupManagement : Fragment() {
                 Toast.LENGTH_SHORT).show()
         }
 
-
         setAdapters()
         bindingRecyclerViewRequests()
+        bindingRecyclerViewMembers()
         requestObserver()
-
+        memberObserver()
     }
-
 
     private fun setAdapters() {
         adapterRequest = RecyclerViewJoinRequestAdapter(
@@ -99,6 +99,8 @@ class FragmentGroupManagement : Fragment() {
                     getUserDecline(openRequestGroup)
                 }
             })
+
+        adapterMembers = GroupMembersAdapter()
     }
 
     private fun bindingRecyclerViewRequests() {
@@ -111,29 +113,45 @@ class FragmentGroupManagement : Fragment() {
                 R.drawable.divider_shape))
     }
 
+    private fun bindingRecyclerViewMembers(){
+        binding.recyclerViewMembers.adapter = adapterMembers
+
+        binding.recyclerViewMembers.layoutManager = LinearLayoutManager(this.context)
+        binding.recyclerViewMembers.addItemDecoration(
+            RecyclerViewItemDecoration(
+                this.requireContext(),
+                R.drawable.divider_shape))
+    }
+
     private fun requestObserver() {
         viewModel.requestListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
                 adapterRequest.submitList(it)
 
                 when (viewModel.listCaseRequest) {
-                    ListCase.EMPTY -> {
-                        adapterRequest.submitList(it)
-                        adapterRequest.notifyItemRangeChanged(0, it.size - 1)
-                        Log.d("adapterViewModelEMPTY", "${viewModel.indexRequest}")
-                    }
-                    ListCase.DELETED -> {
-                        adapterRequest.notifyItemRemoved(viewModel.indexRequest!!)
-                        Log.d("adapterViewModelDELETED", "${viewModel.indexRequest}")
-                    }
-
-                    ListCase.ADDED -> {
-                        adapterRequest.notifyItemInserted(viewModel.indexRequest!!)
-                        Log.d("adapterViewModelADDED", "${viewModel.indexRequest}")
-                    }
-
+                    ListCase.EMPTY -> adapterRequest.submitList(it)
+                    ListCase.DELETED -> adapterRequest.notifyItemRemoved(viewModel.indexRequest!!)
+                    ListCase.ADDED -> adapterRequest.notifyItemInserted(viewModel.indexRequest!!)
                     null -> { //should actually never happen. But just in case, reload the whole list
                         adapterRequest.notifyDataSetChanged()
+                        Log.d("adapter", "Error")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun memberObserver() {
+        viewModel.memberListNew.observe(this.viewLifecycleOwner) { it ->
+            it.let {
+                adapterMembers.submitList(it)
+
+                when (viewModel.listCaseMember) {
+                    ListCase.EMPTY -> adapterMembers.submitList(it)
+                    ListCase.DELETED -> adapterMembers.notifyItemRemoved(viewModel.indexMember!!)
+                    ListCase.ADDED -> adapterMembers.notifyItemInserted(viewModel.indexMember!!)
+                    null -> {
+                        adapterMembers.notifyDataSetChanged()
                         Log.d("adapter", "Error")
                     }
                 }

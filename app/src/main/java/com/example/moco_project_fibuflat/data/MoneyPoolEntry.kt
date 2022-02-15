@@ -1,14 +1,14 @@
-package com.example.moco_project_fibuflat.activityGroup.data
+package com.example.moco_project_fibuflat.data
 
 data class MoneyPoolEntry(
-    val id: String, //identifier of entry -> random UUID to string
-    val stringUser: String, //username
-    val moneyAmount: Int, //money
-    val stringDate: String, //date
-    val stringInfo: String //additional info
+    val id: String? = null, //identifier of entry -> random UUID to string
+    val stringUser: String? = null, //username
+    val moneyAmount: Int? = null, //money
+    val stringDate: String? = null, //date
+    val stringInfo: String? = null //additional info
 )
 
 data class MoneyGoal(
-    var goalMoney: Double,
-    var currentMoney: Double
+    var goalMoney: Double? = null,
+    var currentMoney: Double? = null
 )
