@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/menu_moneypool"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_nav_home_to_addEntryFragment"
@@ -20,24 +20,24 @@
 
     <fragment
         android:id="@+id/nav_todo_list"
-        android:name="com.example.moco_project_fibuflat.activityGroup.ui.ToDo.GalleryFragment"
-        android:label="@string/menu_gallery"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.toDo.ToDoFragment"
+        android:label="@string/menu_todo"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_group_management"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.groupManagement.FragmentGroupManagement"
-        android:label="menu_group_management"
+        android:label="@string/menu_group_management"
         tools:layout="@layout/fragment_group_management"/>
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.moco_project_fibuflat.activityGroup.ui.NFC.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_nfc"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.nfc.NfcFragment"
+        android:label="@string/menu_nfc"
+        tools:layout="@layout/fragment_nfc" />
     <fragment
         android:id="@+id/addEntryFragment"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.addEntry.AddEntryFragment"
-        android:label="fragment_add_entry"
+        android:label="@string/add_entry"
         tools:layout="@layout/fragment_add_entry" >
         <action
             android:id="@+id/action_addEntryFragment_to_nav_home"
@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/entryDetail"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.entryDetail.EntryDetailFragment"
-        android:label="entry_detail"
+        android:label="@string/entry_detail"
         tools:layout="@layout/entry_detail" >
         <argument
             android:name="entry_id"

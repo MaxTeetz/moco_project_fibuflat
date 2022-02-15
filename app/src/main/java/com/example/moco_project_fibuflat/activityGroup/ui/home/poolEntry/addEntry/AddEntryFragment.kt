@@ -5,11 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.activityGroup.ui.home.HomeViewModel
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
@@ -23,12 +23,22 @@ import java.util.*
 class AddEntryFragment : Fragment() {
 
     private val viewModel: AddEntryViewModel by activityViewModels()
-    private val viewModelHome: HomeViewModel by activityViewModels()
     private lateinit var neededData: OftenNeededData
     private var _binding: FragmentAddEntryBinding? = null
     private val binding get() = _binding!!
     private val coroutine1 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

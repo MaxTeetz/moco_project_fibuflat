@@ -33,7 +33,7 @@ class AddEntryViewModel : ViewModel() {
     }
 
     fun getCurrentDate(): String {
-        val sdf = SimpleDateFormat("dd/M/yyyy\nhh:mm:ss")
+        val sdf = SimpleDateFormat("dd/M/yyyy\nhh:mm:ss", Locale.getDefault()) //ToDo shows wrong time after 11.59am
         return sdf.format(Date())
     }
 

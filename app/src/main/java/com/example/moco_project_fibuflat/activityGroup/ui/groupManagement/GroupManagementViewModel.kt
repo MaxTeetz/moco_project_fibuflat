@@ -269,4 +269,5 @@ class GroupManagementViewModel : ViewModel() {
         for (ds in memberList)
             memberListOld.add(ds)
     }
+
 }

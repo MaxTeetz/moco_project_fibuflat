@@ -1,5 +1,6 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.groupManagement
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityGroup.adapter.GroupMembersAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewJoinRequestAdapter
@@ -27,31 +26,25 @@ import kotlinx.coroutines.launch
 
 class FragmentGroupManagement : Fragment() {
 
-    private var _binding: FragmentGroupManagementBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: GroupManagementViewModel by viewModels()
-
+    private lateinit var viewModel: GroupManagementViewModel
     private lateinit var neededData: OftenNeededData
     private lateinit var adapterRequest: RecyclerViewJoinRequestAdapter
     private lateinit var adapterMembers: GroupMembersAdapter
+
+    private var _binding: FragmentGroupManagementBinding? = null
+    private val binding get() = _binding!!
 
     private val coroutine1 = Job()
     private val coroutine2 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
     private val coroutineScope2 = CoroutineScope(coroutine2 + Dispatchers.Main)
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
-        (activity as GroupActivity).supportActionBar?.title = "Group Management"
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        // Inflate the layout for this fragment
+        viewModel = ViewModelProvider(this)[GroupManagementViewModel::class.java]
+        neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
         _binding = FragmentGroupManagementBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -65,7 +58,7 @@ class FragmentGroupManagement : Fragment() {
             neededData.group,
             neededData.user)
 
-        coroutineScope1.launch {
+        coroutineScope1.launch { //toDo
             viewModel.getRequests(AdapterCase.Request)
         }
 
@@ -113,7 +106,7 @@ class FragmentGroupManagement : Fragment() {
                 R.drawable.divider_shape))
     }
 
-    private fun bindingRecyclerViewMembers(){
+    private fun bindingRecyclerViewMembers() {
         binding.recyclerViewMembers.adapter = adapterMembers
 
         binding.recyclerViewMembers.layoutManager = LinearLayoutManager(this.context)
@@ -123,6 +116,7 @@ class FragmentGroupManagement : Fragment() {
                 R.drawable.divider_shape))
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun requestObserver() {
         viewModel.requestListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
@@ -132,7 +126,7 @@ class FragmentGroupManagement : Fragment() {
                     ListCase.EMPTY -> adapterRequest.submitList(it)
                     ListCase.DELETED -> adapterRequest.notifyItemRemoved(viewModel.indexRequest!!)
                     ListCase.ADDED -> adapterRequest.notifyItemInserted(viewModel.indexRequest!!)
-                    null -> { //should actually never happen. But just in case, reload the whole list
+                    null -> { //impossible to reach that case but need an else branch. Reload list in this case, because otherwise a crash occurs.
                         adapterRequest.notifyDataSetChanged()
                         Log.d("adapter", "Error")
                     }
@@ -141,6 +135,7 @@ class FragmentGroupManagement : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun memberObserver() {
         viewModel.memberListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
@@ -170,5 +165,11 @@ class FragmentGroupManagement : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.removeListeners()
+        Log.d("groupManagementFragment", "destroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("groupManagementFragment", "destroyed")
     }
 }

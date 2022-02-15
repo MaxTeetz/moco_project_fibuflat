@@ -31,8 +31,13 @@ class HomeViewModel : ViewModel() {
     private var _index: Int? = 0
     val index get() = _index
 
-    private val _moneyGoal = MutableLiveData(MoneyGoal(0.0, 0.0))
-    val moneyGoal: LiveData<MoneyGoal> get() = _moneyGoal
+    private val _moneyGoal: MutableLiveData<MoneyGoal?> = MutableLiveData()
+    val moneyGoal: LiveData<MoneyGoal?> get() = _moneyGoal
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("homeFragmentViewModel", "onCleared()")
+    }
 
     fun setDataViewModel(
         dataBaseUsers: DatabaseReference,
@@ -48,6 +53,15 @@ class HomeViewModel : ViewModel() {
 
     fun removeListeners(){
         databaseEntryRef.removeEventListener(valueEventListenerEntry)
+    }
+
+    fun clearData(){ //because fragment is never destroyed; just onViewDestroyed is called
+        _allMoneyEntries.value?.clear()
+        _index = 0
+        _listCase = ListCase.EMPTY
+        _moneyGoal.value = null
+        entryList.clear()
+        entryListOld.clear()
     }
 
     suspend fun getEntries() {
@@ -66,7 +80,6 @@ class HomeViewModel : ViewModel() {
                         entryList.clear()
                     if (snapshot.exists()) {
                         for (entrySnapshot in snapshot.children) {
-                            Log.d("homeFragment", entrySnapshot.toString())
                             val moneyPoolEntry = entrySnapshot.getValue(MoneyPoolEntry::class.java)
                             entryList.add(moneyPoolEntry!!)
                         }
@@ -209,4 +222,5 @@ class MutableListLiveData<T>(
     private fun updateValue() {
         value = list
     }
+
 }

@@ -1,17 +1,16 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.activityGroup.GroupActivity
 import com.example.moco_project_fibuflat.activityGroup.adapter.MoneyPoolAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.data.ListCase
@@ -26,25 +25,18 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
+    private lateinit var viewModel: HomeViewModel
     private lateinit var neededData: OftenNeededData
     private lateinit var adapterEntry: MoneyPoolAdapter
     private val coroutine1 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("dataUserGroupHome", "")
-
-
-        (activity as GroupActivity).supportActionBar?.title = "Home"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -88,6 +80,7 @@ class HomeFragment : Fragment() {
                 R.drawable.divider_shape))
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun requestObserver() {
         viewModel.allMoneyEntries.observe(this.viewLifecycleOwner) { it ->
             it.let {
@@ -107,34 +100,60 @@ class HomeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        Log.d("homeFragment", "destroyed")
+        Log.d("homeFragment", "onDestroyView()")
         super.onDestroyView()
+        _binding = null
         viewModel.removeListeners()
     }
 
-    /*private fun bindGoalMoney(view: View) { //ToDO doesn't change if entry is deleted
-        (view.context.getString(
-            R.string.money_amount_in_euro,
-            viewModel.moneyGoal.value?.currentMoney.toString()
-        ) + "/" + viewModel.moneyGoal.value?.goalMoney).also { binding.currentMoney.text = it }
-        if (viewModel.getGoalReached())
-            binding.currentMoney.setTextColor(resources.getColor(R.color.green))
-        else
-            binding.currentMoney.setTextColor(resources.getColor(R.color.red_700))
+    override fun onStart() {
+        super.onStart()
+        Log.d("homeFragment", "onStart()")
     }
-      private fun showAddItemDialog(context: Context) {
-        val taskEditText: EditText = EditText(context)
-        taskEditText.inputType.dec()
-        taskEditText.maxEms = 5
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Change Goal")
-            .setView(taskEditText)
-            .setPositiveButton("Change",
-                DialogInterface.OnClickListener { _, _ ->
-                    viewModel.moneyGoalSetGoal(taskEditText.text.toString().toDouble())
-                })
-            .setNegativeButton("Cancel", null)
-            .create()
-            .show()
-    }*/
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("homeFragment", "onResume()")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("homeFragment", "onPause()")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("homeFragment", "onStop()")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("homeFragment", "onDestroy()")
+    }
 }
+
+/*private fun bindGoalMoney(view: View) { //ToDO doesn't change if entry is deleted
+    (view.context.getString(
+        R.string.money_amount_in_euro,
+        viewModel.moneyGoal.value?.currentMoney.toString()
+    ) + "/" + viewModel.moneyGoal.value?.goalMoney).also { binding.currentMoney.text = it }
+    if (viewModel.getGoalReached())
+        binding.currentMoney.setTextColor(resources.getColor(R.color.green))
+    else
+        binding.currentMoney.setTextColor(resources.getColor(R.color.red_700))
+}
+  private fun showAddItemDialog(context: Context) {
+    val taskEditText: EditText = EditText(context)
+    taskEditText.inputType.dec()
+    taskEditText.maxEms = 5
+    MaterialAlertDialogBuilder(requireContext())
+        .setTitle("Change Goal")
+        .setView(taskEditText)
+        .setPositiveButton("Change",
+            DialogInterface.OnClickListener { _, _ ->
+                viewModel.moneyGoalSetGoal(taskEditText.text.toString().toDouble())
+            })
+        .setNegativeButton("Cancel", null)
+        .create()
+        .show()
+}*/
