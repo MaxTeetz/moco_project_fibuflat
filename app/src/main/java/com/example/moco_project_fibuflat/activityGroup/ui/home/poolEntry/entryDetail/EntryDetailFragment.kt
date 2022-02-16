@@ -56,17 +56,14 @@ class EntryDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as AppCompatActivity).supportActionBar?.title = "Entry: ${navigationArgs.entryId}"
+        (activity as AppCompatActivity).supportActionBar?.title = "Entry: ${navigationArgs.dateSend}"
         val action: NavDirections = EntryDetailFragmentDirections.actionEntryDetailToNavHome()
         val id = navigationArgs.entryId
 
         var moneyPoolEntry: MoneyPoolEntry
 
         coroutineScope1.launch {
-            moneyPoolEntry = viewModel.getMoneyPoolEntry(
-                id,
-                neededData.group.value!!.groupId!!,
-                neededData.dataBaseGroups)?.getValue(MoneyPoolEntry::class.java)!! //ToDo crashes if someone deletes at the moment the data is getting loaded
+            moneyPoolEntry = MoneyPoolEntry(null, navigationArgs.username, navigationArgs.amount, null, navigationArgs.message)
             bind(moneyPoolEntry)
         }
 

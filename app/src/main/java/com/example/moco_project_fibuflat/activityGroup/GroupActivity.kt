@@ -1,6 +1,7 @@
 package com.example.moco_project_fibuflat.activityGroup
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.ActivityGroupBinding
+import com.example.moco_project_fibuflat.databinding.NavHeaderGroupBinding
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -23,6 +25,7 @@ GroupActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityGroupBinding
     private val viewModel: OftenNeededData by viewModels()
+    private lateinit var bindingNavHeader: NavHeaderGroupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +38,14 @@ GroupActivity : AppCompatActivity() {
 
     private fun updateUI() {
 
+        bindingNavHeader = NavHeaderGroupBinding.inflate(LayoutInflater.from(this))
+        bindingNavHeader.navText.text = "${viewModel.group.value?.groupName} ${viewModel.group.value?.groupId?.substring(0,4)}" //ToDo make it work
+
         binding = ActivityGroupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarGroup.toolbar)
+        binding.appBarGroup
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView

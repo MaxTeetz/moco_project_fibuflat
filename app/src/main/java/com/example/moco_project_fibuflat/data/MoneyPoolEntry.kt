@@ -9,6 +9,6 @@ data class MoneyPoolEntry(
 )
 
 data class MoneyGoal(
-    var goalMoney: Double? = null,
-    var currentMoney: Double? = null
+    var currentMoney: Double? = null,
+    var goalMoney: Double? = null
 )

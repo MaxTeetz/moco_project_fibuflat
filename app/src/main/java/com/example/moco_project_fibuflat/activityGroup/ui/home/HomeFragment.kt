@@ -65,7 +65,11 @@ class HomeFragment : Fragment() {
 
     private fun setAdapter() {
         adapterEntry = MoneyPoolAdapter {
-            val action = HomeFragmentDirections.actionNavHomeToEntryDetail(it.id!!)
+            val action = HomeFragmentDirections.actionNavHomeToEntryDetail(it.id!!,
+                it.stringUser!!,
+                it.moneyAmount!!,
+                it.stringInfo!!,
+                it.stringDate!!)
             this.findNavController().navigate(action)
         }
     }
@@ -131,29 +135,18 @@ class HomeFragment : Fragment() {
         Log.d("homeFragment", "onDestroy()")
     }
 }
-
-/*private fun bindGoalMoney(view: View) { //ToDO doesn't change if entry is deleted
-    (view.context.getString(
-        R.string.money_amount_in_euro,
-        viewModel.moneyGoal.value?.currentMoney.toString()
-    ) + "/" + viewModel.moneyGoal.value?.goalMoney).also { binding.currentMoney.text = it }
-    if (viewModel.getGoalReached())
-        binding.currentMoney.setTextColor(resources.getColor(R.color.green))
-    else
-        binding.currentMoney.setTextColor(resources.getColor(R.color.red_700))
-}
-  private fun showAddItemDialog(context: Context) {
-    val taskEditText: EditText = EditText(context)
-    taskEditText.inputType.dec()
-    taskEditText.maxEms = 5
-    MaterialAlertDialogBuilder(requireContext())
-        .setTitle("Change Goal")
-        .setView(taskEditText)
-        .setPositiveButton("Change",
-            DialogInterface.OnClickListener { _, _ ->
-                viewModel.moneyGoalSetGoal(taskEditText.text.toString().toDouble())
-            })
-        .setNegativeButton("Cancel", null)
-        .create()
-        .show()
+/*private fun showAddItemDialog(context: Context) {
+  val taskEditText: EditText = EditText(context)
+  taskEditText.inputType.dec()
+  taskEditText.maxEms = 5
+  MaterialAlertDialogBuilder(requireContext())
+      .setTitle("Change Goal")
+      .setView(taskEditText)
+      .setPositiveButton("Change",
+          DialogInterface.OnClickListener { _, _ ->
+              viewModel.moneyGoalSetGoal(taskEditText.text.toString().toDouble())
+          })
+      .setNegativeButton("Cancel", null)
+      .create()
+      .show()
 }*/

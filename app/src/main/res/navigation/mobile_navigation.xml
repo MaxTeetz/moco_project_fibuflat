@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.HomeFragment"
-        android:label="@string/menu_moneypool"
+        android:label="@string/moneypool"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_nav_home_to_addEntryFragment"
@@ -21,18 +21,18 @@
     <fragment
         android:id="@+id/nav_todo_list"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.toDo.ToDoFragment"
-        android:label="@string/menu_todo"
+        android:label="@string/to_do_list"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_group_management"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.groupManagement.FragmentGroupManagement"
-        android:label="@string/menu_group_management"
+        android:label="@string/group_management"
         tools:layout="@layout/fragment_group_management"/>
     <fragment
         android:id="@+id/nav_nfc"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.nfc.NfcFragment"
-        android:label="@string/menu_nfc"
+        android:label="@string/nfc"
         tools:layout="@layout/fragment_nfc" />
     <fragment
         android:id="@+id/addEntryFragment"
@@ -54,6 +54,18 @@
         <action
             android:id="@+id/action_entryDetail_to_nav_home"
             app:destination="@id/nav_home" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="amount"
+            app:argType="integer" />
+        <argument
+            android:name="message"
+            app:argType="string" />
+        <argument
+            android:name="date_send"
+            app:argType="string" />
     </fragment>
 
 </navigation>

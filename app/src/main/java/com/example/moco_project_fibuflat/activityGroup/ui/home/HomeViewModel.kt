@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moco_project_fibuflat.data.*
+import com.example.moco_project_fibuflat.data.Group
+import com.example.moco_project_fibuflat.data.ListCase
+import com.example.moco_project_fibuflat.data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.data.User
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,8 +34,8 @@ class HomeViewModel : ViewModel() {
     private var _index: Int? = 0
     val index get() = _index
 
-    private val _moneyGoal: MutableLiveData<MoneyGoal?> = MutableLiveData()
-    val moneyGoal: LiveData<MoneyGoal?> get() = _moneyGoal
+    //private val _moneyGoal: MutableLiveData<MoneyGoal?> = MutableLiveData()
+    //val moneyGoal: LiveData<MoneyGoal?> get() = _moneyGoal
 
     override fun onCleared() {
         super.onCleared()
@@ -51,23 +54,15 @@ class HomeViewModel : ViewModel() {
         this.user = user.value!!
     }
 
-    fun removeListeners(){
+    fun removeListeners() {
         databaseEntryRef.removeEventListener(valueEventListenerEntry)
-    }
-
-    fun clearData(){ //because fragment is never destroyed; just onViewDestroyed is called
-        _allMoneyEntries.value?.clear()
-        _index = 0
-        _listCase = ListCase.EMPTY
-        _moneyGoal.value = null
-        entryList.clear()
-        entryListOld.clear()
     }
 
     suspend fun getEntries() {
         databaseEntryRef = databaseGroup.child(group.groupId!!).child("moneyPoolEntries")
             .orderByChild("stringDate")
         fetchDataEntry()
+        //_moneyGoal.value = setGoalMoney()
     }
 
     private suspend fun fetchDataEntry() {
@@ -116,11 +111,6 @@ class HomeViewModel : ViewModel() {
             index = added(arrayListOld, arrayList)
         }
 
-        Log.d("homeViewModelOld", "$arrayListOld")
-        Log.d("homeViewModelNew", "$arrayList")
-        Log.d("homeViewModelCase", "$case")
-        Log.d("homeViewModelIndex", "$index")
-
         @Suppress("UNCHECKED_CAST")
         setListEntry(index, case!!, arrayList as ArrayList<MoneyPoolEntry>)
     }
@@ -162,9 +152,6 @@ class HomeViewModel : ViewModel() {
         listCase: ListCase,
         arrayList: ArrayList<MoneyPoolEntry>,
     ) {
-        Log.d("homeViewModel2", "$arrayList")
-        Log.d("homeViewModel2", "$listCase")
-        Log.d("homeViewModel2", "$index")
         _index = index
         _listCase = listCase
         _allMoneyEntries.value = arrayList
@@ -172,8 +159,9 @@ class HomeViewModel : ViewModel() {
 
     private fun setEntryListOld() {
         entryListOld.clear()
-        for (mpe in entryList)
+        for (mpe in entryList) {
             entryListOld.add(mpe)
+        }
     }
 }
 

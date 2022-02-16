@@ -57,7 +57,6 @@
     <string name="group_management">Group Management</string>
 
     <!--HomeFragment-->
-    <string name="menu_moneypool">Moneypool</string>
     <string name="add_entry">Add Entry</string>
     <string name="entry_detail">Entry</string>
     <string name="needed_money">Goal: </string>
@@ -81,13 +80,10 @@
     <string name="date">Date</string>
 
     <!--ToDoFragment-->
-    <string name="menu_todo">ToDO List</string>
 
     <!--nfc-->
-    <string name="menu_nfc">NFC</string>
 
     <!--Group Management-->
-    <string name="menu_group_management">Group Management</string>
     <string name="group_members">Group Members</string>
     <string name="join_requests">Join Requests</string>
 
