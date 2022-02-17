@@ -8,8 +8,10 @@ import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.data.User
-import com.example.moco_project_fibuflat.helperClasses.CompareLists
-import com.google.firebase.database.*
+import com.example.moco_project_fibuflat.helperClasses.GetSnapshot
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -60,28 +62,11 @@ class HomeViewModel : ViewModel() {
     private suspend fun fetchDataEntry() {
 
         withContext(Dispatchers.IO) {
-            valueEventListenerEntry = object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            valueEventListenerEntry = GetSnapshot(entryList, entryListOld, listCase, MoneyPoolEntry())
+            {index, listCase, entryList -> setListEntry(index!!, listCase!!, entryList) }
 
-                    if (entryList.isNotEmpty())
-                        entryList.clear()
-                    if (snapshot.exists()) {
-                        for (entrySnapshot in snapshot.children) {
-                            val moneyPoolEntry = entrySnapshot.getValue(MoneyPoolEntry::class.java)
-                            entryList.add(moneyPoolEntry!!)
-                        }
-                    }
-                    CompareLists(entryListOld, entryList, listCase)
-                    { index, listCase, arrayList -> setListEntry(index!!, listCase!!, arrayList) }
-                    setEntryListOld()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.d("adapter", "cancelled")
-                }
-            }
+            databaseEntryRef.addValueEventListener(valueEventListenerEntry)
         }
-        databaseEntryRef.addValueEventListener(valueEventListenerEntry)
     }
 
     private fun setListEntry(
@@ -92,10 +77,13 @@ class HomeViewModel : ViewModel() {
         _index = index
         _listCase = listCase
         _allMoneyEntries.value = arrayList
+
+        setEntryListOld()
     }
 
     private fun setEntryListOld() {
-        entryListOld.clear()
+        entryListOld.clear() //ToDo unnecessary just use normal list
+        Log.d("homeViewModel", "setEntryListOld")
         for (mpe in entryList) {
             entryListOld.add(mpe)
         }

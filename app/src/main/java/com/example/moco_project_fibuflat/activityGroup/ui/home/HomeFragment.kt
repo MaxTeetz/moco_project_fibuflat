@@ -102,7 +102,13 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.removeListeners()
+    }
 }
+
 /*private fun showAddItemDialog(context: Context) {
   val taskEditText: EditText = EditText(context)
   taskEditText.inputType.dec()

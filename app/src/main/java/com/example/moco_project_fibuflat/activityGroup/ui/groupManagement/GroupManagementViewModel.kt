@@ -8,8 +8,10 @@ import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.data.User
-import com.example.moco_project_fibuflat.helperClasses.CompareLists
-import com.google.firebase.database.*
+import com.example.moco_project_fibuflat.helperClasses.GetSnapshot
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -121,60 +123,23 @@ class GroupManagementViewModel : ViewModel() {
     private suspend fun fetchDataRequest() {
 
         withContext(Dispatchers.IO) {
-            valueEventListenerRequest = object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            valueEventListenerRequest =
+                GetSnapshot(requestList, requestListOld, listCaseRequest, OpenRequestGroup())
+                { index, listCase, entryList -> setListRequests(index!!, listCase!!, entryList) }
 
-                    if (requestList.isNotEmpty())
-                        requestList.clear()
-                    if (snapshot.exists()) {
-                        for (requestSnapshot in snapshot.children) {
-                            val request = requestSnapshot.getValue(OpenRequestGroup::class.java)
-                            requestList.add(request!!)
-                        }
-                    }
-                    CompareLists(requestListOld, requestList, listCaseRequest)
-                    { index, listCase, arrayList ->
-                        setListRequests(index!!,
-                            listCase!!,
-                            arrayList)
-                    }
-                    setRequestListOld()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.d("adapter", "cancelled")
-                }
-            }
+            databaseRequestRef.addValueEventListener(valueEventListenerRequest)
         }
-        databaseRequestRef.addValueEventListener(valueEventListenerRequest)
     }
 
     private suspend fun fetchDataMember() {
 
         withContext(Dispatchers.IO) {
-            valueEventListenerMember = object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+            valueEventListenerMember =
+                GetSnapshot(memberList, memberListOld, listCaseMember, User())
+                { index, listCase, entryList -> setListMembers(index!!, listCase!!, entryList) }
 
-                    if (memberList.isNotEmpty())
-                        memberList.clear()
-
-                    if (snapshot.exists()) {
-                        for (requestSnapshot in snapshot.children) {
-                            val user = requestSnapshot.getValue(User::class.java)
-                            memberList.add(user!!)
-                        }
-                    }
-                    CompareLists(memberListOld, memberList, listCaseMember)
-                    { index, listCase, arrayList -> setListMembers(index!!, listCase!!, arrayList) }
-                    setMembersListOld()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.d("adapter", "cancelled")
-                }
-            }
+            databaseMemberRef.addValueEventListener(valueEventListenerMember)
         }
-        databaseMemberRef.addValueEventListener(valueEventListenerMember)
     }
 
     private fun setListRequests(
@@ -185,6 +150,8 @@ class GroupManagementViewModel : ViewModel() {
         _indexRequest = index
         _listCaseRequest = listCase
         _requestListNew.value = arrayList
+
+        setRequestListOld()
     }
 
     private fun setListMembers(
@@ -195,8 +162,9 @@ class GroupManagementViewModel : ViewModel() {
         _indexMember = index
         _listCaseMembers = listCase
         _memberListNew.value = arrayList
-    }
 
+        setMembersListOld()
+    }
 
     private fun setRequestListOld() {
         requestListOld.clear()
@@ -209,5 +177,4 @@ class GroupManagementViewModel : ViewModel() {
         for (ds in memberList)
             memberListOld.add(ds)
     }
-
 }

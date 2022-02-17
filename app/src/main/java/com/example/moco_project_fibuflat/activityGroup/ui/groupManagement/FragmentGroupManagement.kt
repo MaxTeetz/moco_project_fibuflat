@@ -166,9 +166,4 @@ class FragmentGroupManagement : Fragment() {
         viewModel.removeListeners()
         Log.d("groupManagementFragment", "destroyView")
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("groupManagementFragment", "destroyed")
-    }
 }
