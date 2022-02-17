@@ -10,3 +10,8 @@ enum class AdapterCase{
     GroupMember,
     Request
 }
+
+data class CaseAndIndex(
+    val listCase: ListCase,
+    val index: Int
+)

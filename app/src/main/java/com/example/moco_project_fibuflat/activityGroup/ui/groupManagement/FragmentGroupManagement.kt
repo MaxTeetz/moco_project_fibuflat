@@ -14,7 +14,6 @@ import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.adapter.GroupMembersAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewJoinRequestAdapter
-import com.example.moco_project_fibuflat.data.AdapterCase
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.data.repository.OftenNeededData
@@ -59,11 +58,11 @@ class FragmentGroupManagement : Fragment() {
             neededData.user)
 
         coroutineScope1.launch { //toDo
-            viewModel.getRequests(AdapterCase.Request)
+            viewModel.getRequests()
         }
 
         coroutineScope2.launch {
-            viewModel.getGroupMembers(AdapterCase.GroupMember)
+            viewModel.getGroupMembers()
         }
 
         viewModel.toast.observe(this.viewLifecycleOwner) {

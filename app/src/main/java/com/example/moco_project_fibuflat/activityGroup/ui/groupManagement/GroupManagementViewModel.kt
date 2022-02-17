@@ -4,7 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moco_project_fibuflat.data.*
+import com.example.moco_project_fibuflat.data.Group
+import com.example.moco_project_fibuflat.data.ListCase
+import com.example.moco_project_fibuflat.data.OpenRequestGroup
+import com.example.moco_project_fibuflat.data.User
+import com.example.moco_project_fibuflat.helperClasses.CompareLists
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,10 +40,10 @@ class GroupManagementViewModel : ViewModel() {
     private var _toast: MutableLiveData<String> = MutableLiveData()
     val toast: LiveData<String> get() = _toast
 
-    private var _listCaseRequest: ListCase? = ListCase.EMPTY
+    private var _listCaseRequest: ListCase? = null
     val listCaseRequest get() = _listCaseRequest
 
-    private var _listCaseMembers: ListCase? = ListCase.EMPTY
+    private var _listCaseMembers: ListCase? = null
     val listCaseMember get() = _listCaseMembers
 
     private var _indexRequest: Int? = 0
@@ -48,15 +52,15 @@ class GroupManagementViewModel : ViewModel() {
     private var _indexMember: Int? = 0
     val indexMember get() = _indexMember
 
-    suspend fun getRequests(adapterCase: AdapterCase) {
+    suspend fun getRequests() {
         databaseRequestRef = databaseGroup.child(group.groupId!!).child("openRequestsByUsers")
             .orderByChild("OpenRequestGroup")
-        fetchDataRequest(adapterCase)
+        fetchDataRequest()
     }
 
-    suspend fun getGroupMembers(adapterCase: AdapterCase) {
+    suspend fun getGroupMembers() {
         databaseMemberRef = databaseGroup.child(group.groupId!!).child("users").orderByChild("User")
-        fetchDataMember(adapterCase)
+        fetchDataMember()
     }
 
     fun setDataViewModel(
@@ -114,7 +118,7 @@ class GroupManagementViewModel : ViewModel() {
         Log.d("groupManagementViewModel", "User successfully joined Group")
     }
 
-    private suspend fun fetchDataRequest(adapterCase: AdapterCase) {
+    private suspend fun fetchDataRequest() {
 
         withContext(Dispatchers.IO) {
             valueEventListenerRequest = object : ValueEventListener {
@@ -128,7 +132,12 @@ class GroupManagementViewModel : ViewModel() {
                             requestList.add(request!!)
                         }
                     }
-                    recyclerViewNewArranged(requestListOld, requestList, adapterCase)
+                    CompareLists(requestListOld, requestList, listCaseRequest)
+                    { index, listCase, arrayList ->
+                        setListRequests(index!!,
+                            listCase!!,
+                            arrayList)
+                    }
                     setRequestListOld()
                 }
 
@@ -140,7 +149,7 @@ class GroupManagementViewModel : ViewModel() {
         databaseRequestRef.addValueEventListener(valueEventListenerRequest)
     }
 
-    private suspend fun fetchDataMember(adapterCase: AdapterCase) {
+    private suspend fun fetchDataMember() {
 
         withContext(Dispatchers.IO) {
             valueEventListenerMember = object : ValueEventListener {
@@ -155,7 +164,8 @@ class GroupManagementViewModel : ViewModel() {
                             memberList.add(user!!)
                         }
                     }
-                    recyclerViewNewArranged(memberListOld, memberList, adapterCase)
+                    CompareLists(memberListOld, memberList, listCaseMember)
+                    { index, listCase, arrayList -> setListMembers(index!!, listCase!!, arrayList) }
                     setMembersListOld()
                 }
 
@@ -167,77 +177,11 @@ class GroupManagementViewModel : ViewModel() {
         databaseMemberRef.addValueEventListener(valueEventListenerMember)
     }
 
-    private fun recyclerViewNewArranged(
-        arrayListOld: ArrayList<*>,
-        arrayList: ArrayList<*>,
-        adapterCase: AdapterCase,
-    ) {
-        Log.d("viewModelGroupManagement", "$adapterCase")
-        var index = 0
-        var case: ListCase? = null
-
-        if (arrayListOld.isEmpty()) {
-            case = ListCase.EMPTY
-        }
-
-        if (arrayListOld.size > arrayList.size) { //Item deleted
-            case = ListCase.DELETED
-            index = deleted(arrayListOld, arrayList)
-        }
-        if ((arrayListOld.size < arrayList.size) && arrayListOld.isNotEmpty()) { //Item added
-            case = ListCase.ADDED
-            index = added(arrayListOld, arrayList)
-        }
-
-        if (adapterCase == AdapterCase.Request)
-            setListRequests(index, case!!, arrayList as ArrayList<OpenRequestGroup>)
-        else
-            setListMembers(index, case!!, arrayList as ArrayList<User>)
-
-        //ToDo if empty and item gets inserted, only shows after second one gets inserted too. No problem if fragment loads with only one item in list
-    }
-
-    private fun added(
-        arrayListOld: ArrayList<*>,
-        arrayList: ArrayList<*>,
-    ): Int {
-        for ((i, any: Any) in arrayList.withIndex()) {
-
-            if (i == arrayListOld.size) { //item somewhere in between
-                return i
-            }
-            if (arrayListOld[i] != any) { //item at lists end
-                return i
-            }
-        }
-        return 0
-    }
-
-    private fun deleted(
-        arrayListOld: ArrayList<*>,
-        arrayList: ArrayList<*>,
-    ): Int {
-        for ((i, any: Any) in arrayListOld.withIndex()) {
-
-            if (i == arrayList.size) {
-                return i
-            }
-            if (arrayList[i] != any) {
-                return i
-            }
-        }
-
-        return 0
-    }
-
     private fun setListRequests(
         index: Int,
         listCase: ListCase,
         arrayList: ArrayList<OpenRequestGroup>,
     ) {
-        Log.d("viewModelGroupManagementRequest", "$arrayList")
-        Log.d("viewModelGroupManagementRequest", "$listCase")
-        Log.d("viewModelGroupManagementRequest", "$index")
         _indexRequest = index
         _listCaseRequest = listCase
         _requestListNew.value = arrayList
@@ -248,9 +192,6 @@ class GroupManagementViewModel : ViewModel() {
         listCase: ListCase,
         arrayList: ArrayList<User>,
     ) {
-        Log.d("viewModelGroupManagementMember", "$arrayList")
-        Log.d("viewModelGroupManagementMember", "$listCase")
-        Log.d("viewModelGroupManagementMember", "$index")
         _indexMember = index
         _listCaseMembers = listCase
         _memberListNew.value = arrayList
@@ -258,7 +199,6 @@ class GroupManagementViewModel : ViewModel() {
 
 
     private fun setRequestListOld() {
-        Log.d("adapterViewModelSetOldList", "")
         requestListOld.clear()
         for (ds in requestList)
             requestListOld.add(ds)

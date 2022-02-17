@@ -22,7 +22,7 @@ class JoinGroupViewModel : ViewModel() {
         stop = false
         userID = FirebaseAuth.getInstance().currentUser!!.uid
 
-        checkRequestAlreadySent(groupName, groupId)
+        getGroup(groupName, groupId)
 
     }
 

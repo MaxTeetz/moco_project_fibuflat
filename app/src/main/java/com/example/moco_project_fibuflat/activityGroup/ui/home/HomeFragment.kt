@@ -102,38 +102,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-    override fun onDestroyView() {
-        Log.d("homeFragment", "onDestroyView()")
-        super.onDestroyView()
-        _binding = null
-        viewModel.removeListeners()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("homeFragment", "onStart()")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("homeFragment", "onResume()")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("homeFragment", "onPause()")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("homeFragment", "onStop()")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("homeFragment", "onDestroy()")
-    }
 }
 /*private fun showAddItemDialog(context: Context) {
   val taskEditText: EditText = EditText(context)
