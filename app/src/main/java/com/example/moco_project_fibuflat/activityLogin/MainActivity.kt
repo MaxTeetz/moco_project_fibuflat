@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         auth = Firebase.auth
 
         // Retrieve NavController from the NavHostFragment
@@ -40,7 +39,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         NavigationUI.setupActionBarWithNavController(this, navController)
 
         viewModel.groupAccess.observe(this) {
-            //setUser() ToDo
             changeActivity(it)
         }
     }
@@ -55,7 +53,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         name: String
     ) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> //ToDo into viewModel and with coroutine
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     viewModel.setUserDB(
                         task.result!!.user!!.uid,
@@ -71,7 +69,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     fun firebaseLogin(
         email: String,
         password: String
-    ) { //ToDo into viewModel? Performance influence
+    ) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful)
@@ -100,5 +98,4 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         startActivity(intent)
     }
-
 }

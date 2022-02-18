@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.data.repository
+package com.example.moco_project_fibuflat.helperClasses
 
 import android.util.Log
 import androidx.lifecycle.LiveData

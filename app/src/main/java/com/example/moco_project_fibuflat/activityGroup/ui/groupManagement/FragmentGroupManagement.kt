@@ -16,8 +16,8 @@ import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemD
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewJoinRequestAdapter
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
-import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentGroupManagementBinding
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,10 +33,16 @@ class FragmentGroupManagement : Fragment() {
     private var _binding: FragmentGroupManagementBinding? = null
     private val binding get() = _binding!!
 
+
+    //ToDo is this clean??
     private val coroutine1 = Job()
     private val coroutine2 = Job()
+    private val coroutine3 = Job()
+    private val coroutine4 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
     private val coroutineScope2 = CoroutineScope(coroutine2 + Dispatchers.Main)
+    private val coroutineScope3 = CoroutineScope(coroutine3 + Dispatchers.Main)
+    private val coroutineScope4 = CoroutineScope(coroutine4 + Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +63,13 @@ class FragmentGroupManagement : Fragment() {
             neededData.group,
             neededData.user)
 
-        coroutineScope1.launch { //toDo
+        setAdapters()
+        bindingRecyclerViewRequests()
+        bindingRecyclerViewMembers()
+        requestObserver()
+        memberObserver()
+
+        coroutineScope1.launch {
             viewModel.getRequests()
         }
 
@@ -72,11 +84,6 @@ class FragmentGroupManagement : Fragment() {
                 Toast.LENGTH_SHORT).show()
         }
 
-        setAdapters()
-        bindingRecyclerViewRequests()
-        bindingRecyclerViewMembers()
-        requestObserver()
-        memberObserver()
     }
 
     private fun setAdapters() {
@@ -119,7 +126,7 @@ class FragmentGroupManagement : Fragment() {
     private fun requestObserver() {
         viewModel.requestListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
-                adapterRequest.submitList(it)
+                //adapterRequest.submitList(it) ToDo? reactivate?
 
                 when (viewModel.listCaseRequest) {
                     ListCase.EMPTY -> adapterRequest.submitList(it)
@@ -127,7 +134,7 @@ class FragmentGroupManagement : Fragment() {
                     ListCase.ADDED -> adapterRequest.notifyItemInserted(viewModel.indexRequest!!)
                     null -> { //impossible to reach that case but need an else branch. Reload list in this case, because otherwise a crash occurs.
                         adapterRequest.notifyDataSetChanged()
-                        Log.d("adapter", "Error")
+                        Log.d("adapterRequestObserver", "Error")
                     }
                 }
             }
@@ -138,7 +145,7 @@ class FragmentGroupManagement : Fragment() {
     private fun memberObserver() {
         viewModel.memberListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
-                adapterMembers.submitList(it)
+                //adapterMembers.submitList(it)
 
                 when (viewModel.listCaseMember) {
                     ListCase.EMPTY -> adapterMembers.submitList(it)
@@ -146,24 +153,24 @@ class FragmentGroupManagement : Fragment() {
                     ListCase.ADDED -> adapterMembers.notifyItemInserted(viewModel.indexMember!!)
                     null -> {
                         adapterMembers.notifyDataSetChanged()
-                        Log.d("adapter", "Error")
+                        Log.d("adapterMemberObserver", "Error")
                     }
                 }
             }
         }
     }
 
+    //ToDo ask prof is coroutine necessary?
     private fun getUserAccept(openRequestGroup: OpenRequestGroup) {
-        viewModel.acceptUser(openRequestGroup)
+            viewModel.acceptUser(openRequestGroup)
     }
 
     private fun getUserDecline(openRequestGroup: OpenRequestGroup) {
-        viewModel.declineUser(openRequestGroup)
+            viewModel.declineUser(openRequestGroup)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.removeListeners()
-        Log.d("groupManagementFragment", "destroyView")
     }
 }

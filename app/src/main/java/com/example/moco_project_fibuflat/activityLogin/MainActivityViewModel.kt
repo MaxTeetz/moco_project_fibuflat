@@ -11,38 +11,32 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class MainActivityViewModel : ViewModel() {
-    private lateinit var database: DatabaseReference
     private val _groupAccess = MutableLiveData<GroupAccess>()
     val groupAccess: LiveData<GroupAccess> get() = _groupAccess
+
+    private val database: DatabaseReference =
+        FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getReference("Users")
 
     fun setUserDB(
         uid: String,
         name: String,
-        email: String
-    ) { //ToDo return if db entry was created
-        database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(uid)
+        email: String,
+    ) {
         val user = User(uid, name, email)
-        database.setValue(user)
+        database.child(uid).setValue(user)
     }
 
     fun getDBGroupEntry() {
-
-        database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(FirebaseAuth.getInstance().uid.toString())
-                .child("group")
-        database.get().addOnSuccessListener {
-            if (it.value == null)
-                _groupAccess.value = GroupAccess.NOGROUP
-            else
-                _groupAccess.value = GroupAccess.INGROUP
-
-
-        }.addOnFailureListener {
-            Log.d("mainActivity", "no Data retrieved")
-        }
+        database.child(FirebaseAuth.getInstance().uid.toString()).child("group").get()
+            .addOnSuccessListener {
+                if (it.value == null)
+                    _groupAccess.value = GroupAccess.NOGROUP
+                else
+                    _groupAccess.value = GroupAccess.INGROUP
+            }
+            .addOnFailureListener {
+                Log.d("mainActivity", "no Data retrieved")
+            }
     }
-
 }

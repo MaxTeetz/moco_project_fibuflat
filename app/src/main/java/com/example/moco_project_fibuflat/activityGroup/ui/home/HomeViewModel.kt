@@ -8,7 +8,7 @@ import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.data.User
-import com.example.moco_project_fibuflat.helperClasses.GetSnapshot
+import com.example.moco_project_fibuflat.helperClasses.GetSnapshotRecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
@@ -60,9 +60,8 @@ class HomeViewModel : ViewModel() {
     }
 
     private suspend fun fetchDataEntry() {
-
         withContext(Dispatchers.IO) {
-            valueEventListenerEntry = GetSnapshot(entryList, entryListOld, listCase, MoneyPoolEntry())
+            valueEventListenerEntry = GetSnapshotRecyclerView(entryList, entryListOld, listCase, MoneyPoolEntry())
             {index, listCase, entryList -> setListEntry(index!!, listCase!!, entryList) }
 
             databaseEntryRef.addValueEventListener(valueEventListenerEntry)
@@ -82,7 +81,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun setEntryListOld() {
-        entryListOld.clear() //ToDo unnecessary just use normal list
+        entryListOld.clear()
         Log.d("homeViewModel", "setEntryListOld")
         for (mpe in entryList) {
             entryListOld.add(mpe)

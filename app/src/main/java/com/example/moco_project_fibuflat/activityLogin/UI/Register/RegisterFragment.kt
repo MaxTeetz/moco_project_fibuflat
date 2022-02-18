@@ -66,7 +66,7 @@ class RegisterFragment : Fragment() {
         viewModel.onRegister(email, username, password, confirmPassword, requireContext())
     }
 
-    private fun registerSuccessful() { //ToDo separate registerFirebase from mainActivity?
+    private fun registerSuccessful() { //ToDo ask prof if this need to get into the viewModel
         //get rid of empty spaces
         val email: String = email.trim { it <= ' ' }
         val password: String = password.trim { it <= ' ' }

@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.data.repository.OftenNeededData
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

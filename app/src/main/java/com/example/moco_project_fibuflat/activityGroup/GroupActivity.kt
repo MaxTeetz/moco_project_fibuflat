@@ -12,9 +12,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.ActivityGroupBinding
 import com.example.moco_project_fibuflat.databinding.NavHeaderGroupBinding
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

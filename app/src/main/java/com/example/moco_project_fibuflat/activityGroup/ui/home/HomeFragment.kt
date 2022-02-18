@@ -14,8 +14,8 @@ import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.adapter.MoneyPoolAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.data.ListCase
-import com.example.moco_project_fibuflat.data.repository.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentHomeBinding
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,6 +54,7 @@ class HomeFragment : Fragment() {
         coroutineScope1.launch {
             viewModel.getEntries()
         }
+
         setAdapter()
         bindingRecyclerViewRequests()
         requestObserver()

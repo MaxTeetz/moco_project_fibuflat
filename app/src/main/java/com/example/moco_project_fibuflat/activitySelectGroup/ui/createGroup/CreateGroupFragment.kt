@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activitySelectGroup.SelectGroupActivity
 import com.example.moco_project_fibuflat.databinding.FragmentCreateGroupBinding
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 
 class CreateGroupFragment : Fragment() {
 
@@ -17,6 +19,7 @@ class CreateGroupFragment : Fragment() {
     private var _binding: FragmentCreateGroupBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var neededData: OftenNeededData
     private lateinit var groupName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +32,7 @@ class CreateGroupFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
+        neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
         _binding = FragmentCreateGroupBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,7 +50,7 @@ class CreateGroupFragment : Fragment() {
             setErrorTextFieldGroup(true)
         } else {
             setErrorTextFieldGroup(false)
-            (activity as SelectGroupActivity).fireBaseCreateGroup(groupName)
+            viewModel.createGroup(groupName, neededData.user.value!!, neededData.dataBaseUsers,neededData.dataBaseGroups)
         }
     }
 

@@ -8,7 +8,7 @@ import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.data.User
-import com.example.moco_project_fibuflat.helperClasses.GetSnapshot
+import com.example.moco_project_fibuflat.helperClasses.GetSnapshotRecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
@@ -77,7 +77,7 @@ class GroupManagementViewModel : ViewModel() {
         this.user = user.value!!
     }
 
-    fun acceptUser(openRequestGroup: OpenRequestGroup) { //ToDo make functions with network call suspending
+    fun acceptUser(openRequestGroup: OpenRequestGroup) {
 
         //could delete all requests belonging to the user in user and groups
         //but just display a message that hes already in a group
@@ -92,8 +92,8 @@ class GroupManagementViewModel : ViewModel() {
                     letUserJoin(openRequestGroup)
             }.addOnFailureListener { e: Exception ->
                 Log.d("groupManagementViewModel", "$e")
-            }
 
+            }
     }
 
     fun declineUser(openRequestGroup: OpenRequestGroup) {
@@ -124,7 +124,11 @@ class GroupManagementViewModel : ViewModel() {
 
         withContext(Dispatchers.IO) {
             valueEventListenerRequest =
-                GetSnapshot(requestList, requestListOld, listCaseRequest, OpenRequestGroup())
+                GetSnapshotRecyclerView(
+                    requestList,
+                    requestListOld,
+                    listCaseRequest,
+                    OpenRequestGroup())
                 { index, listCase, entryList -> setListRequests(index!!, listCase!!, entryList) }
 
             databaseRequestRef.addValueEventListener(valueEventListenerRequest)
@@ -135,7 +139,7 @@ class GroupManagementViewModel : ViewModel() {
 
         withContext(Dispatchers.IO) {
             valueEventListenerMember =
-                GetSnapshot(memberList, memberListOld, listCaseMember, User())
+                GetSnapshotRecyclerView(memberList, memberListOld, listCaseMember, User())
                 { index, listCase, entryList -> setListMembers(index!!, listCase!!, entryList) }
 
             databaseMemberRef.addValueEventListener(valueEventListenerMember)

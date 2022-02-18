@@ -7,7 +7,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
 //returns a firebase realtime database snapshot
-class GetSnapshot<A>(
+class GetSnapshotRecyclerView<A>(
     private var entryList: ArrayList<A>,
     private var entryListOld: ArrayList<A>,
     private var listCaseOld: ListCase?,
@@ -17,7 +17,6 @@ class GetSnapshot<A>(
     private var index: Int? = 0
 
     override fun onDataChange(snapshot: DataSnapshot) {
-        Log.d("groupManagementViewModelLisCaseInGetSnapshot0", "$listCaseOld")
         if (entryList.isNotEmpty())
             entryList.clear()
 
@@ -30,25 +29,16 @@ class GetSnapshot<A>(
         }
         CompareLists(entryListOld, entryList, listCaseOld)
         { index, listCase, arrayList -> setData(index, listCase, arrayList) }
-        setEntryListOld()
         giveValues(index, listCaseOld, entryList)
     }
 
     override fun onCancelled(error: DatabaseError) {
-        Log.d("adapter", "cancelled")
+        Log.d("adapter", "$error")
     }
 
-    private fun setData(index: Int?, listCase: ListCase?, arrayList: ArrayList<A>) {
-        Log.d("groupManagementViewModelLisCaseInGetSnapshot1", "$listCase")
+    private fun setData(index: Int?, listCase: ListCase?, arrayList: ArrayList<A>) { //doesn't work if the data is directly returned from compareList; so needs a helper function
         this.index = index
         this.listCaseOld = listCase
         this.entryList = arrayList
-    }
-
-    private fun setEntryListOld() {
-        entryListOld.clear()
-        for (mpe in entryList) {
-            entryListOld.add(mpe)
-        }
     }
 }

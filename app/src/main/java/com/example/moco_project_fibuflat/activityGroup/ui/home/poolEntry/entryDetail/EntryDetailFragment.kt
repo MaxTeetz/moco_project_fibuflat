@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.data.repository.OftenNeededData
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.EntryDetailBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

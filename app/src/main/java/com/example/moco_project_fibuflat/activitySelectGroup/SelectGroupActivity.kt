@@ -9,21 +9,38 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
-import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.databinding.ActivitySelectGroupBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import java.util.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class SelectGroupActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivitySelectGroupBinding
     private lateinit var database: DatabaseReference
     private val viewModel: SelectGroupActivityViewModel by viewModels()
+    private val neededData: OftenNeededData by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MainScope().launch {
+            neededData.setData()
+            updateUI()
+        }
+        viewModel.groupStatus.observe(this){
+            changeActivity()
+        }
+        viewModel.checkGroupStatus(neededData.dataBaseUsers)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    private fun updateUI() {
         binding = ActivitySelectGroupBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Retrieve NavController from the NavHostFragment
@@ -34,33 +51,14 @@ class SelectGroupActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
+    private fun changeActivity() {
 
-    fun fireBaseCreateGroup(name: String) { //Todo make clean and better
-        val groupID = UUID.randomUUID().toString()
-        val group = Group(groupID, name)
-        val userID = FirebaseAuth.getInstance().currentUser!!.uid
+        //intent for changing activity
+        val intent =
+            Intent(this@SelectGroupActivity, GroupActivity::class.java)
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-        //get user -> groupNode
-        database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(userID)
-                .child("group")
-
-        //set group -> name and id
-        database.setValue(group).addOnSuccessListener {
-
-            //intent for changing activity
-            val intent =
-                Intent(this@SelectGroupActivity, GroupActivity::class.java)
-            intent.flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-            viewModel.createGroup(group, userID)
-            //extras
-            startActivity(intent)
-        }
+        startActivity(intent)
     }
 }

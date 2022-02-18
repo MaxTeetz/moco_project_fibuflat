@@ -1,125 +1,96 @@
 package com.example.moco_project_fibuflat.activitySelectGroup.ui.joinGroup
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.data.OpenRequestUser
 import com.example.moco_project_fibuflat.data.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.example.moco_project_fibuflat.helperClasses.GetSnapshotSingleEvent
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
-//ToDo !!!This whole class needs to use coroutines. Currently one function after an other -> blocking code !!!
 class JoinGroupViewModel : ViewModel() {
-    private lateinit var database: DatabaseReference
+    private lateinit var databaseUser: DatabaseReference
+    private lateinit var databaseGroup: DatabaseReference
     private lateinit var user: User
-    private lateinit var group: Group
-    private lateinit var userID: String
-    private var stop: Boolean = false
+    private lateinit var groupName: String
+    private lateinit var groupId: String
 
-    fun joinGroup(groupName: String, groupId: String) {
-        stop = false
-        userID = FirebaseAuth.getInstance().currentUser!!.uid
+    private var _success: MutableLiveData<String> = MutableLiveData()
+    val success: LiveData<String> get() = _success
 
-        getGroup(groupName, groupId)
+    suspend fun joinGroup(
+        groupName: String,
+        groupId: String,
+        user: User,
+        databaseReferenceUser: DatabaseReference,
+        databaseReferenceGroup: DatabaseReference,
+    ) {
+        this.groupName = groupName
+        this.groupId = groupId
+        this.user = user
+        this.databaseUser = databaseReferenceUser
+        this.databaseGroup = databaseReferenceGroup
 
-    }
+        val userRef =
+            databaseUser.child(user.userID!!).child("openRequestsToGroups")
+                .orderByChild("groupName")
+                .equalTo(this.groupName)
 
-    private fun checkRequestAlreadySent(groupName: String, groupId: String) {
-        database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users")
-        val userRef = database.child(userID).child("openRequestsToGroups").orderByChild("groupName")
-            .equalTo(groupName)
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (ds in snapshot.children) {
-                    Log.d("joiNGroup", ds.toString())
-                    if (ds.child("groupID").getValue(String::class.java)
-                            ?.substring(0, 4) == groupId
-                    ) {
-                        stop = true
-                        break
-                    }
-                }
-                if (!stop)
-                    getGroup(groupName, groupId)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("joinFragment", "Request not found")
-            }
-
+        withContext(Dispatchers.IO) { //ToDo ask prof if suspend or anything is needed for every function
+            GetSnapshotSingleEvent(userRef) { snapshot -> checkAlreadySent(snapshot) }
         }
-        userRef.addListenerForSingleValueEvent(valueEventListener)
     }
 
-    private fun getGroup(groupName: String, groupId: String) {
-        database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Groups")
-        val groupsNamesRef = database.orderByChild("groupName").equalTo(groupName)
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (ds in snapshot.children) {
-                    Log.d("joinFragment1", ds.toString())
-                    if (ds.child("groupId").getValue(String::class.java)
-                            ?.substring(0, 4) == groupId
-                    ) {
-                        Log.d("joinFragment", ds.toString())
-                        group = ds.getValue(Group::class.java)!!
-                        getUser()
-                    }
+    private fun checkAlreadySent(snapshot: DataSnapshot) {
+        val groupsNamesRef = databaseGroup.orderByChild("groupName").equalTo(groupName)
+
+        if (snapshot.exists()) {
+            for (requests in snapshot.children) {
+                if (requests.child("groupID").getValue(String::class.java)
+                        ?.substring(0, 4) == groupId
+                ) {
+                    return
                 }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("joinFragment", "Group not found")
-            }
         }
-
-        groupsNamesRef.addListenerForSingleValueEvent(valueEventListener)
+        GetSnapshotSingleEvent(groupsNamesRef) { snapshotReturn -> getGroup(snapshotReturn) }
     }
 
-    private fun getUser() {
-
-        this.database =
-            FirebaseDatabase.getInstance("https://fibuflat-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users")
-
-        val userRef = database.child(userID)
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    user = snapshot.getValue(User::class.java)!!
-                    setDatabase()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("joinGroup", "cancelled")
+    private fun getGroup(snapshot: DataSnapshot) {
+        for (ds in snapshot.children) {
+            if (ds.child("groupId").getValue(String::class.java)
+                    ?.substring(0, 4) == groupId
+            ) {
+                setDatabase(
+                    Group(
+                        ds.child("groupId").getValue(String::class.java)!!,
+                        ds.child("groupName")
+                            .getValue(String::class.java))) //don't need the whole snapshot
+                break
             }
         }
-        userRef.addListenerForSingleValueEvent(valueEventListener)
     }
 
-    private fun setDatabase() {
-
+    private fun setDatabase(group: Group) {
         val requestID: String = UUID.randomUUID().toString()
         val openRequestGroup =
             OpenRequestGroup(requestID, user.userID, user.username)
         val openRequestUser = OpenRequestUser(requestID, group.groupId, group.groupName)
 
         //set Group Request
-        database.parent!!.child("Groups").child(group.groupId!!).child("openRequestsByUsers")
+        databaseGroup.child(group.groupId!!).child("openRequestsByUsers")
             .child(requestID).setValue(openRequestGroup)
 
         //set User Request
-        database =
-            database.parent!!.child("Users").child(userID).child("openRequestsToGroups")
-                .child(requestID)
-        database.setValue(openRequestUser)
-    }
+        databaseUser.child(user.userID!!).child("openRequestsToGroups")
+            .child(requestID).setValue(openRequestUser)
 
+        _success.value = "Request to group ${group.groupName} successful send!"
+    }
 }
