@@ -13,15 +13,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-@Suppress("UNCHECKED_CAST") //always clear, so its ok to suppress it
 class GroupManagementViewModel : ViewModel() {
-
-    private var requestList: ArrayList<OpenRequestGroup> = arrayListOf()
-    private var requestListOld: ArrayList<OpenRequestGroup> = arrayListOf()
-    private var memberList: ArrayList<User> = arrayListOf()
-    private var memberListOld: ArrayList<User> = arrayListOf()
 
     private lateinit var databaseGroup: DatabaseReference
     private lateinit var databaseUser: DatabaseReference
@@ -32,6 +27,11 @@ class GroupManagementViewModel : ViewModel() {
 
     private lateinit var databaseRequestRef: Query
     private lateinit var databaseMemberRef: Query
+
+    private var requestList: ArrayList<OpenRequestGroup> = arrayListOf()
+    private var requestListOld: ArrayList<OpenRequestGroup> = arrayListOf()
+    private var memberList: ArrayList<User> = arrayListOf()
+    private var memberListOld: ArrayList<User> = arrayListOf()
 
     private var _requestListNew: MutableLiveData<ArrayList<OpenRequestGroup>> = MutableLiveData()
     val requestListNew: LiveData<ArrayList<OpenRequestGroup>> get() = _requestListNew
@@ -77,30 +77,30 @@ class GroupManagementViewModel : ViewModel() {
         this.user = user.value!!
     }
 
-    fun acceptUser(openRequestGroup: OpenRequestGroup) {
-
+    suspend fun acceptUser(openRequestGroup: OpenRequestGroup) {
         //could delete all requests belonging to the user in user and groups
         //but just display a message that hes already in a group
         //this way send requests stay active and group members decide if they want to delete it
-        databaseUser.child(openRequestGroup.userID.toString()).child("group").get()
-            .addOnSuccessListener {
 
-                if (it.getValue(Group::class.java)?.groupId != null)
-                //Make toast here
-                    _toast.value = openRequestGroup.username!!
-                else
-                    letUserJoin(openRequestGroup)
-            }.addOnFailureListener { e: Exception ->
-                Log.d("groupManagementViewModel", "$e")
-
-            }
+        val group: Group? =
+            databaseUser.child(openRequestGroup.userID.toString()).child("group").get().await()
+            .getValue(Group::class.java)
+        Log.d("groupManagementViewModel1", "$group")
+        if (group != null)
+            _toast.value = openRequestGroup.username!!
+        else
+            letUserJoin(openRequestGroup)
     }
 
-    fun declineUser(openRequestGroup: OpenRequestGroup) {
-        databaseUser.child(openRequestGroup.userID!!).child("openRequestsToGroups")
-            .child(openRequestGroup.requestID!!).removeValue()
-        databaseGroup.child(this.group.groupId!!).child("openRequestsByUsers")
-            .child(openRequestGroup.requestID!!).removeValue()
+    suspend fun declineUser(openRequestGroup: OpenRequestGroup) {
+        withContext(Dispatchers.IO) {
+            Log.d("groupManagementViewModel3", "")
+            databaseUser.child(openRequestGroup.userID!!).child("openRequestsToGroups")
+                .child(openRequestGroup.requestID!!).removeValue()
+            databaseGroup.child(group.groupId!!).child("openRequestsByUsers")
+                .child(openRequestGroup.requestID!!).removeValue()
+            Log.d("groupManagementViewModel4", "")
+        }
     }
 
     fun removeListeners() {
@@ -108,20 +108,22 @@ class GroupManagementViewModel : ViewModel() {
         databaseMemberRef.removeEventListener(valueEventListenerMember)
     }
 
-    private fun letUserJoin(openRequestGroup: OpenRequestGroup) {
+    private suspend fun letUserJoin(openRequestGroup: OpenRequestGroup) {
+        withContext(Dispatchers.IO) {
+            val user = User(openRequestGroup.userID, openRequestGroup.username)
 
-        val user = User(openRequestGroup.userID, openRequestGroup.username)
-
-        databaseUser.child(user.userID.toString()).child("group")
-            .setValue(group)
-        databaseGroup.child(group.groupId.toString()).child("users")
-            .child(user.userID.toString()).setValue(user)
-        declineUser(openRequestGroup)
-        Log.d("groupManagementViewModel", "User successfully joined Group")
+            Log.d("groupManagementViewModel2", "")
+            databaseUser.child(user.userID.toString()).child("group")
+                .setValue(group)
+            databaseGroup.child(group.groupId.toString()).child("users")
+                .child(user.userID.toString()).setValue(user)
+            declineUser(openRequestGroup)
+            Log.d("groupManagementViewModel5", "User successfully joined Group")
+        }
     }
 
     private suspend fun fetchDataRequest() {
-
+        //ToDo cleaner if the assignment is outside the coroutine?
         withContext(Dispatchers.IO) {
             valueEventListenerRequest =
                 GetSnapshotRecyclerView(
@@ -129,18 +131,17 @@ class GroupManagementViewModel : ViewModel() {
                     requestListOld,
                     listCaseRequest,
                     OpenRequestGroup())
-                { index, listCase, entryList -> setListRequests(index!!, listCase!!, entryList) }
+                { index, listCase, entryList, entryListOld -> setListRequests(index!!, listCase!!, entryList, entryListOld) }
 
             databaseRequestRef.addValueEventListener(valueEventListenerRequest)
         }
     }
 
     private suspend fun fetchDataMember() {
-
         withContext(Dispatchers.IO) {
             valueEventListenerMember =
                 GetSnapshotRecyclerView(memberList, memberListOld, listCaseMember, User())
-                { index, listCase, entryList -> setListMembers(index!!, listCase!!, entryList) }
+                { index, listCase, entryList, entryListOld -> setListMembers(index!!, listCase!!, entryList, entryListOld) }
 
             databaseMemberRef.addValueEventListener(valueEventListenerMember)
         }
@@ -150,35 +151,23 @@ class GroupManagementViewModel : ViewModel() {
         index: Int,
         listCase: ListCase,
         arrayList: ArrayList<OpenRequestGroup>,
+        entryListOld: ArrayList<OpenRequestGroup>,
     ) {
-        _indexRequest = index
-        _listCaseRequest = listCase
-        _requestListNew.value = arrayList
-
-        setRequestListOld()
+        this._indexRequest = index
+        this._listCaseRequest = listCase
+        this._requestListNew.value = arrayList
+        this.requestListOld = entryListOld
     }
 
     private fun setListMembers(
         index: Int,
         listCase: ListCase,
         arrayList: ArrayList<User>,
+        entryListOld: ArrayList<User>,
     ) {
-        _indexMember = index
-        _listCaseMembers = listCase
-        _memberListNew.value = arrayList
-
-        setMembersListOld()
-    }
-
-    private fun setRequestListOld() {
-        requestListOld.clear()
-        for (ds in requestList)
-            requestListOld.add(ds)
-    }
-
-    private fun setMembersListOld() {
-        memberListOld.clear()
-        for (ds in memberList)
-            memberListOld.add(ds)
+        this._indexMember = index
+        this._listCaseMembers = listCase
+        this._memberListNew.value = arrayList
+        this.memberListOld = entryListOld
     }
 }

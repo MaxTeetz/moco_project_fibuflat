@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MoCo_Project_FiBuFlat</string>
+    <string name="app_name" translatable="false">FiBuFlat</string>
 
     <!--Main activity strings-->
     <!--UI strings-->
@@ -25,13 +25,13 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <!--Select group activity strings-->
     <!--Select Group Option Fragment-->
-    <string name="welcome_message">Welcome to FiBuFlat.\n To Continue create a Group or join an existing one.</string>
+    <string name="welcome_message" translatable="false">Welcome to FiBuFlat.\n To Continue create a Group or join an existing one.</string>
     <string name="create_group_text">Create Group</string>
     <string name="join_group_text">Join Group</string>
 
@@ -51,10 +51,10 @@
 
     <!--Group activity strings-->
     <!--side_nav_bar-->
-    <string name="moneypool">Moneypool</string>
-    <string name="to_do_list">ToDo List</string>
-    <string name="nfc">NFC</string>
-    <string name="group_management">Group Management</string>
+    <string name="moneypool" translatable="false">Moneypool</string>
+    <string name="to_do_list" translatable="false">ToDo List</string>
+    <string name="nfc" translatable="false">NFC</string>
+    <string name="group_management" translatable="false">Group Management</string>
 
     <!--HomeFragment-->
     <string name="add_entry">Add Entry</string>
@@ -69,8 +69,8 @@
     <string name="username_home_fragment">Username</string>
     <string name="amount_home_fragment">Amount</string>
     <string name="money_amount_in_euro">€%1$s</string>
-    <string name="max_mustermann">Max Mustermann</string>
-    <string name="john_doe">John Doe</string>
+    <string name="max_mustermann" translatable="false">Max Mustermann</string>
+    <string name="john_doe" translatable="false">John Doe</string>
     <string name="number">5</string>
     <string name="amount_hint">1–20000€</string>
     <string name="cancel">Cancel</string>
@@ -80,11 +80,26 @@
     <string name="date">Date</string>
 
     <!--ToDoFragment-->
+    <string name="todo_fragment" translatable="false">ToDo List</string>
+    <string name="add_task">Add Task</string>
+    <string name="enter_your_task_here">Enter your task here</string>
+    <string name="optional_image_used_in_todo_list">Optional Image used in ToDo List</string>
+    <string name="click_the_image_to_take_or_select_a_picture">Click the Image to take or select a picture</string>
+    <string name="add_a_new_task">Add a new Task</string>
+    <string name="select_from_gallery">Select From Gallery</string>e
 
     <!--nfc-->
 
     <!--Group Management-->
     <string name="group_members">Group Members</string>
     <string name="join_requests">Join Requests</string>
+
+    <!--Group Info-->
+    <string name="group_info">Group Info</string>
+    <string name="group_name_group_info">Group Name</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="leave_group_confirm">Do you want to leave the Group?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 
 </resources>

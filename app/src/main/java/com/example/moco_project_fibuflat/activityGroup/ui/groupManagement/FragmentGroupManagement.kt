@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.adapter.GroupMembersAdapter
@@ -33,16 +34,11 @@ class FragmentGroupManagement : Fragment() {
     private var _binding: FragmentGroupManagementBinding? = null
     private val binding get() = _binding!!
 
-
     //ToDo is this clean??
     private val coroutine1 = Job()
     private val coroutine2 = Job()
-    private val coroutine3 = Job()
-    private val coroutine4 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
     private val coroutineScope2 = CoroutineScope(coroutine2 + Dispatchers.Main)
-    private val coroutineScope3 = CoroutineScope(coroutine3 + Dispatchers.Main)
-    private val coroutineScope4 = CoroutineScope(coroutine4 + Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -126,8 +122,6 @@ class FragmentGroupManagement : Fragment() {
     private fun requestObserver() {
         viewModel.requestListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
-                //adapterRequest.submitList(it) ToDo? reactivate?
-
                 when (viewModel.listCaseRequest) {
                     ListCase.EMPTY -> adapterRequest.submitList(it)
                     ListCase.DELETED -> adapterRequest.notifyItemRemoved(viewModel.indexRequest!!)
@@ -145,8 +139,6 @@ class FragmentGroupManagement : Fragment() {
     private fun memberObserver() {
         viewModel.memberListNew.observe(this.viewLifecycleOwner) { it ->
             it.let {
-                //adapterMembers.submitList(it)
-
                 when (viewModel.listCaseMember) {
                     ListCase.EMPTY -> adapterMembers.submitList(it)
                     ListCase.DELETED -> adapterMembers.notifyItemRemoved(viewModel.indexMember!!)
@@ -160,13 +152,17 @@ class FragmentGroupManagement : Fragment() {
         }
     }
 
-    //ToDo ask prof is coroutine necessary?
+    //ToDo how to handle if fragment is destroyed before everything's done -> redundant todo?
     private fun getUserAccept(openRequestGroup: OpenRequestGroup) {
+        lifecycleScope.launch {
             viewModel.acceptUser(openRequestGroup)
+        }
     }
 
     private fun getUserDecline(openRequestGroup: OpenRequestGroup) {
+        lifecycleScope.launch {
             viewModel.declineUser(openRequestGroup)
+        }
     }
 
     override fun onDestroyView() {

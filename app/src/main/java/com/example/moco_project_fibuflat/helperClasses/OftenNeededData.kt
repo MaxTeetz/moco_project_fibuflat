@@ -34,26 +34,33 @@ class OftenNeededData : ViewModel() {
 
 
     suspend fun setData() {
+        Log.d("GroupActivityCoroutine", "1")
         val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         val task1 = fetchUser(uid)
         val task2 = fetchGroup(uid)
+        Log.d("GroupActivityCoroutine", "4")
         _user.value = task1?.getValue(User::class.java)!!
+        Log.d("GroupActivityCoroutine", "5")
         _group.value = task2?.getValue(Group::class.java)
     }
 
     private suspend fun fetchUser(uid: String): DataSnapshot? {
+        Log.d("GroupActivityCoroutine", "2.0")
         return try {
-            val user = _dataBaseUsers.child(uid).get().await()
-            user
-        } catch (e: Exception) {
-            Log.d("dataUserUser", "$e")
-            null
+                val user = _dataBaseUsers.child(uid).get().await()
+                Log.d("GroupActivityCoroutine", "2.1")
+                user
+            } catch (e: Exception) {
+                Log.d("dataUserUser", "$e")
+                null
         }
     }
 
     private suspend fun fetchGroup(uid: String): DataSnapshot? {
+        Log.d("GroupActivityCoroutine", "3.0")
         return try {
             val group = _dataBaseUsers.child(uid).child("group").get().await()
+            Log.d("GroupActivityCoroutine", "3.1")
             group
         } catch (e: Exception) {
             Log.d("dataUserGroup", "$e")

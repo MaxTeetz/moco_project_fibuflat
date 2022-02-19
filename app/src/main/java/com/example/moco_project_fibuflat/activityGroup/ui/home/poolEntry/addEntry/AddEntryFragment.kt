@@ -1,7 +1,6 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.addEntry
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
-import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
+import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,7 +31,6 @@ class AddEntryFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
     }
 
     override fun onStop() {
@@ -45,7 +43,6 @@ class AddEntryFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
-        Log.d("addEntryFragment", "onCreateView")
         // Inflate the layout for this fragment
         _binding = FragmentAddEntryBinding.inflate(inflater, container, false)
         return binding.root
@@ -53,7 +50,6 @@ class AddEntryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("addEntryFragment", "onViewCreated")
 
         viewModel.setData(
             neededData.user.value!!,
@@ -78,7 +74,6 @@ class AddEntryFragment : Fragment() {
 
     private fun addNewEntry() {
         if (isEntryValid()) {
-
             coroutineScope1.launch {
                 viewModel.addEntryToDB(MoneyPoolEntry(
                     UUID.randomUUID().toString(),

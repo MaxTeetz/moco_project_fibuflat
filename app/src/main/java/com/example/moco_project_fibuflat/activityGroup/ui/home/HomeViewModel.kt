@@ -1,6 +1,5 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,9 +16,6 @@ import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
 
-    private var entryList: ArrayList<MoneyPoolEntry> = arrayListOf()
-    private var entryListOld: ArrayList<MoneyPoolEntry> = arrayListOf()
-
     private lateinit var databaseGroup: DatabaseReference
     private lateinit var databaseUser: DatabaseReference
     private lateinit var group: Group
@@ -27,6 +23,9 @@ class HomeViewModel : ViewModel() {
     private lateinit var valueEventListenerEntry: ValueEventListener
 
     private lateinit var databaseEntryRef: Query
+
+    private var entryList: ArrayList<MoneyPoolEntry> = arrayListOf()
+    private var entryListOld: ArrayList<MoneyPoolEntry> = arrayListOf()
 
     private val _allMoneyEntries: MutableLiveData<ArrayList<MoneyPoolEntry>> = MutableLiveData()
     val allMoneyEntries: LiveData<ArrayList<MoneyPoolEntry>> get() = _allMoneyEntries
@@ -62,7 +61,7 @@ class HomeViewModel : ViewModel() {
     private suspend fun fetchDataEntry() {
         withContext(Dispatchers.IO) {
             valueEventListenerEntry = GetSnapshotRecyclerView(entryList, entryListOld, listCase, MoneyPoolEntry())
-            {index, listCase, entryList -> setListEntry(index!!, listCase!!, entryList) }
+            {index, listCase, entryList, entryListOld -> setListEntry(index!!, listCase!!, entryList, entryListOld) }
 
             databaseEntryRef.addValueEventListener(valueEventListenerEntry)
         }
@@ -72,19 +71,11 @@ class HomeViewModel : ViewModel() {
         index: Int,
         listCase: ListCase,
         arrayList: ArrayList<MoneyPoolEntry>,
+        entryListOld: ArrayList<MoneyPoolEntry>,
     ) {
-        _index = index
-        _listCase = listCase
-        _allMoneyEntries.value = arrayList
-
-        setEntryListOld()
-    }
-
-    private fun setEntryListOld() {
-        entryListOld.clear()
-        Log.d("homeViewModel", "setEntryListOld")
-        for (mpe in entryList) {
-            entryListOld.add(mpe)
-        }
+        this._index = index
+        this._listCase = listCase
+        this._allMoneyEntries.value = arrayList
+        this.entryListOld = entryListOld
     }
 }

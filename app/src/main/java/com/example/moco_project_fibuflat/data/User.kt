@@ -6,7 +6,6 @@ data class User(
     val email: String? = null,
     val groupId: String? = null,
     val groupName: String? = null,
-    //val groupOpenInvitations: String? = null, //invitations by groups -> id of group
     val openRequestsToGroups: OpenRequestUser? = null, //requests to join group -> id of group
 )
 
@@ -14,7 +13,6 @@ data class Group(
     val groupId: String? = null,
     val groupName: String? = null,
     val users: User? = null,
-    //val openInvitations: OpenRequestUser? = null, //invited users -> id of user
     val openRequestsByUsers: OpenRequestGroup? = null, //open requests by users -> id of user
 )
 

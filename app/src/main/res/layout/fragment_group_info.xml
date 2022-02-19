@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:id="@+id/info_group_name_label"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="72dp"
+        android:gravity="center"
+        android:text="@string/group_name_group_info"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/info_group_id_label"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:gravity="center"
+        android:text="@string/id"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@id/info_group_name"
+        app:layout_constraintTop_toTopOf="@id/info_group_name_label" />
+
+    <TextView
+        android:id="@+id/info_group_name"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/info_group_name_label"
+        app:layout_constraintTop_toBottomOf="@id/info_group_name_label"
+        tools:text="Max's Group" />
+
+    <TextView
+        android:id="@+id/info_group_id"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/info_group_id_label"
+        app:layout_constraintTop_toTopOf="@id/info_group_name"
+        tools:text="b506" />
+
+    <Button
+        android:id="@+id/info_leave_group"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/red_700"
+        android:text="@string/leave_group"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

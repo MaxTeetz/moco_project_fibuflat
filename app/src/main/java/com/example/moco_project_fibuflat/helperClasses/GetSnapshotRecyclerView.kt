@@ -12,7 +12,7 @@ class GetSnapshotRecyclerView<A>(
     private var entryListOld: ArrayList<A>,
     private var listCaseOld: ListCase?,
     private var dataType: A,
-    private val giveValues: (index: Int?, listCase: ListCase?, entryList: ArrayList<A>) -> Unit,
+    private val giveValues: (index: Int?, listCase: ListCase?, entryList: ArrayList<A>, entryListOld: ArrayList<A>) -> Unit,
 ) : ValueEventListener {
     private var index: Int? = 0
 
@@ -29,7 +29,7 @@ class GetSnapshotRecyclerView<A>(
         }
         CompareLists(entryListOld, entryList, listCaseOld)
         { index, listCase, arrayList -> setData(index, listCase, arrayList) }
-        giveValues(index, listCaseOld, entryList)
+        giveValues(index, listCaseOld, entryList, entryListOld)
     }
 
     override fun onCancelled(error: DatabaseError) {
@@ -40,5 +40,13 @@ class GetSnapshotRecyclerView<A>(
         this.index = index
         this.listCaseOld = listCase
         this.entryList = arrayList
+        setEntryListOld(entryList)
+    }
+
+    private fun setEntryListOld(arrayList: ArrayList<A>){
+        entryListOld.clear()
+
+        for(entry in arrayList)
+            entryListOld.add(entry)
     }
 }

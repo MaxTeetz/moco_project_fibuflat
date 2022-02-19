@@ -42,7 +42,7 @@ class JoinGroupViewModel : ViewModel() {
                 .orderByChild("groupName")
                 .equalTo(this.groupName)
 
-        withContext(Dispatchers.IO) { //ToDo ask prof if suspend or anything is needed for every function
+        withContext(Dispatchers.IO) {
             GetSnapshotSingleEvent(userRef) { snapshot -> checkAlreadySent(snapshot) }
         }
     }

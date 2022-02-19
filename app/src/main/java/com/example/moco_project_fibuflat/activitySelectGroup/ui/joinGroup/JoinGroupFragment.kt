@@ -22,7 +22,7 @@ class JoinGroupFragment : Fragment() {
     private val viewModel: JoinGroupViewModel by viewModels()
     private lateinit var neededData: OftenNeededData
     private val coroutine1 = Job()
-    private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
+    private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.IO)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

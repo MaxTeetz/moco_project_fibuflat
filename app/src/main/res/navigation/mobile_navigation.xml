@@ -22,7 +22,11 @@
         android:id="@+id/nav_todo_list"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.toDo.ToDoFragment"
         android:label="@string/to_do_list"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_todo" >
+        <action
+            android:id="@+id/action_nav_todo_list_to_addToDoEntryFragament"
+            app:destination="@id/addToDoEntryFragament" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_group_management"
@@ -34,6 +38,11 @@
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.nfc.NfcFragment"
         android:label="@string/nfc"
         tools:layout="@layout/fragment_nfc" />
+    <fragment
+        android:id="@+id/nav_group_info"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.groupInfo.FragmentGroupInfo"
+        android:label="FragmentGroupInfo"
+        tools:layout="@layout/fragment_group_info"/>
     <fragment
         android:id="@+id/addEntryFragment"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.addEntry.AddEntryFragment"
@@ -67,5 +76,15 @@
             android:name="date_send"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/addToDoEntryFragament"
+        android:name="com.example.moco_project_fibuflat.activityGroup.ui.toDo.toDoEntry.AddToDoEntryFragment"
+        android:label="fragment_add_to_do_entry"
+        tools:layout="@layout/fragment_add_to_do_entry" >
+        <action
+            android:id="@+id/action_addToDoEntryFragament_to_nav_todo_list"
+            app:destination="@id/nav_todo_list" />
+    </fragment>
+
 
 </navigation>

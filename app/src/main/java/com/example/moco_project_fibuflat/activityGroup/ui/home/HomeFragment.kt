@@ -23,11 +23,13 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
     private lateinit var viewModel: HomeViewModel
     private lateinit var neededData: OftenNeededData
     private lateinit var adapterEntry: MoneyPoolAdapter
+
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
     private val coroutine1 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
 

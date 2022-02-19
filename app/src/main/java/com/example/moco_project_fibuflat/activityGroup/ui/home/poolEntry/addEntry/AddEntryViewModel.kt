@@ -1,6 +1,5 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.addEntry
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
@@ -25,15 +24,13 @@ class AddEntryViewModel : ViewModel() {
 
     suspend fun addEntryToDB(moneyPoolEntry: MoneyPoolEntry) {
         withContext(Dispatchers.IO) {
-            Log.d("addEntryViewModel1", "")
             databaseReference.child(group.groupId!!).child("moneyPoolEntries")
                 .child(moneyPoolEntry.id!!).setValue(moneyPoolEntry)
-            Log.d("addEntryViewModel2", "")
         }
     }
 
     fun getCurrentDate(): String {
-        val sdf = SimpleDateFormat("dd/M/yyyy\nhh:mm:ss", Locale.getDefault()) //ToDo shows wrong time after 11.59am
+        val sdf = SimpleDateFormat("dd/M/yyyy\nhh:mm:ss a", Locale.getDefault()).format(Date())
         return sdf.format(Date())
     }
 
