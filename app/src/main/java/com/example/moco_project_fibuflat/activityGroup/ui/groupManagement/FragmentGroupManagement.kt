@@ -34,7 +34,7 @@ class FragmentGroupManagement : Fragment() {
     private var _binding: FragmentGroupManagementBinding? = null
     private val binding get() = _binding!!
 
-    //ToDo is this clean??
+    //ToDoEntry is this clean??
     private val coroutine1 = Job()
     private val coroutine2 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
@@ -152,7 +152,7 @@ class FragmentGroupManagement : Fragment() {
         }
     }
 
-    //ToDo how to handle if fragment is destroyed before everything's done -> redundant todo?
+    //ToDoEntry how to handle if fragment is destroyed before everything's done -> redundant todo?
     private fun getUserAccept(openRequestGroup: OpenRequestGroup) {
         lifecycleScope.launch {
             viewModel.acceptUser(openRequestGroup)

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
-import com.example.moco_project_fibuflat.databinding.RecyclerViewJoinRequestsEntryBinding
+import com.example.moco_project_fibuflat.databinding.DetailJoinRequestsEntryBinding
 
 class RecyclerViewJoinRequestAdapter(
     private val itemClickListenerAccept: ClickListenerAccept,
@@ -24,7 +24,7 @@ class RecyclerViewJoinRequestAdapter(
     }
 
     class MyViewHolder(
-        val binding: RecyclerViewJoinRequestsEntryBinding,
+        val binding: DetailJoinRequestsEntryBinding,
         private var parent: ViewGroup,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(openRequestGroup: OpenRequestGroup) {
@@ -36,7 +36,7 @@ class RecyclerViewJoinRequestAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
-            RecyclerViewJoinRequestsEntryBinding.inflate(
+            DetailJoinRequestsEntryBinding.inflate(
                 LayoutInflater.from(
                     parent.context,
                 )

@@ -13,8 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
+import com.example.moco_project_fibuflat.databinding.DetailMoneypoolEntryOnClickedBinding
 import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
-import com.example.moco_project_fibuflat.databinding.EntryDetailBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 class EntryDetailFragment : Fragment() {
     private val navigationArgs: EntryDetailFragmentArgs by navArgs()
 
-    private var _binding: EntryDetailBinding? = null
+    private var _binding: DetailMoneypoolEntryOnClickedBinding? = null
     private val binding get() = _binding!!
     private val viewModel: EntryDetailViewModel by viewModels()
     private lateinit var neededData: OftenNeededData
@@ -49,7 +49,7 @@ class EntryDetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
-        _binding = EntryDetailBinding.inflate(inflater, container, false)
+        _binding = DetailMoneypoolEntryOnClickedBinding.inflate(inflater, container, false)
         return binding.root
     }
 

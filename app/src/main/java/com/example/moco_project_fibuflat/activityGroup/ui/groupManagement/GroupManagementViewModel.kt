@@ -123,7 +123,7 @@ class GroupManagementViewModel : ViewModel() {
     }
 
     private suspend fun fetchDataRequest() {
-        //ToDo cleaner if the assignment is outside the coroutine?
+        //ToDoEntry cleaner if the assignment is outside the coroutine?
         withContext(Dispatchers.IO) {
             valueEventListenerRequest =
                 GetSnapshotRecyclerView(

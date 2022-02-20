@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.data.User
-import com.example.moco_project_fibuflat.databinding.EntryUserBinding
+import com.example.moco_project_fibuflat.databinding.DetailUserEntryBinding
 
 class GroupMembersAdapter() :
     ListAdapter<User, GroupMembersAdapter.MyViewHolder>(DiffCallback) {
 
     class MyViewHolder(
-        val binding: EntryUserBinding,
+        val binding: DetailUserEntryBinding,
         private var parent: ViewGroup,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
@@ -24,7 +24,7 @@ class GroupMembersAdapter() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
-            EntryUserBinding.inflate(
+            DetailUserEntryBinding.inflate(
                 LayoutInflater.from(
                     parent.context,
                 )

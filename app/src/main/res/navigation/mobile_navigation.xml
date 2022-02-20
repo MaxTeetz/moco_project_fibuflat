@@ -56,7 +56,7 @@
         android:id="@+id/entryDetail"
         android:name="com.example.moco_project_fibuflat.activityGroup.ui.home.poolEntry.entryDetail.EntryDetailFragment"
         android:label="@string/entry_detail"
-        tools:layout="@layout/entry_detail" >
+        tools:layout="@layout/detail_moneypool_entry_on_clicked" >
         <argument
             android:name="entry_id"
             app:argType="string"/>

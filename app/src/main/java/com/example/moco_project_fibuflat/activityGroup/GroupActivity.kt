@@ -1,9 +1,11 @@
 package com.example.moco_project_fibuflat.activityGroup
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -25,6 +27,7 @@ import kotlinx.coroutines.withContext
 class
 GroupActivity : AppCompatActivity() {
 
+    private lateinit var dialog: Dialog
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityGroupBinding
     private val viewModel: OftenNeededData by viewModels()
@@ -33,11 +36,25 @@ GroupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         MainScope().launch {
+            showProgressBar()
             Log.d("GroupActivityCoroutine", "0")
             viewModel.setData()
             Log.d("GroupActivityCoroutine", "6")
+            hideProgressBar()
             updateUI()
         }
+    }
+
+    private fun showProgressBar() {
+        dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+
+    private fun hideProgressBar() {
+        dialog.dismiss()
     }
 
     private suspend fun updateUI() {

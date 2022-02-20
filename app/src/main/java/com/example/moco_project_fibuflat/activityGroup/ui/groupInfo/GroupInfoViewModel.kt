@@ -15,7 +15,7 @@ class GroupInfoViewModel : ViewModel() {
     private lateinit var dataBaseUsers: DatabaseReference
     private lateinit var dataBaseGroups: DatabaseReference
 
-    //ToDo ask prof
+    //ToDoEntry ask prof
     suspend fun leaveGroup(
         user: User,
         group: Group,
