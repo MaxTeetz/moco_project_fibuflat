@@ -36,6 +36,7 @@ class AddToDoEntryFragment : Fragment() {
     private lateinit var viewModel: AddToDoEntryViewModel
     private lateinit var neededData: OftenNeededData
     private lateinit var storageReference: StorageReference
+    private lateinit var id: String
 
     private lateinit var imageUri: Uri
     private lateinit var dialog: Dialog
@@ -57,7 +58,7 @@ class AddToDoEntryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val id = UUID.randomUUID().toString()
+        id = UUID.randomUUID().toString()
 
         binding.optionalImage.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -78,12 +79,12 @@ class AddToDoEntryFragment : Fragment() {
         binding.addEntry.setOnClickListener {
             showProgressBar()
             val todoEntry =
-                ToDoEntry(id, neededData.user.value!!.username, binding.task.text.toString())
-            neededData.dataBaseGroups.child(neededData.group.value!!.groupId!!).child("todo")
+                ToDoEntry(id, neededData.user.value!!.username, binding.task.text.toString(), "ToDoEntries/$id")
+            neededData.dataBaseGroups.child(neededData.group.value!!.groupId!!).child("todoEntries")
                 .child(id)
                 .setValue(todoEntry).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        uploadPicture(id)
+                        uploadPicture()
                     } else {
                         hideProgressBar()
                         Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_SHORT).show()
@@ -92,7 +93,7 @@ class AddToDoEntryFragment : Fragment() {
         }
     }
 
-    private fun uploadPicture(id: String) {
+    private fun uploadPicture() {
         storageReference = FirebaseStorage.getInstance().getReference("ToDoEntries/$id")
         storageReference.putFile(imageUri).addOnSuccessListener {
 

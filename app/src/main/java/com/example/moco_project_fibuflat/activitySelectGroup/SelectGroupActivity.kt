@@ -52,7 +52,7 @@ class SelectGroupActivity : AppCompatActivity() {
         // Set up the action bar for use with the NavController
         NavigationUI.setupActionBarWithNavController(this, navController)
 
-        lifecycleScope.launch(Dispatchers.IO) { //ToDoEntry witchContext(Dispatchers.IO)?
+        lifecycleScope.launch(Dispatchers.IO) { //ToDo witchContext(Dispatchers.IO)?
             viewModel.checkGroupStatus(neededData.dataBaseUsers, neededData.user.value!!)
         }
     }

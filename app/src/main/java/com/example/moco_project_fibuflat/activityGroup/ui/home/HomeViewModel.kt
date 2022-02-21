@@ -70,12 +70,12 @@ class HomeViewModel : ViewModel() {
     private fun setListEntry(
         index: Int,
         listCase: ListCase,
-        arrayList: ArrayList<MoneyPoolEntry>,
+        entryList: ArrayList<MoneyPoolEntry>,
         entryListOld: ArrayList<MoneyPoolEntry>,
     ) {
         this._index = index
         this._listCase = listCase
-        this._allMoneyEntries.value = arrayList
+        this._allMoneyEntries.value = entryList
         this.entryListOld = entryListOld
     }
 }
