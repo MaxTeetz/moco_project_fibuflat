@@ -1,6 +1,5 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.toDo
 
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ToDoViewModel : ViewModel() {
@@ -31,10 +31,9 @@ class ToDoViewModel : ViewModel() {
 
     private lateinit var databaseToDoRef: Query
     private val storageReference = FirebaseStorage.getInstance().reference
-    private val localFile: File = File.createTempFile("tempImage", "jpg")
 
-    private var entryList: ArrayList<ToDoEntry> = arrayListOf()
-    private var entryListOld: ArrayList<ToDoEntry> = arrayListOf()
+    private var entryList: LinkedList<ToDoEntry> = LinkedList()
+    private var entryListOld: LinkedList<ToDoEntry> = LinkedList()
 
     private var _allToDoEntries: ArrayList<ToDoEntry> = arrayListOf()
     val allToDoEntries: ArrayList<ToDoEntry> get() = _allToDoEntries
@@ -78,7 +77,8 @@ class ToDoViewModel : ViewModel() {
             valueEventListenerEntry =
                 GetSnapshotRecyclerView(entryList, entryListOld, listCase.value, ToDoEntry())
                 { index, listCase, entryList, entryListOld ->
-                    setListToDo(index!!,
+                    setListToDo(
+                        index!!,
                         listCase!!,
                         entryList,
                         entryListOld)
@@ -99,9 +99,9 @@ class ToDoViewModel : ViewModel() {
         this._index = index
         this._listCase.value = listCase
         this.entryListOld = entryListOld
-        Log.d("viewModelShared", "")
+        Log.d("viewModelShared", "$index")
 
-        if (listCase != ListCase.DELETED) //no need to load everything again if somethings got deleted
+        if (listCase != ListCase.DELETED)
             getImage(index, listCase)
     }
 
@@ -109,38 +109,29 @@ class ToDoViewModel : ViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (listCase == ListCase.EMPTY)
-                    for ((i, entry) in entryList.withIndex()) {
-                        Log.d("todoViewModel", "getImage")
+                    for ((i, entry) in _allToDoEntries.withIndex()) {
                         if (entry.pictureAdded != null) {
-                            storageReference.child(group.groupId!!).child(entry.pictureAdded!!).getFile(localFile).await()
-                            setImage(i)
+                            val image =
+                                storageReference.child(entry.pictureAdded!!)
+                            val url = image.downloadUrl.await()
+                            setImage(url.toString(), i)
                         }
                     }
-                if (listCase == ListCase.ADDED) { //only load image at "added position"
-                    if (entryList[index].pictureAdded != null) {
-                        storageReference.child(entryList[index].pictureAdded!!).getFile(localFile)
-                            .await()
-                        withContext(Dispatchers.Default) {
-                            val image = BitmapFactory.decodeFile(localFile.absolutePath)
-                            entryList[index].picture = image
-                            _indexChanged = index
-                            _listCase.postValue(ListCase.CHANGED)
-                        }
-                    }
+                else {
+                    val image = storageReference.child(_allToDoEntries[index].pictureAdded!!)
+                    val url = image.downloadUrl.await()
+                    setImage(url.toString(), index)
                 }
             } catch (e: Exception) {
                 Log.d("toDoAdapter", "$e")
             }
         }
 
-    private suspend fun setImage(i : Int) {
-        withContext(Dispatchers.Default) {
-            val image = BitmapFactory.decodeFile(localFile.absolutePath)
-            entryList[i].picture = image
-            _indexChanged = i
-            _listCase.postValue(ListCase.CHANGED)
-            Log.d("todoViewModel", "changeListCase")
-        }
+    private fun setImage(imageUrls: String, index: Int) {
+        Log.d("viewModelImageIndex2", "$index")
+        _allToDoEntries[index].picture = imageUrls
+        _indexChanged = index
+        _listCase.postValue(ListCase.CHANGED)
     }
 
     override fun onCleared() {

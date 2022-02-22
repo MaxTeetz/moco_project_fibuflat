@@ -13,9 +13,6 @@ class CompareLists<A>(
     private var index: Int? = 0
 
     init {
-        //check for what happens when the internet was gone and many items were updated
-        if (!checkForErrors(arrayListOld, arrayListNew))
-            giveValues(0, ListCase.ERROR, arrayListNew)
 
         if (listCaseOld == null) {
             giveValues(0, ListCase.EMPTY, arrayListNew)
@@ -29,32 +26,6 @@ class CompareLists<A>(
             index = added(arrayListOld, arrayListNew)
             giveValues(index, ListCase.ADDED, arrayListNew)
         }
-    }
-
-    private fun checkForErrors(
-        //ToDo if list size is the same but items changed, valueEventListener doesn't trigger.
-        // For this maybe just check connection and return error. No List compare
-        arrayListOld: java.util.ArrayList<A>,
-        arrayListNew: java.util.ArrayList<A>,
-    ): Boolean {
-        var changeCounter = 0
-        if (arrayListNew.size - arrayListOld.size < -1 || arrayListNew.size - arrayListOld.size > 1)
-            return false
-        if (arrayListOld.size > arrayListNew.size)
-            for ((i, any) in arrayListOld.withIndex()) {
-                if (i == arrayListNew.size - 1)
-                    break
-                if (any != arrayListNew[i])
-                    changeCounter++
-            }
-        if (arrayListNew.size >= arrayListOld.size)
-            for ((i, any) in arrayListNew.withIndex()) {
-                if (i == arrayListOld.size - 1)
-                    if (any != arrayListOld[i])
-                        changeCounter++
-            }
-
-        return changeCounter <= 1
     }
 
     private fun added(

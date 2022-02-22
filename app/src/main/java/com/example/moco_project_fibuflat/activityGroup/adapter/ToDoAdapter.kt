@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.data.ToDoEntry
 import com.example.moco_project_fibuflat.databinding.DetailTodoEntryBinding
@@ -28,12 +29,14 @@ class ToDoAdapter(
             binding.apply {
                 todoEntryTextName.text = toDoEntry.name
                 todoEntryTextTask.text = toDoEntry.message
-                if (toDoEntry.pictureAdded != null)
-                    todoEntryPicture.setImageResource(R.drawable.loading_image)
-                else
+                if (toDoEntry.pictureAdded != null) {
+                    if (toDoEntry.picture == null)
+                        todoEntryPicture.setImageResource(R.drawable.loading_image)
+                    else
+                        Glide.with(itemView).load(toDoEntry.picture).into(binding.todoEntryPicture)
+
+                } else
                     todoEntryPicture.setImageResource(R.drawable.broken_image)
-                if (toDoEntry.picture != null)
-                    binding.todoEntryPicture.setImageBitmap(toDoEntry.picture)
             }
         }
     }
