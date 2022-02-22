@@ -143,7 +143,7 @@ class FragmentGroupManagement : Fragment() {
                     ListCase.EMPTY -> adapterMembers.submitList(it)
                     ListCase.DELETED -> adapterMembers.notifyItemRemoved(viewModel.indexMember!!)
                     ListCase.ADDED -> adapterMembers.notifyItemInserted(viewModel.indexMember!!)
-                    null -> {
+                    else -> {
                         adapterMembers.notifyDataSetChanged()
                         Log.d("adapterMemberObserver", "Error")
                     }

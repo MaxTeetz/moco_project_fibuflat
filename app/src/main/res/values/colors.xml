@@ -13,5 +13,6 @@
     <color name="red_700">#FFD32F2F</color>
     <color name="grey">#ADADAD</color>
     <color name="red">#f12215</color>
-
+    <color name="underlineColor">#121212</color>
+    <color name="underlineBackground">#FFFFFF</color>
 </resources>

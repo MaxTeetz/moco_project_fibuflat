@@ -12,7 +12,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
 
-class ToDoAdapter() :
+class ToDoAdapter(
+    private val itemClickListenerButton: ClickListenerButton
+) :
     ListAdapter<ToDoEntry, ToDoAdapter.MyViewHolder>(DiffCallback) {
 
     class MyViewHolder(
@@ -36,6 +38,10 @@ class ToDoAdapter() :
         }
     }
 
+    interface ClickListenerButton {
+        fun onItemClicked(toDoEntry: ToDoEntry)
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
@@ -50,6 +56,9 @@ class ToDoAdapter() :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val current = getItem(position)
+        holder.binding.todoButtonDeleteEntry.setOnClickListener {
+            itemClickListenerButton.onItemClicked(current)
+        }
         holder.bind(current)
     }
 

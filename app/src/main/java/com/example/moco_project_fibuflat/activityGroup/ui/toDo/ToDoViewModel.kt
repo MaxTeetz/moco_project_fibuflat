@@ -48,6 +48,9 @@ class ToDoViewModel : ViewModel() {
     private var _indexChanged: Int? = 0
     val indexChanged get() = _indexChanged
 
+    private var _toastMessage: MutableLiveData<String?> = MutableLiveData()
+    val toastMessage: LiveData<String?> get() = _toastMessage
+
     fun setDataViewModel(
         dataBaseUsers: DatabaseReference,
         dataBaseGroups: DatabaseReference,
@@ -96,24 +99,59 @@ class ToDoViewModel : ViewModel() {
         this._index = index
         this._listCase.value = listCase
         this.entryListOld = entryListOld
+        Log.d("viewModelShared", "")
 
-        getImage()
+        if (listCase != ListCase.DELETED) //no need to load everything again if somethings got deleted
+            getImage(index, listCase)
     }
 
-    private fun getImage() = CoroutineScope(Dispatchers.IO).launch { //ToDo loads rather slow
-        try {
-            for ((i, entry) in entryList.withIndex()) {
-                storageReference.child(entry.pictureAdded!!).getFile(localFile).await()
+    private fun getImage(index: Int, listCase: ListCase) =
+        CoroutineScope(Dispatchers.IO).launch { //ToDo loads rather slow and make it better
+            try {
+                if (listCase == ListCase.EMPTY)
+                    for ((i, entry) in entryList.withIndex()) {
+                        if (entry.pictureAdded != null) {
+                            storageReference.child(entry.pictureAdded!!).getFile(localFile).await()
 
-                withContext(Dispatchers.Default) {
-                    val image = BitmapFactory.decodeFile(localFile.absolutePath)
-                    entryList[i].picture = image
-                    _indexChanged = i
-                    _listCase.postValue(ListCase.CHANGED)
+                            withContext(Dispatchers.Default) {
+                                val image = BitmapFactory.decodeFile(localFile.absolutePath)
+                                entryList[i].picture = image
+                                _indexChanged = i
+                                _listCase.postValue(ListCase.CHANGED)
+                            }
+                        }
+                    }
+                if (listCase == ListCase.ADDED) { //only load image at "added position"
+                    if (entryList[index].pictureAdded != null) {
+                        storageReference.child(entryList[index].pictureAdded!!).getFile(localFile)
+                            .await()
+                        withContext(Dispatchers.Default) {
+                            val image = BitmapFactory.decodeFile(localFile.absolutePath)
+                            entryList[index].picture = image
+                            _indexChanged = index
+                            _listCase.postValue(ListCase.CHANGED)
+                        }
+                    }
                 }
+            } catch (e: Exception) {
+                Log.d("toDoAdapter", "$e")
             }
-        } catch (e: Exception) {
-            Log.d("toDoAdapter", "$e")
+        }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("toDoViewModel", "onCleared()")
+    }
+
+    suspend fun deleteItem(toDoEntry: ToDoEntry) {
+        withContext(Dispatchers.IO) {
+            databaseGroup.child(group.groupId!!).child("todoEntries").child(toDoEntry.id!!)
+                .removeValue()
+            storageReference.child(toDoEntry.pictureAdded!!).delete().addOnSuccessListener {
+                _toastMessage.postValue("Delete successful")
+            }.addOnFailureListener {
+                _toastMessage.postValue("Delete not successful")
+            }
         }
     }
 }

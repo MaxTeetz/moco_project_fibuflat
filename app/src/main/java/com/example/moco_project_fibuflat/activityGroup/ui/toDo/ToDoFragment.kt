@@ -6,11 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.activityGroup.adapter.ToDoAdapter
 import com.example.moco_project_fibuflat.data.ListCase
+import com.example.moco_project_fibuflat.data.ToDoEntry
 import com.example.moco_project_fibuflat.databinding.FragmentTodoBinding
 import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +38,8 @@ class ToDoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        viewModel = ViewModelProvider(this)[ToDoViewModel::class.java]
+        viewModel =
+            ViewModelProvider(requireActivity())[ToDoViewModel::class.java] //bind to activity, so data isn't loaded multiple times
         neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         return binding.root
@@ -50,14 +54,18 @@ class ToDoFragment : Fragment() {
             neededData.group,
             neededData.user)
 
-        coroutineScope1.launch {
-            viewModel.getEntries()
-        }
+        if (viewModel.listCase.value == null)
+            coroutineScope1.launch {
+                viewModel.getEntries()
+            }
 
         setAdapter()
         bindingRecyclerViewRequests()
         requestObserver()
 
+        viewModel.toastMessage.observe(this.viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
         binding.addTodoEntryButton.setOnClickListener {
             val action = ToDoFragmentDirections.actionNavTodoListToAddToDoEntryFragament()
             this.findNavController().navigate(action)
@@ -65,7 +73,13 @@ class ToDoFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        adapterToDo = ToDoAdapter()
+        adapterToDo = ToDoAdapter(object : ToDoAdapter.ClickListenerButton {
+            override fun onItemClicked(toDoEntry: ToDoEntry) {
+                lifecycleScope.launch {
+                    viewModel.deleteItem(toDoEntry)
+                }
+            }
+        })
     }
 
     private fun bindingRecyclerViewRequests() {
@@ -76,9 +90,13 @@ class ToDoFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun requestObserver() {
+
+        if (viewModel.listCase.value != null) {
+            adapterToDo.submitList(viewModel.allToDoEntries)
+        }
+
         viewModel.listCase.observe(this.viewLifecycleOwner) { it ->
             it.let {
-
                 when (it) {
                     ListCase.EMPTY -> adapterToDo.submitList(viewModel.allToDoEntries)
                     ListCase.DELETED -> adapterToDo.notifyItemRemoved(viewModel.index!!)
@@ -95,10 +113,5 @@ class ToDoFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.removeListeners()
     }
 }
