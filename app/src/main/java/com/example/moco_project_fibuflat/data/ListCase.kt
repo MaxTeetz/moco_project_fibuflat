@@ -4,5 +4,6 @@ enum class ListCase {
     EMPTY,
     ADDED,
     DELETED,
-    CHANGED
+    CHANGED,
+    ERROR
 }

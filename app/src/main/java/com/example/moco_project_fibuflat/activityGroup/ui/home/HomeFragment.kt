@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
                     ListCase.EMPTY -> adapterEntry.submitList(it)
                     ListCase.DELETED -> adapterEntry.notifyItemRemoved(viewModel.index!!)
                     ListCase.ADDED -> adapterEntry.notifyItemInserted(viewModel.index!!)
-                    null -> { //should actually never happen. But just in case, reload the whole list
+                    else -> { //if the internet goes of and many items changed, deleted or got added
                         adapterEntry.notifyDataSetChanged()
                         Log.d("adapter", "Error")
                     }

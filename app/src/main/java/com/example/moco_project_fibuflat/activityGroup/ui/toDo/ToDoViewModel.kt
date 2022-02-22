@@ -106,19 +106,14 @@ class ToDoViewModel : ViewModel() {
     }
 
     private fun getImage(index: Int, listCase: ListCase) =
-        CoroutineScope(Dispatchers.IO).launch { //ToDo loads rather slow and make it better
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (listCase == ListCase.EMPTY)
                     for ((i, entry) in entryList.withIndex()) {
+                        Log.d("todoViewModel", "getImage")
                         if (entry.pictureAdded != null) {
-                            storageReference.child(entry.pictureAdded!!).getFile(localFile).await()
-
-                            withContext(Dispatchers.Default) {
-                                val image = BitmapFactory.decodeFile(localFile.absolutePath)
-                                entryList[i].picture = image
-                                _indexChanged = i
-                                _listCase.postValue(ListCase.CHANGED)
-                            }
+                            storageReference.child(group.groupId!!).child(entry.pictureAdded!!).getFile(localFile).await()
+                            setImage(i)
                         }
                     }
                 if (listCase == ListCase.ADDED) { //only load image at "added position"
@@ -137,6 +132,16 @@ class ToDoViewModel : ViewModel() {
                 Log.d("toDoAdapter", "$e")
             }
         }
+
+    private suspend fun setImage(i : Int) {
+        withContext(Dispatchers.Default) {
+            val image = BitmapFactory.decodeFile(localFile.absolutePath)
+            entryList[i].picture = image
+            _indexChanged = i
+            _listCase.postValue(ListCase.CHANGED)
+            Log.d("todoViewModel", "changeListCase")
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()

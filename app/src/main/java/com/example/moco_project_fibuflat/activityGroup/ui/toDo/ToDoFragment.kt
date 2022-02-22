@@ -106,7 +106,7 @@ class ToDoFragment : Fragment() {
                             viewModel.allToDoEntries[viewModel.indexChanged!!].picture)
                         Log.d("todo", "changed")
                     }
-                    null -> {
+                    else -> {
                         adapterToDo.notifyDataSetChanged()
                         Log.d("adapter", "Error")
                     }

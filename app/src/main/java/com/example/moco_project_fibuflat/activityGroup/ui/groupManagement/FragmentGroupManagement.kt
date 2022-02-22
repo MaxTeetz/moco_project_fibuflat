@@ -126,7 +126,7 @@ class FragmentGroupManagement : Fragment() {
                     ListCase.EMPTY -> adapterRequest.submitList(it)
                     ListCase.DELETED -> adapterRequest.notifyItemRemoved(viewModel.indexRequest!!)
                     ListCase.ADDED -> adapterRequest.notifyItemInserted(viewModel.indexRequest!!)
-                    null -> { //impossible to reach that case but need an else branch. Reload list in this case, because otherwise a crash occurs.
+                    else -> {
                         adapterRequest.notifyDataSetChanged()
                         Log.d("adapterRequestObserver", "Error")
                     }
