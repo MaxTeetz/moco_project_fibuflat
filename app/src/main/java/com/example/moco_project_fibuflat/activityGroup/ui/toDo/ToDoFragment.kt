@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.moco_project_fibuflat.R
-import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.activityGroup.adapter.ToDoAdapter
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.databinding.FragmentTodoBinding
@@ -72,23 +70,25 @@ class ToDoFragment : Fragment() {
 
     private fun bindingRecyclerViewRequests() {
         binding.recyclerViewTodoList.adapter = adapterToDo
-        binding.recyclerViewTodoList.addItemDecoration(
-            RecyclerViewItemDecoration(
-                this.requireContext(),
-                R.drawable.divider_shape))
+        binding.recyclerViewTodoList.setHasFixedSize(true)
+        binding.recyclerViewTodoList.isNestedScrollingEnabled = false
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun requestObserver() {
-        viewModel.allToDoEntries.observe(this.viewLifecycleOwner) { it ->
+        viewModel.listCase.observe(this.viewLifecycleOwner) { it ->
             it.let {
-                adapterToDo.submitList(it)
 
-                when (viewModel.listCase) {
-                    ListCase.EMPTY -> adapterToDo.submitList(it)
+                when (it) {
+                    ListCase.EMPTY -> adapterToDo.submitList(viewModel.allToDoEntries)
                     ListCase.DELETED -> adapterToDo.notifyItemRemoved(viewModel.index!!)
                     ListCase.ADDED -> adapterToDo.notifyItemInserted(viewModel.index!!)
-                    null -> { //should actually never happen. But just in case, reload the whole list
+                    ListCase.CHANGED -> {
+                        adapterToDo.notifyItemChanged(viewModel.indexChanged!!,
+                            viewModel.allToDoEntries[viewModel.indexChanged!!].picture)
+                        Log.d("todo", "changed")
+                    }
+                    null -> {
                         adapterToDo.notifyDataSetChanged()
                         Log.d("adapter", "Error")
                     }

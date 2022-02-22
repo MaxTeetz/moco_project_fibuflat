@@ -1,5 +1,7 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.toDo
 
+import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +13,14 @@ import com.example.moco_project_fibuflat.helperClasses.GetSnapshotRecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.File
+
 
 class ToDoViewModel : ViewModel() {
     private lateinit var databaseGroup: DatabaseReference
@@ -22,18 +30,23 @@ class ToDoViewModel : ViewModel() {
     private lateinit var valueEventListenerEntry: ValueEventListener
 
     private lateinit var databaseToDoRef: Query
+    private val storageReference = FirebaseStorage.getInstance().reference
+    private val localFile: File = File.createTempFile("tempImage", "jpg")
 
     private var entryList: ArrayList<ToDoEntry> = arrayListOf()
     private var entryListOld: ArrayList<ToDoEntry> = arrayListOf()
 
-    private val _allToDoEntries: MutableLiveData<ArrayList<ToDoEntry>> = MutableLiveData()
-    val allToDoEntries: LiveData<ArrayList<ToDoEntry>> get() = _allToDoEntries
+    private var _allToDoEntries: ArrayList<ToDoEntry> = arrayListOf()
+    val allToDoEntries: ArrayList<ToDoEntry> get() = _allToDoEntries
 
-    private var _listCase: ListCase? = null
-    val listCase get() = _listCase
+    private var _listCase: MutableLiveData<ListCase?> = MutableLiveData()
+    val listCase: LiveData<ListCase?> get() = _listCase
 
     private var _index: Int? = 0
     val index get() = _index
+
+    private var _indexChanged: Int? = 0
+    val indexChanged get() = _indexChanged
 
     fun setDataViewModel(
         dataBaseUsers: DatabaseReference,
@@ -60,7 +73,7 @@ class ToDoViewModel : ViewModel() {
     private suspend fun fetchDataToDo() {
         withContext(Dispatchers.IO) {
             valueEventListenerEntry =
-                GetSnapshotRecyclerView(entryList, entryListOld, listCase, ToDoEntry())
+                GetSnapshotRecyclerView(entryList, entryListOld, listCase.value, ToDoEntry())
                 { index, listCase, entryList, entryListOld ->
                     setListToDo(index!!,
                         listCase!!,
@@ -72,15 +85,35 @@ class ToDoViewModel : ViewModel() {
         }
     }
 
+
     private fun setListToDo(
         index: Int,
         listCase: ListCase,
         entryList: java.util.ArrayList<ToDoEntry>,
         entryListOld: java.util.ArrayList<ToDoEntry>,
     ) {
+        this._allToDoEntries = entryList
         this._index = index
-        this._listCase = listCase
-        this._allToDoEntries.value = entryList
+        this._listCase.value = listCase
         this.entryListOld = entryListOld
+
+        getImage()
+    }
+
+    private fun getImage() = CoroutineScope(Dispatchers.IO).launch { //ToDo loads rather slow
+        try {
+            for ((i, entry) in entryList.withIndex()) {
+                storageReference.child(entry.pictureAdded!!).getFile(localFile).await()
+
+                withContext(Dispatchers.Default) {
+                    val image = BitmapFactory.decodeFile(localFile.absolutePath)
+                    entryList[i].picture = image
+                    _indexChanged = i
+                    _listCase.postValue(ListCase.CHANGED)
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("toDoAdapter", "$e")
+        }
     }
 }

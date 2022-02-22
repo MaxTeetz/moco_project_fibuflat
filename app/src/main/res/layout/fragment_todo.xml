@@ -4,34 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="4dp"
     tools:context=".activityGroup.ui.toDo.ToDoFragment">
-
-    <TextView
-        android:id="@+id/todo_entry_task"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:background="@drawable/underline_black_bottom_single_line"
-        android:gravity="center"
-        android:text="@string/to_do_list"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_todo_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:padding="6dp"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/todo_entry_task"
-        app:spanCount="2"
+        app:spanCount="1"
         tools:itemCount="8" />
 
     <ImageButton

@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.data.ToDoEntry
 import com.example.moco_project_fibuflat.databinding.DetailTodoEntryBinding
-import com.example.moco_project_fibuflat.helperClasses.GetStoragePicture
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.File
 
 class ToDoAdapter() :
     ListAdapter<ToDoEntry, ToDoAdapter.MyViewHolder>(DiffCallback) {
@@ -17,24 +19,23 @@ class ToDoAdapter() :
         val binding: DetailTodoEntryBinding,
         private var parent: ViewGroup,
     ) : RecyclerView.ViewHolder(binding.root) {
+        private val storageReference: StorageReference = FirebaseStorage.getInstance().reference
+        private val file: File = File.createTempFile("tempImage", "jpg")
+
         fun bind(toDoEntry: ToDoEntry) {
             binding.apply {
                 todoEntryTextName.text = toDoEntry.name
                 todoEntryTextTask.text = toDoEntry.message
-
-                if (toDoEntry.pictureAdded != null) {
+                if (toDoEntry.pictureAdded != null)
                     todoEntryPicture.setImageResource(R.drawable.loading_image)
-                    GetStoragePicture(toDoEntry.pictureAdded!!) { bitmap ->
-                        if (bitmap != null) {
-                            todoEntryPicture.setImageBitmap(bitmap)
-                        }else
-                            todoEntryPicture.setImageResource(R.drawable.broken_image)
-                    }
-                } else
-                    todoEntryPicture.setImageResource(R.drawable.todo_image_select)
+                else
+                    todoEntryPicture.setImageResource(R.drawable.broken_image)
+                if (toDoEntry.picture != null)
+                    binding.todoEntryPicture.setImageBitmap(toDoEntry.picture)
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
@@ -52,6 +53,7 @@ class ToDoAdapter() :
         holder.bind(current)
     }
 
+
     companion
     object {
         private val DiffCallback = object : DiffUtil.ItemCallback<ToDoEntry>() {
@@ -60,14 +62,14 @@ class ToDoAdapter() :
                 oldItem: ToDoEntry,
                 newItem: ToDoEntry,
             ): Boolean {
-                return oldItem === newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
                 oldItem: ToDoEntry,
                 newItem: ToDoEntry,
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.picture != null
             }
         }
     }

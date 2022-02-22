@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.data.ToDoEntry
 import com.example.moco_project_fibuflat.databinding.FragmentAddToDoEntryBinding
@@ -45,6 +46,8 @@ class AddToDoEntryFragment : Fragment() {
 
     private var _binding: FragmentAddToDoEntryBinding? = null
     private val binding get() = _binding!!
+
+    var pictureAdded: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,7 +82,7 @@ class AddToDoEntryFragment : Fragment() {
         binding.addEntry.setOnClickListener {
             showProgressBar()
             val todoEntry =
-                ToDoEntry(id, neededData.user.value!!.username, binding.task.text.toString(), "ToDoEntries/$id")
+                ToDoEntry(id, neededData.user.value!!.username, binding.task.text.toString(), pictureAdded)
             neededData.dataBaseGroups.child(neededData.group.value!!.groupId!!).child("todoEntries")
                 .child(id)
                 .setValue(todoEntry).addOnCompleteListener {
@@ -91,14 +94,22 @@ class AddToDoEntryFragment : Fragment() {
                     }
                 }
         }
+
+        binding.cancel.setOnClickListener {
+            val action = AddToDoEntryFragmentDirections.actionAddToDoEntryFragamentToNavTodoList()
+            this.findNavController().navigate(action)
+        }
     }
 
     private fun uploadPicture() {
-        storageReference = FirebaseStorage.getInstance().getReference("ToDoEntries/$id")
+        storageReference = FirebaseStorage.getInstance()
+            .getReference("ToDoEntries/${neededData.group.value!!.groupId}/$id")
         storageReference.putFile(imageUri).addOnSuccessListener {
 
             hideProgressBar()
             Toast.makeText(requireContext(), "Successfully uploaded", Toast.LENGTH_SHORT).show()
+            val action = AddToDoEntryFragmentDirections.actionAddToDoEntryFragamentToNavTodoList()
+            this.findNavController().navigate(action)
 
         }.addOnFailureListener {
 
@@ -135,6 +146,9 @@ class AddToDoEntryFragment : Fragment() {
 
             imageUri = Uri.fromFile(photoFile)
             Log.d("todoEntry", "${Uri.fromFile(photoFile)}")
+
+            pictureAdded = "ToDoEntries/${neededData.group.value!!.groupId}/$id"
+
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

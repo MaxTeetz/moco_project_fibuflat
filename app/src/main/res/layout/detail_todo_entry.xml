@@ -3,38 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="1dp">
+
+    <ImageButton
+        android:id="@+id/todo_button_delete_entry"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/green"
+        android:contentDescription="@string/click_if_task_is_done"
+        android:src="@drawable/done"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/todo_entry_text_name" />
+    <!--ToDo set better button image. Maybe just an image-->
 
     <TextView
         android:id="@+id/todo_entry_text_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        android:gravity="center"
+        android:gravity="clip_vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/todo_button_delete_entry"
+        app:layout_constraintStart_toEndOf="@id/todo_entry_picture"
+        app:layout_constraintTop_toTopOf="@id/todo_entry_picture"
         tools:text="Max Mustermann" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/todo_entry_picture"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/use_if_an_additional_picture_is_needed"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundCorner"
+        tools:src="@drawable/todo_image_select" />
 
     <TextView
         android:id="@+id/todo_entry_text_task"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="clip_vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/todo_entry_picture"
         app:layout_constraintTop_toBottomOf="@id/todo_entry_text_name"
         tools:text="Tidy up room" />
-
-    <ImageView
-        android:id="@+id/todo_entry_picture"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/todo_entry_text_task"
-        tools:src="@drawable/todo_image_select"
-        android:contentDescription="@string/use_if_an_additional_picture_is_needed" />
 </androidx.constraintlayout.widget.ConstraintLayout>
