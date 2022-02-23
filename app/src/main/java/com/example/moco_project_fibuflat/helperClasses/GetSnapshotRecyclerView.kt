@@ -45,7 +45,6 @@ class GetSnapshotRecyclerView<A>(
 
     private fun setEntryListOld(arrayList: ArrayList<A>){
         entryListOld.clear()
-
         for(entry in arrayList)
             entryListOld.add(entry)
     }

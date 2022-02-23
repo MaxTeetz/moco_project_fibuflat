@@ -59,9 +59,11 @@ class ToDoAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val current = getItem(position)
+
         holder.binding.todoButtonDeleteEntry.setOnClickListener {
             itemClickListenerButton.onItemClicked(current)
         }
+
         holder.bind(current)
     }
 
@@ -81,7 +83,7 @@ class ToDoAdapter(
                 oldItem: ToDoEntry,
                 newItem: ToDoEntry,
             ): Boolean {
-                return oldItem.picture != null
+                return oldItem.picture == newItem.picture
             }
         }
     }

@@ -81,18 +81,7 @@ class AddToDoEntryFragment : Fragment() {
 
         binding.addEntry.setOnClickListener {
             showProgressBar()
-            val todoEntry =
-                ToDoEntry(id, neededData.user.value!!.username, binding.task.text.toString(), pictureAdded)
-            neededData.dataBaseGroups.child(neededData.group.value!!.groupId!!).child("todoEntries")
-                .child(id)
-                .setValue(todoEntry).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        uploadPicture()
-                    } else {
-                        hideProgressBar()
-                        Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            uploadPicture()
         }
 
         binding.cancel.setOnClickListener {
@@ -106,6 +95,15 @@ class AddToDoEntryFragment : Fragment() {
             .getReference("ToDoEntries/${neededData.group.value!!.groupId}/$id")
         storageReference.putFile(imageUri).addOnSuccessListener {
 
+            val todoEntry =
+                ToDoEntry(id,
+                    neededData.user.value!!.username,
+                    binding.task.text.toString(),
+                    pictureAdded)
+            neededData.dataBaseGroups.child(neededData.group.value!!.groupId!!).child("todoEntries")
+                .child(id)
+                .setValue(todoEntry)
+
             hideProgressBar()
             Toast.makeText(requireContext(), "Successfully uploaded", Toast.LENGTH_SHORT).show()
             val action = AddToDoEntryFragmentDirections.actionAddToDoEntryFragamentToNavTodoList()
@@ -115,7 +113,6 @@ class AddToDoEntryFragment : Fragment() {
 
             hideProgressBar()
             Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_SHORT).show()
-
         }
     }
 

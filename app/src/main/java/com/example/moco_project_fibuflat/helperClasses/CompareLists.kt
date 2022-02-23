@@ -24,6 +24,7 @@ class CompareLists<A>(
         }
         if ((arrayListOld.size < arrayListNew.size) && listCaseOld != null) { //Item added
             index = added(arrayListOld, arrayListNew)
+            Log.d("todoEntryListAddedCompareLists", "$index")
             giveValues(index, ListCase.ADDED, arrayListNew)
         }
     }
@@ -33,7 +34,8 @@ class CompareLists<A>(
         arrayList: ArrayList<*>,
     ): Int? {
         for ((i, any: Any) in arrayList.withIndex()) {
-
+            Log.d("todoEntryListAddedCompareListsNewList", "$any")
+            //Log.d("todoEntryListAddedCompareListsOldSize", "${arrayListOld[i]}")
             if (i == arrayListOld.size) { //item somewhere in between
                 return i
             }
@@ -41,7 +43,6 @@ class CompareLists<A>(
                 return i
             }
         }
-
         Log.d("compareListsAdded", "Error. Item not found")
         return null
     }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moco_project_fibuflat.activityGroup.adapter.ToDoAdapter
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.ToDoEntry
@@ -53,10 +54,10 @@ class ToDoFragment : Fragment() {
             neededData.group,
             neededData.user)
 
-        if (viewModel.allToDoEntries.isEmpty())
-            coroutineScope1.launch {
-                viewModel.getEntries()
-            }
+        if(viewModel.listCase.value == null)
+        coroutineScope1.launch {
+            viewModel.getEntries()
+        }
 
         setAdapter()
         bindingRecyclerViewRequests()
@@ -80,32 +81,30 @@ class ToDoFragment : Fragment() {
 
     private fun bindingRecyclerViewRequests() {
         binding.recyclerViewTodoList.adapter = adapterToDo
-        binding.recyclerViewTodoList.setHasFixedSize(true)
-        binding.recyclerViewTodoList.isNestedScrollingEnabled = false
+        binding.recyclerViewTodoList.layoutManager = GridLayoutManager(this.context, 1)
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun requestObserver() {
-
-        if (viewModel.listCase.value != null) {
+        if(viewModel.listCase.value != null)
             adapterToDo.submitList(viewModel.allToDoEntries)
-        }
 
         viewModel.listCase.observe(this.viewLifecycleOwner) { it ->
             it.let {
                 when (it) {
                     ListCase.EMPTY -> {
                         adapterToDo.submitList(viewModel.allToDoEntries)
-                        Log.d("todo", "empty + ${viewModel.indexChanged}")
+                        Log.d("todo", "empty + ${viewModel.index}")
 
                     }
                     ListCase.DELETED -> {
                         adapterToDo.notifyItemRemoved(viewModel.index!!)
-                        Log.d("todo", "deleted + ${viewModel.indexChanged}")
+                        Log.d("todo", "deleted + ${viewModel.index}")
                     }
                     ListCase.ADDED -> {
                         adapterToDo.notifyItemInserted(viewModel.index!!)
-                        Log.d("todo", "added + ${viewModel.indexChanged}")
+                        Log.d("todo", "added + ${viewModel.index}")
                     }
                     ListCase.CHANGED -> {
                         adapterToDo.notifyItemChanged(viewModel.indexChanged!!,
@@ -119,5 +118,10 @@ class ToDoFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.reset()
     }
 }

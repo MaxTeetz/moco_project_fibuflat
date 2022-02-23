@@ -18,8 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ToDoViewModel : ViewModel() {
@@ -32,11 +30,11 @@ class ToDoViewModel : ViewModel() {
     private lateinit var databaseToDoRef: Query
     private val storageReference = FirebaseStorage.getInstance().reference
 
-    private var entryList: LinkedList<ToDoEntry> = LinkedList()
-    private var entryListOld: LinkedList<ToDoEntry> = LinkedList()
+    private var entryList: ArrayList<ToDoEntry> = arrayListOf()
+    private var entryListOld: ArrayList<ToDoEntry> = arrayListOf()
 
-    private var _allToDoEntries: ArrayList<ToDoEntry> = arrayListOf()
-    val allToDoEntries: ArrayList<ToDoEntry> get() = _allToDoEntries
+    private var _allToDoEntries: MutableList<ToDoEntry> = arrayListOf()
+    val allToDoEntries: MutableList<ToDoEntry> get() = _allToDoEntries
 
     private var _listCase: MutableLiveData<ListCase?> = MutableLiveData()
     val listCase: LiveData<ListCase?> get() = _listCase
@@ -62,10 +60,6 @@ class ToDoViewModel : ViewModel() {
         this.user = user.value!!
     }
 
-    fun removeListeners() {
-        databaseToDoRef.removeEventListener(valueEventListenerEntry)
-    }
-
     suspend fun getEntries() {
         databaseToDoRef =
             databaseGroup.child(group.groupId!!).child("todoEntries").orderByChild("id")
@@ -77,6 +71,7 @@ class ToDoViewModel : ViewModel() {
             valueEventListenerEntry =
                 GetSnapshotRecyclerView(entryList, entryListOld, listCase.value, ToDoEntry())
                 { index, listCase, entryList, entryListOld ->
+                    Log.d("viewModelToDOFetchData", "$index")
                     setListToDo(
                         index!!,
                         listCase!!,
@@ -88,50 +83,37 @@ class ToDoViewModel : ViewModel() {
         }
     }
 
-
     private fun setListToDo(
         index: Int,
         listCase: ListCase,
         entryList: java.util.ArrayList<ToDoEntry>,
         entryListOld: java.util.ArrayList<ToDoEntry>,
     ) {
-        this._allToDoEntries = entryList
+        Log.d("todoEntryList", "${this.entryList.size}")
         this._index = index
-        this._listCase.value = listCase
-        this.entryListOld = entryListOld
-        Log.d("viewModelShared", "$index")
-
-        if (listCase != ListCase.DELETED)
-            getImage(index, listCase)
-    }
-
-    private fun getImage(index: Int, listCase: ListCase) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                if (listCase == ListCase.EMPTY)
-                    for ((i, entry) in _allToDoEntries.withIndex()) {
-                        if (entry.pictureAdded != null) {
-                            val image =
-                                storageReference.child(entry.pictureAdded!!)
-                            val url = image.downloadUrl.await()
-                            setImage(url.toString(), i)
-                        }
-                    }
-                else {
-                    val image = storageReference.child(_allToDoEntries[index].pictureAdded!!)
-                    val url = image.downloadUrl.await()
-                    setImage(url.toString(), index)
-                }
-            } catch (e: Exception) {
-                Log.d("toDoAdapter", "$e")
+        if (listCase == ListCase.EMPTY) {
+            Log.d("todoEntryListEmpty", "${index}")
+            for (entry in entryList) {
+                _allToDoEntries.add(entry.copy())
             }
+            this._listCase.value = listCase
+            getImage()
         }
 
-    private fun setImage(imageUrls: String, index: Int) {
-        Log.d("viewModelImageIndex2", "$index")
-        _allToDoEntries[index].picture = imageUrls
-        _indexChanged = index
-        _listCase.postValue(ListCase.CHANGED)
+        if (listCase == ListCase.DELETED) {
+            Log.d("todoEntryListDeleted", "${index}")
+            _allToDoEntries.removeAt(index)
+            this._listCase.value = listCase
+        }
+
+        if (listCase == ListCase.ADDED) {
+            Log.d("todoEntryListAdded", "${index}")
+            _allToDoEntries.add(index, entryList[index])
+            this._listCase.value = listCase
+            getImageAdded(index, _allToDoEntries[index])
+        }
+        this.entryListOld = entryListOld
+
     }
 
     override fun onCleared() {
@@ -139,15 +121,56 @@ class ToDoViewModel : ViewModel() {
         Log.d("toDoViewModel", "onCleared()")
     }
 
+    private fun getImage() =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                for ((i, entry) in _allToDoEntries.withIndex()) {
+                    if (entry.pictureAdded != null && entry.picture == null) {
+                        Log.d("todoEntryListAddedIndexChanged1", entry.pictureAdded!!)
+                        val image =
+                            storageReference.child(entry.pictureAdded!!)
+                        val url = image.downloadUrl.await()
+                        setImage(url.toString(), i)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("toDoAdapter", "$e")
+            }
+        }
+
+    private fun getImageAdded(index: Int, toDoEntry: ToDoEntry) =
+        CoroutineScope(Dispatchers.IO).launch {
+            if (toDoEntry.pictureAdded != null) {
+                Log.d("todoEntryListAddedIndexChanged2", toDoEntry.pictureAdded!!)
+                val image = storageReference.child(toDoEntry.pictureAdded!!)
+                val url = image.downloadUrl.await()
+                setImage(url.toString(), index)
+            }
+        }
+
+    private fun setImage(imageUrls: String, index: Int) {
+        Log.d("todoEntryListAddedIndexChanged3", "${entryList[index]}")
+        _allToDoEntries[index].picture = imageUrls
+        _indexChanged = index
+        Log.d("todoEntryListAddedIndexChanged4", "${entryList[index]}")
+        _listCase.postValue(ListCase.CHANGED)
+    }
+
     suspend fun deleteItem(toDoEntry: ToDoEntry) {
         withContext(Dispatchers.IO) {
             databaseGroup.child(group.groupId!!).child("todoEntries").child(toDoEntry.id!!)
                 .removeValue()
-            storageReference.child(toDoEntry.pictureAdded!!).delete().addOnSuccessListener {
-                _toastMessage.postValue("Delete successful")
-            }.addOnFailureListener {
-                _toastMessage.postValue("Delete not successful")
-            }
+
+            if (toDoEntry.pictureAdded != null)
+                storageReference.child(toDoEntry.pictureAdded!!).delete().addOnSuccessListener {
+                    _toastMessage.postValue("Delete successful")
+                }.addOnFailureListener {
+                    _toastMessage.postValue("Delete not successful")
+                }
         }
+    }
+
+    fun reset() {
+        _listCase.value = ListCase.EMPTY
     }
 }
