@@ -13,16 +13,41 @@ class UserViewModel(private val userInfoDao: UserInfoDao) : ViewModel() {
         insertUserInfo(newUserInfo)
     }
 
-    private fun insertUserInfo(newUserInfo: DatabaseUser) {
-        viewModelScope.launch {
-            userInfoDao.insert(newUserInfo)
-        }
+    fun updateUserInfo( //later, it should be possible to update the user email and password.
+        id: Int,
+        email: String,
+        password: String
+    ){
+        val updatedUserInfo = getUpdatedUserInfo(id, email, password)
+        updateUserInfo(updatedUserInfo)
     }
 
     fun isEntryValid(email: String, password: String): Boolean {
         if (email.isBlank() || password.isBlank())
             return false
         return true
+    }
+
+    fun retrieveUserInfo(id: Int): LiveData<DatabaseUser> {
+        return userInfoDao.getItem(id).asLiveData()
+    }
+
+    fun deleteItem(databaseUser: DatabaseUser) {
+        viewModelScope.launch {
+            userInfoDao.delete(databaseUser)
+        }
+    }
+
+    private fun insertUserInfo(newUserInfo: DatabaseUser) {
+        viewModelScope.launch {
+            userInfoDao.insert(newUserInfo)
+        }
+    }
+
+    private fun updateUserInfo(databaseUser: DatabaseUser) {
+        viewModelScope.launch {
+            userInfoDao.update(databaseUser)
+        }
     }
 
     private fun getNewUserInfoEntry(email: String, password: String): DatabaseUser {
@@ -32,37 +57,12 @@ class UserViewModel(private val userInfoDao: UserInfoDao) : ViewModel() {
         )
     }
 
-    fun retrieveUserInfo(id: Int): LiveData<DatabaseUser> {
-        return userInfoDao.getItem(id).asLiveData()
-    }
-
-    fun updateUserInfo(databaseUser: DatabaseUser) {
-        viewModelScope.launch {
-            userInfoDao.update(databaseUser)
-        }
-    }
-
-    fun deleteItem(databaseUser: DatabaseUser) {
-        viewModelScope.launch {
-            userInfoDao.delete(databaseUser)
-        }
-    }
-
     private fun getUpdatedUserInfo(
         id: Int,
         email: String,
         password: String,
     ): DatabaseUser {
         return DatabaseUser(id = id, email = email, password = password)
-    }
-
-    fun updateUserInfo( //later, it should be possible to update the user email and password.
-        id: Int,
-        email: String,
-        password: String
-    ){
-        val updatedUserInfo = getUpdatedUserInfo(id, email, password)
-        updateUserInfo(updatedUserInfo)
     }
 }
 

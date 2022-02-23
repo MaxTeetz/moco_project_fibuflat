@@ -107,7 +107,7 @@ class ToDoViewModel : ViewModel() {
         }
 
         if (listCase == ListCase.ADDED) {
-            Log.d("todoEntryListAdded", "$index")
+            Log.d("todoEntryListAdded1", "$index")
             _allToDoEntries.add(index, entryList[index].copy())
             this._listCase.value = listCase
             getImageAdded(index, _allToDoEntries[index])
@@ -139,10 +139,13 @@ class ToDoViewModel : ViewModel() {
 
     private fun getImageAdded(index: Int, toDoEntry: ToDoEntry) =
         CoroutineScope(Dispatchers.IO).launch {
+            Log.d("todoEntryListAdded2", "$toDoEntry")
             if (toDoEntry.pictureAdded != null) {
                 val image = storageReference.child(toDoEntry.pictureAdded!!)
                 val url = image.downloadUrl.await()
+                Log.d("todoEntryListAdded3", "$url")
                 setImage(url.toString(), index)
+                Log.d("todoEntryListAdded4", "$index")
             }
         }
 

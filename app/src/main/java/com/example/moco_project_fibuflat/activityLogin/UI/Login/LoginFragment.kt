@@ -14,6 +14,7 @@ import com.example.moco_project_fibuflat.UserViewModel
 import com.example.moco_project_fibuflat.UserViewModelFactory
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.data.ErrorMessageType
+import com.example.moco_project_fibuflat.data.database.DatabaseUser
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +30,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var email: String
     private lateinit var password: String
+    private var user: DatabaseUser? = null
 
     private val viewModelDatabase: UserViewModel by activityViewModels {
         UserViewModelFactory((activity?.application as UserApplication).database.userInfoDao())
@@ -44,6 +46,14 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
+        viewModelDatabase.retrieveUserInfo(1).observe(this.viewLifecycleOwner) {
+            if (it != null) {
+                Log.d("loginFragment", "$it")
+                user = it
+                binding.email.setText(user!!.email)
+                binding.password.setText(user!!.password)
+            }
+        }
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -82,18 +92,23 @@ class LoginFragment : Fragment() {
         password: String,
         activated: Boolean,
     ) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password) //ToDo back in MainActivity. Doesn't sign in all the time, even with email and password
             .addOnSuccessListener {
                 CoroutineScope(Dispatchers.Default).launch {
-                    if (activated) {
+                    if (!activated && user != null) {
+                        Log.d("loginFragment", "${user?.id} + ${user?.email} + ${user?.password}")
+                        viewModelDatabase.deleteItem(user!!)
+                    }
+                    if (activated && user == null) {
                         Log.d("loginFragment", "$email / $password")
                         saveUserInfo(email, password)
                     }
-                    //delay(5000)
-                    //viewModel.getDBGroupEntry()
+                    viewModel.getDBGroupEntry()
                 }
             }.addOnFailureListener { task ->
                 (activity as MainActivity).taskFailed(task)
+                Log.d("loginFragmentTaskFailed", "$task")
+                Log.d("loginFragmentTaskFailed", "$email + $password")
             }
     }
 
