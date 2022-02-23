@@ -76,7 +76,7 @@
         app:layout_constraintStart_toStartOf="@id/password_label"
         app:layout_constraintTop_toBottomOf="@id/email_label" />
 
-
+    <!--
     <TextView
         android:id="@+id/newHere"
         android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
         android:textColor="@color/password_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/loginButton"
-        app:layout_constraintTop_toBottomOf="@id/loginButton" />
+        app:layout_constraintTop_toBottomOf="@id/loginButton" /> -->
 
     <TextView
         android:id="@+id/createAccountText"
@@ -111,5 +111,14 @@
         app:layout_constraintEnd_toEndOf="@id/password_label"
         app:layout_constraintStart_toStartOf="@id/password_label"
         app:layout_constraintTop_toBottomOf="@+id/password_label" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_save_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-15dp"
+        android:contentDescription="@string/stay_logged_in"
+        app:layout_constraintStart_toStartOf="@id/loginButton"
+        app:layout_constraintTop_toTopOf="@id/createAccountText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

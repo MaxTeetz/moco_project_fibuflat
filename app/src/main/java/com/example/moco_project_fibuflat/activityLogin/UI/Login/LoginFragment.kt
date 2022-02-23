@@ -1,16 +1,25 @@
 package com.example.moco_project_fibuflat.activityLogin.UI.Login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.moco_project_fibuflat.UserApplication
+import com.example.moco_project_fibuflat.UserViewModel
+import com.example.moco_project_fibuflat.UserViewModelFactory
 import com.example.moco_project_fibuflat.activityLogin.MainActivity
 import com.example.moco_project_fibuflat.data.ErrorMessageType
 import com.example.moco_project_fibuflat.databinding.FragmentLoginBinding
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -21,6 +30,10 @@ class LoginFragment : Fragment() {
     private lateinit var email: String
     private lateinit var password: String
 
+    private val viewModelDatabase: UserViewModel by activityViewModels {
+        UserViewModelFactory((activity?.application as UserApplication).database.userInfoDao())
+    }
+
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).supportActionBar?.title = "Login"
@@ -28,7 +41,7 @@ class LoginFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
@@ -46,13 +59,47 @@ class LoginFragment : Fragment() {
 
         binding.loginButton.setOnClickListener { onLogin() }
 
+        viewModel.groupAccess.observe(this.viewLifecycleOwner) {
+            (activity as MainActivity).changeActivity(it)
+        }
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             when (it.errorMessageType) {
-                ErrorMessageType.EMAIL -> setErrorTextField(it.error!!, binding.emailLabel, it.message)
-                ErrorMessageType.PASSWORD -> setErrorTextField(it.error!!, binding.passwordLabel, it.message)
-                else -> (activity as MainActivity).firebaseLogin(email, password)
+                ErrorMessageType.EMAIL -> setErrorTextField(it.error!!,
+                    binding.emailLabel,
+                    it.message)
+                ErrorMessageType.PASSWORD -> setErrorTextField(it.error!!,
+                    binding.passwordLabel,
+                    it.message)
+                else -> {
+                    (firebaseLogin(email, password, binding.switchSavePassword.isChecked))
+                }
             }
         }
+    }
+
+    private fun firebaseLogin(
+        email: String,
+        password: String,
+        activated: Boolean,
+    ) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+            .addOnSuccessListener {
+                CoroutineScope(Dispatchers.Default).launch {
+                    if (activated) {
+                        Log.d("loginFragment", "$email / $password")
+                        saveUserInfo(email, password)
+                    }
+                    //delay(5000)
+                    //viewModel.getDBGroupEntry()
+                }
+            }.addOnFailureListener { task ->
+                (activity as MainActivity).taskFailed(task)
+            }
+    }
+
+    private fun saveUserInfo(email: String, password: String) {
+        Log.d("mainActivity", "User Info saved")
+        viewModelDatabase.addNewUserInfo(email, password)
     }
 
     private fun onLogin() {

@@ -28,6 +28,8 @@
     <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="stay_logged_in">Safes the credentials locally if checked and enables a faster login</string>
+
 
     <!--Select group activity strings-->
     <!--Select Group Option Fragment-->
@@ -92,6 +94,7 @@
 
 
     <!--nfc-->
+    <!--Coming soon-->
 
     <!--Group Management-->
     <string name="group_members">Group Members</string>
@@ -104,5 +107,6 @@
     <string name="leave_group_confirm">Do you want to leave the Group?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="save_settings">Save Settings</string>
 
 </resources>
