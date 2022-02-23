@@ -92,7 +92,7 @@ class ToDoViewModel : ViewModel() {
         Log.d("todoEntryList", "${this.entryList.size}")
         this._index = index
         if (listCase == ListCase.EMPTY) {
-            Log.d("todoEntryListEmpty", "${index}")
+            Log.d("todoEntryListEmpty", "$index")
             for (entry in entryList) {
                 _allToDoEntries.add(entry.copy())
             }
@@ -101,14 +101,14 @@ class ToDoViewModel : ViewModel() {
         }
 
         if (listCase == ListCase.DELETED) {
-            Log.d("todoEntryListDeleted", "${index}")
+            Log.d("todoEntryListDeleted", "$index")
             _allToDoEntries.removeAt(index)
             this._listCase.value = listCase
         }
 
         if (listCase == ListCase.ADDED) {
-            Log.d("todoEntryListAdded", "${index}")
-            _allToDoEntries.add(index, entryList[index])
+            Log.d("todoEntryListAdded", "$index")
+            _allToDoEntries.add(index, entryList[index].copy())
             this._listCase.value = listCase
             getImageAdded(index, _allToDoEntries[index])
         }
@@ -126,7 +126,6 @@ class ToDoViewModel : ViewModel() {
             try {
                 for ((i, entry) in _allToDoEntries.withIndex()) {
                     if (entry.pictureAdded != null && entry.picture == null) {
-                        Log.d("todoEntryListAddedIndexChanged1", entry.pictureAdded!!)
                         val image =
                             storageReference.child(entry.pictureAdded!!)
                         val url = image.downloadUrl.await()
@@ -141,7 +140,6 @@ class ToDoViewModel : ViewModel() {
     private fun getImageAdded(index: Int, toDoEntry: ToDoEntry) =
         CoroutineScope(Dispatchers.IO).launch {
             if (toDoEntry.pictureAdded != null) {
-                Log.d("todoEntryListAddedIndexChanged2", toDoEntry.pictureAdded!!)
                 val image = storageReference.child(toDoEntry.pictureAdded!!)
                 val url = image.downloadUrl.await()
                 setImage(url.toString(), index)
@@ -149,10 +147,8 @@ class ToDoViewModel : ViewModel() {
         }
 
     private fun setImage(imageUrls: String, index: Int) {
-        Log.d("todoEntryListAddedIndexChanged3", "${entryList[index]}")
         _allToDoEntries[index].picture = imageUrls
         _indexChanged = index
-        Log.d("todoEntryListAddedIndexChanged4", "${entryList[index]}")
         _listCase.postValue(ListCase.CHANGED)
     }
 

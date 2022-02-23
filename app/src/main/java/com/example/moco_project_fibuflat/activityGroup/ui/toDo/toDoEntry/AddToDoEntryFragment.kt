@@ -43,6 +43,7 @@ class AddToDoEntryFragment : Fragment() {
     private lateinit var dialog: Dialog
 
     private var takenImage: Bitmap? = null
+    private var check = false
 
     private var _binding: FragmentAddToDoEntryBinding? = null
     private val binding get() = _binding!!
@@ -81,7 +82,12 @@ class AddToDoEntryFragment : Fragment() {
 
         binding.addEntry.setOnClickListener {
             showProgressBar()
-            uploadPicture()
+
+            if (check)
+                uploadPicture()
+            else
+                setRealtimeDatabase()
+
         }
 
         binding.cancel.setOnClickListener {
@@ -93,27 +99,28 @@ class AddToDoEntryFragment : Fragment() {
     private fun uploadPicture() {
         storageReference = FirebaseStorage.getInstance()
             .getReference("ToDoEntries/${neededData.group.value!!.groupId}/$id")
+
         storageReference.putFile(imageUri).addOnSuccessListener {
-
-            val todoEntry =
-                ToDoEntry(id,
-                    neededData.user.value!!.username,
-                    binding.task.text.toString(),
-                    pictureAdded)
-            neededData.dataBaseGroups.child(neededData.group.value!!.groupId!!).child("todoEntries")
-                .child(id)
-                .setValue(todoEntry)
-
-            hideProgressBar()
             Toast.makeText(requireContext(), "Successfully uploaded", Toast.LENGTH_SHORT).show()
-            val action = AddToDoEntryFragmentDirections.actionAddToDoEntryFragamentToNavTodoList()
-            this.findNavController().navigate(action)
-
+            setRealtimeDatabase()
         }.addOnFailureListener {
-
             hideProgressBar()
             Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun setRealtimeDatabase() {
+        hideProgressBar()
+        val todoEntry =
+            ToDoEntry(id,
+                neededData.user.value!!.username,
+                binding.task.text.toString(),
+                pictureAdded)
+        neededData.dataBaseGroups.child(neededData.group.value!!.groupId!!).child("todoEntries")
+            .child(id)
+            .setValue(todoEntry)
+        val action = AddToDoEntryFragmentDirections.actionAddToDoEntryFragamentToNavTodoList()
+        this.findNavController().navigate(action)
     }
 
     private fun showProgressBar() {
@@ -143,9 +150,8 @@ class AddToDoEntryFragment : Fragment() {
 
             imageUri = Uri.fromFile(photoFile)
             Log.d("todoEntry", "${Uri.fromFile(photoFile)}")
-
             pictureAdded = "ToDoEntries/${neededData.group.value!!.groupId}/$id"
-
+            check = true
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
