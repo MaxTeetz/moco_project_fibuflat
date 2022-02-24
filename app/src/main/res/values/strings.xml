@@ -13,7 +13,7 @@
     <string name="logo">logo</string>
     <string name="confirm_password">Confirm Password</string>
 
-    <!--Login and Register Strings-->
+    <!--login and register Strings-->
     <string name="emptyMail">Mail can´t be empty</string>
     <string name="emptyPassword">Password can´t be empty</string>
     <string name="empty_username">Username can´t be empty</string>

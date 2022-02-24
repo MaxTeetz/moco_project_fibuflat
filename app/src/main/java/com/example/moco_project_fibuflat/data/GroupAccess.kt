@@ -4,3 +4,8 @@ enum class GroupAccess {
     NOGROUP,
     INGROUP
 }
+
+enum class UserDatabaseCase {
+    ADD,
+    DELETE
+}

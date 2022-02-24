@@ -1,4 +1,4 @@
-package com.example.moco_project_fibuflat.activityLogin.UI.Register
+package com.example.moco_project_fibuflat.activityLogin.ui.register
 
 import android.content.Context
 import androidx.lifecycle.LiveData

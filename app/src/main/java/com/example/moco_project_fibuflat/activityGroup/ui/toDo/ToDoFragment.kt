@@ -82,7 +82,7 @@ class ToDoFragment : Fragment() {
     private fun bindingRecyclerViewRequests() {
         binding.recyclerViewTodoList.adapter = adapterToDo
         binding.recyclerViewTodoList.layoutManager = GridLayoutManager(this.context, 1)
-
+        binding.recyclerViewTodoList.setHasFixedSize(true)
     }
 
     @SuppressLint("NotifyDataSetChanged")
