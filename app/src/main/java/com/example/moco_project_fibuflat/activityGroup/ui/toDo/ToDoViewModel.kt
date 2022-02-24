@@ -169,7 +169,7 @@ class ToDoViewModel : ViewModel() {
         }
     }
 
-    fun reset() {
+    fun resetListCase() {
         _listCase.value = ListCase.EMPTY
     }
 }

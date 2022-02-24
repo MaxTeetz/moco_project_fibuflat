@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
     }
 
-fun taskFailed(task: Exception) { //stays
+private fun taskFailed(task: Exception) { //stays
     Toast.makeText(
         this@MainActivity,
         task.message.toString(),

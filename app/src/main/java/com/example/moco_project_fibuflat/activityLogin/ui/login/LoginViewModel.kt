@@ -73,8 +73,6 @@ class LoginViewModel : ViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
-                    //viewModelScope.launch {
-
                     if (activated && user == null) {
                         _userDatabaseCase.value = UserDatabaseCase.ADD
                     }
@@ -83,7 +81,6 @@ class LoginViewModel : ViewModel() {
                         _userDatabaseCase.value = UserDatabaseCase.DELETE
                     }
                     getDBGroupEntry()
-                    //}
                 }.addOnFailureListener { task ->
                     Log.d("loginFragmentTaskFailed", "$task")
                     Log.d("loginFragmentTaskFailed", "$email + $password")

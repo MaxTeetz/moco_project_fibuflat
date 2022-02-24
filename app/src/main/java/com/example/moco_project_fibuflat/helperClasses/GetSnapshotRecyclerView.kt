@@ -20,6 +20,7 @@ class GetSnapshotRecyclerView<A>(
         if (entryList.isNotEmpty())
             entryList.clear()
 
+        Log.d("compareListsBeforeCall", "$listCaseOld")
         if (snapshot.exists()) {
             for (entrySnapshot in snapshot.children) {
                 val entry =
@@ -27,6 +28,7 @@ class GetSnapshotRecyclerView<A>(
                 entryList.add(entry!!)
             }
         }
+        Log.d("compareListsBeforeCall", "$listCaseOld")
         CompareLists(entryListOld, entryList, listCaseOld)
         { index, listCase, arrayList -> setData(index, listCase, arrayList) }
         giveValues(index, listCaseOld, entryList, entryListOld)

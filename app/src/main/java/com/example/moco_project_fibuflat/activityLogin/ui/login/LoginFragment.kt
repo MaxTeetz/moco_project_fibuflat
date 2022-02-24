@@ -73,6 +73,7 @@ class LoginFragment : Fragment() {
                 user = it[0]
                 binding.email.setText(user!!.email)
                 binding.password.setText(user!!.password)
+                binding.switchSavePassword.isChecked = true
             }
         }
 

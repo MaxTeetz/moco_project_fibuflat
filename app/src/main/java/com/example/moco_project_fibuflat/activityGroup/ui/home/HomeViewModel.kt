@@ -1,5 +1,6 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -73,6 +74,7 @@ class HomeViewModel : ViewModel() {
         entryList: ArrayList<MoneyPoolEntry>,
         entryListOld: ArrayList<MoneyPoolEntry>,
     ) {
+        Log.d("compareListsSetData", "${listCase}")
         this._index = index
         this._listCase = listCase
         this._allMoneyEntries.value = entryList

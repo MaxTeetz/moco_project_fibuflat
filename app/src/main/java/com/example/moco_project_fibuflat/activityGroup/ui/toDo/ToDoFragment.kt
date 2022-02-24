@@ -122,6 +122,6 @@ class ToDoFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.reset()
+        viewModel.resetListCase()
     }
 }

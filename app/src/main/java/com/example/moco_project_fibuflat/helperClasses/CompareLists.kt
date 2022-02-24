@@ -13,16 +13,25 @@ class CompareLists<A>(
     private var index: Int? = 0
 
     init {
-
+        Log.d("compareListsIn", "$listCaseOld")
         if (listCaseOld == null) {
+            Log.d("compareListsEmpty", "$listCaseOld")
             giveValues(0, ListCase.EMPTY, arrayListNew)
         }
 
-        if (arrayListOld.size > arrayListNew.size) { //Item deleted
+        if(listCaseOld == ListCase.ERROR){ //for retrieving internet connection
+            Log.d("compareListsError", "$listCaseOld")
+            giveValues(0, ListCase.ERROR, arrayListNew)
+        }
+
+        if (arrayListOld.size > arrayListNew.size && listCaseOld != null && listCaseOld != ListCase.ERROR) { //Item deleted
+            Log.d("compareListsDeleted", "$listCaseOld")
             index = deleted(arrayListOld, arrayListNew)
             giveValues(index, ListCase.DELETED, arrayListNew)
         }
-        if ((arrayListOld.size < arrayListNew.size) && listCaseOld != null) { //Item added
+
+        if (arrayListOld.size < arrayListNew.size && listCaseOld != null && listCaseOld != ListCase.ERROR) { //Item added
+            Log.d("compareListsAdded", "$listCaseOld")
             index = added(arrayListOld, arrayListNew)
             giveValues(index, ListCase.ADDED, arrayListNew)
         }

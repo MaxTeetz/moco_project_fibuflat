@@ -1,11 +1,17 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -32,6 +38,7 @@ class HomeFragment : Fragment() {
 
     private val coroutine1 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
+    private val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +61,7 @@ class HomeFragment : Fragment() {
             neededData.user)
 
         coroutineScope1.launch {
+            requireActivity().registerReceiver(connectivityReceiver, intentFilter)
             viewModel.getEntries()
         }
 
@@ -91,18 +99,15 @@ class HomeFragment : Fragment() {
     private fun requestObserver() {
         viewModel.allMoneyEntries.observe(this.viewLifecycleOwner) { it ->
             it.let {
-                adapterEntry.submitList(it)
-
                 when (viewModel.listCase) {
                     ListCase.EMPTY -> adapterEntry.submitList(it)
-                    ListCase.DELETED -> {
-                        adapterEntry.notifyItemRemoved(viewModel.index!!)
-                        Log.d("homeFragmentDeleted", "${viewModel.index}")
-                    }
+                    ListCase.DELETED -> adapterEntry.notifyItemRemoved(viewModel.index!!)
                     ListCase.ADDED -> adapterEntry.notifyItemInserted(viewModel.index!!)
+                    ListCase.ERROR -> {
+                        adapterEntry.notifyDataSetChanged()
+                    }
                     else -> { //if the internet goes of and many items changed, deleted or got added
                         adapterEntry.notifyDataSetChanged()
-                        Log.d("adapter", "Error")
                     }
                 }
             }
@@ -112,21 +117,23 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.removeListeners()
+        requireActivity().unregisterReceiver(connectivityReceiver)
+    }
+
+    private val connectivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
+                val noConnectivity: Boolean =
+                    intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+                if (noConnectivity) {
+                    Log.d("HomeFragment", "noConnectivity")
+                    Toast.makeText(context, "Disconnected", Toast.LENGTH_SHORT).show()
+                    viewModel.removeListeners()
+                } else {
+                    Log.d("HomeFragment", "connectivity")
+                    Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }
-
-/*private fun showAddItemDialog(context: Context) {
-  val taskEditText: EditText = EditText(context)
-  taskEditText.inputType.dec()
-  taskEditText.maxEms = 5
-  MaterialAlertDialogBuilder(requireContext())
-      .setTitle("Change Goal")
-      .setView(taskEditText)
-      .setPositiveButton("Change",
-          DialogInterface.OnClickListener { _, _ ->
-              viewModel.moneyGoalSetGoal(taskEditText.text.toString().toDouble())
-          })
-      .setNegativeButton("Cancel", null)
-      .create()
-      .show()
-}*/
