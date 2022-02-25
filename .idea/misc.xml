@@ -12,6 +12,7 @@
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/ic_error.xml" value="0.25833333333333336" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/ic_launcher_background.xml" value="0.368" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.137" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/layout_rounded_corners.xml" value="0.285" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/loading_image.xml" value="0.1135" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/loading_img.xml" value="0.1135" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/drawable/side_nav_bar.xml" value="0.206" />
@@ -33,7 +34,7 @@
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/detail_join_requests_entry.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/detail_moneypool_entry.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/detail_moneypool_entry_on_clicked.xml" value="0.3671875" />
-        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/detail_todo_entry.xml" value="0.3671875" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/detail_todo_entry.xml" value="0.55" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/detail_user_entry.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/dialog_wait.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/entry_detail.xml" value="0.3671875" />
@@ -57,6 +58,7 @@
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_select_group.xml" value="0.375" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_slideshow.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/fragment_todo.xml" value="0.4444444444444444" />
+        <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/group_app_bar.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/group_content.xml" value="0.1890625" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/invitations_layout.xml" value="0.3671875" />
         <entry key="..\:/Users/max-j/AndroidStudioProjects/MoCo_Project_FiBuFlat/app/src/main/res/layout/moneypool_entry.xml" value="0.3671875" />

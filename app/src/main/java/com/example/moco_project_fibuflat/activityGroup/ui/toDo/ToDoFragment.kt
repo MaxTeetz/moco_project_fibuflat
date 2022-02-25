@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -54,18 +55,25 @@ class ToDoFragment : Fragment() {
             neededData.group,
             neededData.user)
 
-        if(viewModel.listCase.value == null)
-        coroutineScope1.launch {
-            viewModel.getEntries()
-        }
+        if (viewModel.listCase.value == null)
+            coroutineScope1.launch {
+                viewModel.getEntries()
+            }
 
         setAdapter()
         bindingRecyclerViewRequests()
         requestObserver()
+        toastObserver()
 
         binding.addTodoEntryButton.setOnClickListener {
             val action = ToDoFragmentDirections.actionNavTodoListToAddToDoEntryFragament()
             this.findNavController().navigate(action)
+        }
+    }
+
+    private fun toastObserver() {
+        viewModel.toastMessage.observe(this.viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -94,6 +102,7 @@ class ToDoFragment : Fragment() {
             it.let {
                 when (it) {
                     ListCase.EMPTY -> {
+                        adapterToDo.notifyDataSetChanged()
                         adapterToDo.submitList(viewModel.allToDoEntries)
                         Log.d("todo", "empty + ${viewModel.index}")
 
@@ -113,7 +122,7 @@ class ToDoFragment : Fragment() {
                     }
                     else -> {
                         adapterToDo.notifyDataSetChanged()
-                        Log.d("adapter", "Error")
+                        Log.d("adapter", "else")
                     }
                 }
             }

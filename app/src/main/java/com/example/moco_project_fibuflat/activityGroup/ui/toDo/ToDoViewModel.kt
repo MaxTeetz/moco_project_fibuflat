@@ -89,10 +89,10 @@ class ToDoViewModel : ViewModel() {
         entryList: java.util.ArrayList<ToDoEntry>,
         entryListOld: java.util.ArrayList<ToDoEntry>,
     ) {
-        Log.d("todoEntryList", "${this.entryList.size}")
         this._index = index
         if (listCase == ListCase.EMPTY) {
             Log.d("todoEntryListEmpty", "$index")
+            _allToDoEntries.clear()
             for (entry in entryList) {
                 _allToDoEntries.add(entry.copy())
             }

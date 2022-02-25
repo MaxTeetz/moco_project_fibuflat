@@ -74,7 +74,7 @@ class HomeViewModel : ViewModel() {
         entryList: ArrayList<MoneyPoolEntry>,
         entryListOld: ArrayList<MoneyPoolEntry>,
     ) {
-        Log.d("compareListsSetData", "${listCase}")
+        Log.d("compareListsSetData", "$listCase")
         this._index = index
         this._listCase = listCase
         this._allMoneyEntries.value = entryList

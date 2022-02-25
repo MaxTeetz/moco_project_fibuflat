@@ -1,11 +1,16 @@
 package com.example.moco_project_fibuflat.activityGroup
 
 import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.Window
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -16,6 +21,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activitySelectGroup.SelectGroupActivity
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.databinding.ActivityGroupBinding
 import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import com.google.android.material.navigation.NavigationView
@@ -31,9 +37,13 @@ GroupActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityGroupBinding
     private val viewModel: OftenNeededData by viewModels()
+    private var connectivity: Connectivity? = null
+    private val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        registerReceiver(connectivityReceiver, intentFilter)
 
         MainScope().launch {
             showProgressBar()
@@ -110,4 +120,26 @@ GroupActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    //used for restarting activity if connection was gone
+    private val connectivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
+                val noConnectivity: Boolean =
+                    intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+                if (noConnectivity) {
+                    Toast.makeText(context, "Disconnected", Toast.LENGTH_SHORT).show()
+                    connectivity = Connectivity.OFFLINE
+                } else {
+                    if (connectivity == Connectivity.OFFLINE) {
+                        Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show()
+                        val intentRestart = Intent(this@GroupActivity, GroupActivity::class.java)
+                        startActivity(intentRestart)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onBackPressed() {}
 }

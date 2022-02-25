@@ -4,6 +4,10 @@ enum class ListCase {
     EMPTY,
     ADDED,
     DELETED,
-    CHANGED,
-    ERROR
+    CHANGED
+}
+
+enum class Connectivity {
+    ONLINE,
+    OFFLINE
 }

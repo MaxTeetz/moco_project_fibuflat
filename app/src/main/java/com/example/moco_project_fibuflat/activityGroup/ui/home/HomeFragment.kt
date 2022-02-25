@@ -1,17 +1,10 @@
 package com.example.moco_project_fibuflat.activityGroup.ui.home
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -38,7 +31,6 @@ class HomeFragment : Fragment() {
 
     private val coroutine1 = Job()
     private val coroutineScope1 = CoroutineScope(coroutine1 + Dispatchers.Main)
-    private val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +53,6 @@ class HomeFragment : Fragment() {
             neededData.user)
 
         coroutineScope1.launch {
-            requireActivity().registerReceiver(connectivityReceiver, intentFilter)
             viewModel.getEntries()
         }
 
@@ -103,10 +94,7 @@ class HomeFragment : Fragment() {
                     ListCase.EMPTY -> adapterEntry.submitList(it)
                     ListCase.DELETED -> adapterEntry.notifyItemRemoved(viewModel.index!!)
                     ListCase.ADDED -> adapterEntry.notifyItemInserted(viewModel.index!!)
-                    ListCase.ERROR -> {
-                        adapterEntry.notifyDataSetChanged()
-                    }
-                    else -> { //if the internet goes of and many items changed, deleted or got added
+                    else -> {
                         adapterEntry.notifyDataSetChanged()
                     }
                 }
@@ -117,23 +105,5 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.removeListeners()
-        requireActivity().unregisterReceiver(connectivityReceiver)
-    }
-
-    private val connectivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
-                val noConnectivity: Boolean =
-                    intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
-                if (noConnectivity) {
-                    Log.d("HomeFragment", "noConnectivity")
-                    Toast.makeText(context, "Disconnected", Toast.LENGTH_SHORT).show()
-                    viewModel.removeListeners()
-                } else {
-                    Log.d("HomeFragment", "connectivity")
-                    Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
     }
 }

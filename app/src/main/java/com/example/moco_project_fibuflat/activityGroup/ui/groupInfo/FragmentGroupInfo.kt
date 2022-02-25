@@ -25,6 +25,7 @@ class FragmentGroupInfo : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+
         viewModel = ViewModelProvider(this)[GroupInfoViewModel::class.java]
         neededData = ViewModelProvider(requireActivity())[OftenNeededData::class.java]
         _binding = FragmentGroupInfoBinding.inflate(inflater, container, false)

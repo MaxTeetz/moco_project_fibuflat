@@ -15,4 +15,6 @@
     <color name="red">#f12215</color>
     <color name="underlineColor">#121212</color>
     <color name="underlineBackground">#FFFFFF</color>
+    <color name="todoListEntry">#939393</color>
+    <color name="todoListEntryFringe">#424242</color>
 </resources>

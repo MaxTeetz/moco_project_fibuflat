@@ -19,18 +19,13 @@ class CompareLists<A>(
             giveValues(0, ListCase.EMPTY, arrayListNew)
         }
 
-        if(listCaseOld == ListCase.ERROR){ //for retrieving internet connection
-            Log.d("compareListsError", "$listCaseOld")
-            giveValues(0, ListCase.ERROR, arrayListNew)
-        }
-
-        if (arrayListOld.size > arrayListNew.size && listCaseOld != null && listCaseOld != ListCase.ERROR) { //Item deleted
+        if (arrayListOld.size > arrayListNew.size && listCaseOld != null) { //Item deleted
             Log.d("compareListsDeleted", "$listCaseOld")
             index = deleted(arrayListOld, arrayListNew)
             giveValues(index, ListCase.DELETED, arrayListNew)
         }
 
-        if (arrayListOld.size < arrayListNew.size && listCaseOld != null && listCaseOld != ListCase.ERROR) { //Item added
+        if (arrayListOld.size < arrayListNew.size && listCaseOld != null) { //Item added
             Log.d("compareListsAdded", "$listCaseOld")
             index = added(arrayListOld, arrayListNew)
             giveValues(index, ListCase.ADDED, arrayListNew)

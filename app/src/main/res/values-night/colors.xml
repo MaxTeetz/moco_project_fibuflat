@@ -2,4 +2,6 @@
 <resources>
     <color name="underlineColor">#FFFFFF</color>
     <color name="underlineBackground">#121212</color>
+    <color name="todoListEntry">#424242</color>
+    <color name="todoListEntryFringe">#212121</color>
 </resources>
