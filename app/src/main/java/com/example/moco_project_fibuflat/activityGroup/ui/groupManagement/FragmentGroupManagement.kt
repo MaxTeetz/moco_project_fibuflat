@@ -15,6 +15,7 @@ import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.adapter.GroupMembersAdapter
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewItemDecoration
 import com.example.moco_project_fibuflat.activityGroup.adapter.RecyclerViewJoinRequestAdapter
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.OpenRequestGroup
 import com.example.moco_project_fibuflat.databinding.FragmentGroupManagementBinding
@@ -152,14 +153,15 @@ class FragmentGroupManagement : Fragment() {
         }
     }
 
-    //ToDo how to handle if fragment is destroyed before everything's done -> redundant todo?
     private fun getUserAccept(openRequestGroup: OpenRequestGroup) {
+        if(neededData.connectivityStatus.value != Connectivity.OFFLINE)
         lifecycleScope.launch {
             viewModel.acceptUser(openRequestGroup)
         }
     }
 
     private fun getUserDecline(openRequestGroup: OpenRequestGroup) {
+        if(neededData.connectivityStatus.value != Connectivity.OFFLINE)
         lifecycleScope.launch {
             viewModel.declineUser(openRequestGroup)
         }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.databinding.FragmentAddEntryBinding
 import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
@@ -57,6 +58,7 @@ class AddEntryFragment : Fragment() {
             neededData.dataBaseGroups)
 
         binding.addEntry.setOnClickListener {
+            if(neededData.connectivityStatus.value != Connectivity.OFFLINE)
             addNewEntry()
         }
         binding.cancel.setOnClickListener {

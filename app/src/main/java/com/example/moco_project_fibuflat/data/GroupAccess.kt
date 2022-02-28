@@ -7,5 +7,6 @@ enum class GroupAccess {
 
 enum class UserDatabaseCase {
     ADD,
-    DELETE
+    DELETE,
+    CHANGE
 }

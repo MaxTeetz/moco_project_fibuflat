@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moco_project_fibuflat.activityGroup.adapter.ToDoAdapter
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.data.ListCase
 import com.example.moco_project_fibuflat.data.ToDoEntry
 import com.example.moco_project_fibuflat.databinding.FragmentTodoBinding
@@ -80,6 +81,7 @@ class ToDoFragment : Fragment() {
     private fun setAdapter() {
         adapterToDo = ToDoAdapter(object : ToDoAdapter.ClickListenerButton {
             override fun onItemClicked(toDoEntry: ToDoEntry) {
+                if(neededData.connectivityStatus.value != Connectivity.OFFLINE)
                 lifecycleScope.launch {
                     viewModel.deleteItem(toDoEntry)
                 }

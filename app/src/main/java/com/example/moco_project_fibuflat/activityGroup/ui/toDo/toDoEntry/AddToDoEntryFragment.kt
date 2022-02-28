@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.data.ToDoEntry
 import com.example.moco_project_fibuflat.databinding.FragmentAddToDoEntryBinding
 import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
@@ -77,22 +78,23 @@ class AddToDoEntryFragment : Fragment() {
 
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
-            if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null)
+            //if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null)
                 startActivityForResult(takePictureIntent, REQUEST_CODE)
-            else
-                Toast.makeText(requireContext(), "Unable to open camera", Toast.LENGTH_SHORT).show()
+            //else
+                //Toast.makeText(requireContext(), "Unable to open camera", Toast.LENGTH_SHORT).show()
         }
 
         binding.addEntry.setOnClickListener {
-            showProgressBar()
+            if (neededData.connectivityStatus.value != Connectivity.OFFLINE) {
+                showProgressBar()
 
-            if (check)
-                uploadPicture()
-            else
-                setRealtimeDatabase()
+                if (check)
+                    uploadPicture()
+                else
+                    setRealtimeDatabase()
 
+            }
         }
-
         binding.cancel.setOnClickListener {
             val action = AddToDoEntryFragmentDirections.actionAddToDoEntryFragamentToNavTodoList()
             this.findNavController().navigate(action)

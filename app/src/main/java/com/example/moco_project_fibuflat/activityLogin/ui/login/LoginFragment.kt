@@ -78,11 +78,25 @@ class LoginFragment : Fragment() {
         }
 
         viewModel.userDatabaseCase.observe(this.viewLifecycleOwner) {
+            Log.d("loginFragment", "userDataBase")
             CoroutineScope(Dispatchers.Default).launch {
-                if (it == UserDatabaseCase.ADD)
-                    viewModelDatabase.addNewUserInfo(email, password)
-                if (it == UserDatabaseCase.DELETE)
-                    viewModelDatabase.deleteItem(user!!)
+                when (it) {
+                    UserDatabaseCase.ADD -> {
+                        viewModelDatabase.addNewUserInfo(email, password)
+                        Log.d("loginFragment", "Add")
+                    }
+                    UserDatabaseCase.DELETE -> {
+                        viewModelDatabase.deleteUser(user!!)
+                        Log.d("loginFragment", "Delete")
+                    }
+                    UserDatabaseCase.CHANGE -> {
+                        viewModelDatabase.updateUserInfo(user!!.id, email, password)
+                        Log.d("loginFragment", "Change")
+                    }
+                    else -> {
+                        Log.d("loginFragment", "Error")
+                    }
+                }
             }
         }
     }

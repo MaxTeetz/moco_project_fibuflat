@@ -32,7 +32,7 @@ class UserViewModel(private val userInfoDao: UserInfoDao) : ViewModel() {
         return userInfoDao.getItem(id).asLiveData()
     }
 
-    fun deleteItem(databaseUser: DatabaseUser) {
+    fun deleteUser(databaseUser: DatabaseUser) {
         viewModelScope.launch {
             userInfoDao.delete(databaseUser)
         }

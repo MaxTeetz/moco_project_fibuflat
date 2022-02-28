@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.moco_project_fibuflat.R
 import com.example.moco_project_fibuflat.activityGroup.GroupActivity
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.databinding.FragmentGroupInfoBinding
 import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,6 +40,7 @@ class FragmentGroupInfo : Fragment() {
         binding.infoGroupId.text = neededData.group.value!!.groupId!!.substring(0, 4)
 
         binding.infoLeaveGroup.setOnClickListener {
+            if(neededData.connectivityStatus.value != Connectivity.OFFLINE)
             showConfirmationDialog()
         }
     }

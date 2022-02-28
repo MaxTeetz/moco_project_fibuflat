@@ -12,6 +12,7 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.moco_project_fibuflat.R
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.data.MoneyPoolEntry
 import com.example.moco_project_fibuflat.databinding.DetailMoneypoolEntryOnClickedBinding
 import com.example.moco_project_fibuflat.helperClasses.OftenNeededData
@@ -68,6 +69,7 @@ class EntryDetailFragment : Fragment() {
         }
 
         binding.deleteEntry.setOnClickListener {
+            if(neededData.connectivityStatus.value != Connectivity.OFFLINE)
             coroutineScope2.launch {
                 viewModel.deleteEntry(
                     id,

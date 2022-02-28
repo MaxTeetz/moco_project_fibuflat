@@ -46,8 +46,8 @@ GroupActivity : AppCompatActivity() {
         registerReceiver(connectivityReceiver, intentFilter)
 
         MainScope().launch {
-            showProgressBar()
             Log.d("GroupActivityCoroutine", "0")
+            showProgressBar()
             viewModel.setData()
             Log.d("GroupActivityCoroutine", "6")
             hideProgressBar()
@@ -130,6 +130,7 @@ GroupActivity : AppCompatActivity() {
                 if (noConnectivity) {
                     Toast.makeText(context, "Disconnected", Toast.LENGTH_SHORT).show()
                     connectivity = Connectivity.OFFLINE
+                    viewModel.setConnectivity(Connectivity.OFFLINE)
                 } else {
                     if (connectivity == Connectivity.OFFLINE) {
                         Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show()

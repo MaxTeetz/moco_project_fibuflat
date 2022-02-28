@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.moco_project_fibuflat.data.Connectivity
 import com.example.moco_project_fibuflat.data.Group
 import com.example.moco_project_fibuflat.data.User
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +33,12 @@ class OftenNeededData : ViewModel() {
     private var _group: MutableLiveData<Group> = MutableLiveData()
     val group: LiveData<Group> get() = _group
 
+    private var _connectivityStatus: MutableLiveData<Connectivity> = MutableLiveData()
+    val connectivityStatus : LiveData<Connectivity> get() = _connectivityStatus
+
+    fun setConnectivity(connectivity: Connectivity){
+        this._connectivityStatus.value = connectivity
+    }
 
     suspend fun setData() {
         Log.d("GroupActivityCoroutine", "1")
